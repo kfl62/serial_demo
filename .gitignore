@@ -1,0 +1,6 @@
+.*
+!.gitignore
+!.yardopts
+tmp/*
+!tmp/restart.txt
+
