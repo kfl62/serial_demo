@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/sinatra/sinatra.git
-  revision: 026648d788a9b477d5ffa94a2854b92cc995ac9e
+  revision: b0262b3f84f48e6e13318ce72bcdfeef29533871
   specs:
     sinatra (1.3.0)
       rack (~> 1.2)
@@ -9,6 +9,9 @@ GIT
 GEM
   remote: http://rubygems.org/
   specs:
+    compass (0.10.6)
+      haml (>= 3.0.4)
+    haml (3.0.25)
     rack (1.2.2)
     tilt (1.2.2)
 
@@ -16,4 +19,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  compass (~> 0.10)
+  haml
   sinatra!
