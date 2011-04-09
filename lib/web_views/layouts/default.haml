@@ -1,0 +1,16 @@
+!!!
+%html
+  = partial('shared/html-head')
+  %body
+    #main.wrap
+      %header#header
+        = partial ('shared/header')
+      %nav#menu
+        = partial ('shared/menu')
+      %section#content
+        = yield
+      %section#sidebar
+        = partial ('shared/sidebar')
+      %section#main_footer.wrap
+    %footer#footer.wrap
+      = partial ('shared/footer')
