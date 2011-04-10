@@ -46,14 +46,14 @@ module IbWebModule
       # @return [String]
       # @todo Document this method
       def current_controller
-        self.class.to_s.underscore
+        self.class.to_s
       end
       # get the current controller path
       # @example
       #   "#{lang_path}#{controller_path}" #=> "/hu/cc"
       # @return [String] used to format url
       def controller_path
-        current_controller == 'ib_web_control' ? retval = '/cc' : retval = ''
+        current_controller == 'IbWebControl' ? retval = '/cc' : retval = ''
         retval
       end
 
