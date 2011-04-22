@@ -1,0 +1,73 @@
+en:
+  ib_web_menu:
+    home: "Home"
+    docs: "API docs"
+    info: "Info"
+    tabl: "Tables"
+    tables:
+      hw: "HW"
+      hwd:
+        nodes: "Node"
+        readers: "Reader"
+        keys: "Key"
+        devices: "Device"
+      ps: "Persons"
+      psn:
+        owners: "Owner"
+        admins: "Admin"
+    task: "Tasks"
+de:
+  ib_web_menu:
+    home: "Home"
+    docs: "API docs"
+    info: "Info"
+    tabl: "Tables"
+    tables:
+      hw: "HW"
+      hwd:
+        nodes: "Node"
+        readers: "Reader"
+        keys: "Key"
+        devices: "Device"
+      ps: "Persons"
+      psn:
+        owners: "Owner"
+        admins: "Admin"
+    task: "Tasks"
+ro:
+  ib_web_menu:
+    home: "Home"
+    docs: "API docs"
+    info: "Info"
+    tabl: "Tables"
+    tables:
+      hw: "HW"
+      hwd:
+        nodes: "Node"
+        readers: "Reader"
+        keys: "Key"
+        devices: "Device"
+      ps: "Persons"
+      psn:
+        owners: "Owner"
+        admins: "Admin"
+    task: "Tasks"
+hu:
+  ib_web_menu:
+    home: "Home"
+    docs: "API docs"
+    info: "Info"
+    tabl: "Tables"
+    tables:
+      hw: "HW"
+      hwd:
+        nodes: "Node"
+        readers: "Reader"
+        keys: "Key"
+        devices: "Device"
+      ps: "Persons"
+      psn:
+        owners: "Owner"
+        admins: "Admin"
+    task: "Tasks"
+

@@ -5,14 +5,15 @@ en:
     ro: "Romanian"
     hu: "Hungarian"
     test: "Content in english!"
-  ib_web_auth:
+    change: "You have selected English language"
+  ibttn_auth:
     login: "Login"
     login_title: "Authentication"
     login_name: "Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
     login_pass: "Password"
     login_msg: "Login successful."
     login_err: "The login_name or password you entered is incorrect."
-    login_required: "Nice try, but authentication required..."    
+    login_required: "Nice try, but authentication required..."
     logout: "Logout"
     logout_msg: "Logout successful."
     authenticated_as: "Authenticated as:"
@@ -23,14 +24,15 @@ de:
     ro: "Rumänisch"
     hu: "Ungarisch"
     test: "Inhalt in Deutsch!"
-  ib_web_auth:
+    change: "Sie haben ausgewählt Deutsch"
+  ibttn_auth:
     login: "Login"
     login_title: "Authentication"
     login_name: "Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
     login_pass: "Passwort"
     login_msg: "Login erfolgreich."
     login_err: "Der Login-Name oder Passwort ist nicht korrekt."
-    login_required: "Netter Versuch, aber Authentifizierung erforderlich ..."    
+    login_required: "Netter Versuch, aber Authentifizierung erforderlich ..."
     logout: "Abmelden"
     logout_msg: "Abmeldung erfolgreich."
     authenticated_as: "Authentifizierte als:"
@@ -41,7 +43,8 @@ ro:
     ro: "Română"
     hu: "Maghiară"
     test: "Conţinut în limba română!"
-  ib_web_auth:
+    change: "Aţi ales limba romănâ"
+  ibttn_auth:
     login: "Login"
     login_title: "Autentificare"
     login_name: "Nume"
@@ -59,14 +62,16 @@ hu:
     ro: "Román"
     hu: "Magyar"
     test: "Tartalom magyar nyelven!"
-  ib_web_auth:
+    change: "A magyar nyelvet választotta"
+  ibttn_auth:
     login: "Login"
     login_title: "Azonosítás"
     login_name: "Név&nbsp;&nbsp;&nbsp;"
     login_pass: "Jelszó"
     login_msg: "Sikeres azonosítás"
     login_err: "Sikertelen azonosítás! Hibás név vagy jelszó!"
-    login_required: "Érdekes probálkozás, de az azonosítás szükséges..."  
+    login_required: "Érdekes probálkozás, de az azonosítás szükséges..."
     logout: "Logout"
     logout_msg: "Viszontlátásra!"
     authenticated_as: "Azonosítva mint:"
+
