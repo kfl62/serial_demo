@@ -12,7 +12,7 @@ else
 end
 
 # This is common configuration
-sass_dir = File.join('lib', 'web_views', 'stylesheets')
+sass_dir = File.join('lib', 'web', 'web_views', 'stylesheets')
 images_dir = File.join('public', 'images')
 cache_dir = File.join('tmp', 'sass-cache')
 http_path = '/'
