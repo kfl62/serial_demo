@@ -1,0 +1,19 @@
+!!!
+%html
+  = partial('shared/html-head')
+  %body{:id => "public",:'data-lang' => current_lang}
+    #main.wrap
+      %header#header
+        = partial ('shared/header')
+      %nav#menu
+        = partial ('shared/menu')
+      %section#content
+        %article#xhr_content
+          = yield
+        %article#xhr_msg.hidden
+      %section#sidebar
+        = partial ('shared/sidebar')
+      %section#main_footer.wrap
+    %footer#footer.wrap
+      = partial ('shared/footer')
+

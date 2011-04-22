@@ -1,15 +1,14 @@
 %p.header_title.em.st.ce IButton web interface
 %p.header_auth.ri
   %span
-    %a#login_status.st.em{:href => "#", :onclick => "ibttn.auth.init(); return false;"}
-      = t('ib_web_auth.login')
+    %a#login_status.st.em{:href => "/utils/logout"}= t('ibttn_auth.logout')
     &nbsp;|&nbsp;
     %a.st.em{:href => "http://google.com"} IButton
     %br
   %br
   %br
-  %span #{t('ib_web_auth.authenticated_as')}<br>
-  %span#login_name.st.em Anonymus
+  %span #{t('ibttn_auth.authenticated_as')}<br>
+  %span#login_name.st.em #{current_user.login_name}
 %span#I18n
   %a{:href => "/utils/lang/en",:title => t('lang.en')}
     %img{:src => "/images/icons/en.png",:alt => t('lang.en')}
@@ -19,3 +18,4 @@
     %img{:src => "/images/icons/ro.png",:alt => t('lang.ro')}
   %a{:href => "/utils/lang/hu",:title => t('lang.hu')}
     %img{:src => "/images/icons/hu.png",:alt => t('lang.hu')}
+
