@@ -3,4 +3,6 @@
 !.yardopts
 tmp/*
 !tmp/restart.txt
+db/*.sqlite3
+public/docs/*
 
