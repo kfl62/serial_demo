@@ -6,4 +6,9 @@ gem "haml"
 gem "compass", "~>0.10"
 gem "i18n"
 gem "json"
+gem "sequel"
+gem "sqlite3"
+gem "serialport"
+gem "rdiscount"
+gem "wirble", :group => :development
 
