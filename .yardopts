@@ -1,0 +1,9 @@
+--title 'IButton API Documentation'
+--readme README.md
+--markup-provider rdiscount
+--markup markdown
+--output-dir public/docs
+--charset utf-8
+--no-stats
+--name-tag 'action: What\'s happening'
+
