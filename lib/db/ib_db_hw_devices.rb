@@ -6,7 +6,7 @@ module Ib
       #IButton Database Hardware-Device model
       # ##Migration 004_create_table_hw_devices.rb
       #     def up
-      #       create_table(:hw_readers) do
+      #       create_table(:hw_devices) do
       #         primary_key :id
       #         foreign_key :node_id,       :hw_nodes
       #         column      :name,          String
