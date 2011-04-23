@@ -57,7 +57,25 @@ module Ib
             current_controller == 'Control' ? retval = '/ctrl' : retval = ''
             retval
           end
-
+          # @todo
+          def pretty_title(obj)
+            prefix = obj.model.to_s.downcase.split('::')[-2..-1].join("_")
+            t("#{prefix}.title")
+          end
+          # @todo
+          def pretty_column_names(obj)
+            retval = []
+            prefix = obj.model.to_s.downcase.split('::')[-2..-1].join("_")
+            obj.columns.each do |name|
+              name = name.to_s
+              if (name =~ /id|created_at|updated_at/) == 0
+                retval << t("mdl.#{name}")
+              else
+                retval << t("#{prefix}.#{name}")
+              end
+            end
+            retval
+          end
         end
       end
     end
