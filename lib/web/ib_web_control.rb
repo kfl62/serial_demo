@@ -17,11 +17,11 @@ module Ib
         login_required
         haml :index
       end
-      # @todo
+      # @todo Document this method
       get '/list/*' do
         login_required
-        tbl = modelize(params[:splat][0])
-        haml :test, :locals => {:tbl  => tbl}
+        obj = modelize(params[:splat][0])
+        haml :list, :layout => request.xhr? ? false : :layout, :locals => {:obj  => obj}
       end
     end
   end
