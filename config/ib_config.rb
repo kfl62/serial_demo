@@ -39,6 +39,9 @@ module Ib
       :database         => 'sqlite',
       :sqlite_path      => 'db',
       :sqlite_file      => 'ibutton.sqlite3',
+      :mysql_dbname     => "ibutton",
+      :mysql_username   => "root",
+      :mysql_password   => "ibutton",
       :db_models        => File.join(app_path, 'lib', 'db')
     )
   end
