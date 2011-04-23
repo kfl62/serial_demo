@@ -1,0 +1,153 @@
+en:
+  mdl:
+    id: "Id"
+    created_at: "Created at"
+    updated_at: "Updated at"
+  hw_key:
+    title: "Working on <b>Keys</b> table, <b>\"hw_keys\"</b> in DB"
+    keyId: "Key name"
+  hw_node:
+    title: "Working on <b>Nodes</b> table, <b>\"hw_nodes\"</b> in DB"
+    sid: "SId"
+    sid_at: "SId at"
+    name: "Name"
+    readers_nr: "Nr. of readers"
+    devices_nr: "Nr. of devices"
+    answer_status: "Answer status"
+  hw_reader:
+    title: "Working on <b>Readers</b> table, <b>\"hw_readers\"</b> in DB"
+    node_id: "On node"
+    name: "Name"
+    order: "Order"
+  hw_device:
+    title: "Working on <b>Devices</b> table, <b>\"hw_devices\"</b> in DB"
+    node_id: "On node"
+    name: "Name"
+    order: "Order"
+  persons_owner:
+    title: "Working on <b>Owners</b> table, <b>\"persons_owners\"</b> in DB"
+    key_id: "Key's id"
+    first_name: "First name"
+    last_name: "Last name"
+  persons_admin:
+    title: "Working on <b>Admins</b> table, <b>\"persons_admins\"</b> in DB"
+    owner_id: "Owner's id"
+    login_name: "Login name"
+    email: "Email"
+    salt: "Salt"
+    hashed_password: "Encrypted password"
+de:
+  mdl:
+    id: "Id"
+    created_at: "Created at"
+    updated_at: "Updated at"
+  hw_key:
+    title: "Working on <b>Keys</b> table, <b>\"hw_keys\"</b> in DB"
+    keyId: "Key name"
+  hw_node:
+    title: "Working on <b>Nodes</b> table, <b>\"hw_nodes\"</b> in DB"
+    sid: "SId"
+    sid_at: "SId at"
+    name: "Name"
+    readers_nr: "Nr. of readers"
+    devices_nr: "Nr. of devices"
+    answer_status: "Answer status"
+  hw_reader:
+    title: "Working on <b>Readers</b> table, <b>\"hw_readers\"</b> in DB"
+    node_id: "On node"
+    name: "Name"
+    order: "Order"
+  hw_device:
+    title: "Working on <b>Devices</b> table, <b>\"hw_devices\"</b> in DB"
+    node_id: "On node"
+    name: "Name"
+    order: "Order"
+  persons_owner:
+    title: "Working on <b>Owners</b> table, <b>\"persons_owners\"</b> in DB"
+    key_id: "Key's id"
+    first_name: "First name"
+    last_name: "Last name"
+  persons_admin:
+    title: "Working on <b>Admins</b> table, <b>\"persons_admins\"</b> in DB"
+    owner_id: "Owner's id"
+    login_name: "Login name"
+    email: "Email"
+    salt: "Salt"
+    hashed_password: "Encrypted password"
+ro:
+  mdl:
+    id: "Id"
+    created_at: "Created at"
+    updated_at: "Updated at"
+  hw_key:
+    title: "Working on <b>Keys</b> table, <b>\"hw_keys\"</b> in DB"
+    keyId: "Key name"
+  hw_node:
+    title: "Working on <b>Nodes</b> table, <b>\"hw_nodes\"</b> in DB"
+    sid: "SId"
+    sid_at: "SId at"
+    name: "Name"
+    readers_nr: "Nr. of readers"
+    devices_nr: "Nr. of devices"
+    answer_status: "Answer status"
+  hw_reader:
+    title: "Working on <b>Readers</b> table, <b>\"hw_readers\"</b> in DB"
+    node_id: "On node"
+    name: "Name"
+    order: "Order"
+  hw_device:
+    title: "Working on <b>Devices</b> table, <b>\"hw_devices\"</b> in DB"
+    node_id: "On node"
+    name: "Name"
+    order: "Order"
+  persons_owner:
+    title: "Working on <b>Owners</b> table, <b>\"persons_owners\"</b> in DB"
+    key_id: "Key's id"
+    first_name: "First name"
+    last_name: "Last name"
+  persons_admin:
+    title: "Working on <b>Admins</b> table, <b>\"persons_admins\"</b> in DB"
+    owner_id: "Owner's id"
+    login_name: "Login name"
+    email: "Email"
+    salt: "Salt"
+    hashed_password: "Encrypted password"
+hu:
+  mdl:
+    id: "Id"
+    created_at: "Created at"
+    updated_at: "Updated at"
+  hw_key:
+    title: "Working on <b>Keys</b> table, <b>\"hw_keys\"</b> in DB"
+    keyId: "Key name"
+  hw_node:
+    title: "Working on <b>Nodes</b> table, <b>\"hw_nodes\"</b> in DB"
+    sid: "SId"
+    sid_at: "SId at"
+    name: "Name"
+    readers_nr: "Nr. of readers"
+    devices_nr: "Nr. of devices"
+    answer_status: "Answer status"
+  hw_reader:
+    title: "Working on <b>Readers</b> table, <b>\"hw_readers\"</b> in DB"
+    node_id: "On node"
+    name: "Name"
+    order: "Order"
+  hw_device:
+    title: "Working on <b>Devices</b> table, <b>\"hw_devices\"</b> in DB"
+    node_id: "On node"
+    name: "Name"
+    order: "Order"
+  persons_owner:
+    title: "Working on <b>Owners</b> table, <b>\"persons_owners\"</b> in DB"
+    key_id: "Key's id"
+    first_name: "First name"
+    last_name: "Last name"
+  persons_admin:
+    title: "Working on <b>Admins</b> table, <b>\"persons_admins\"</b> in DB"
+    owner_id: "Owner's id"
+    login_name: "Login name"
+    email: "Email"
+    salt: "Salt"
+    hashed_password: "Encrypted password"
+
