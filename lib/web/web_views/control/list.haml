@@ -1,0 +1,14 @@
+- rs = obj.all
+%p.title= pretty_title(obj)
+%table.list{:cellspacing => "0"}
+  %thead
+    %tr
+      - pretty_column_names(obj).each do |column|
+        %th= column
+  %tbody
+    - rs.each do |r|
+      %tr.cycle
+        - r.table_data.each do |f|
+          %td
+            %span{:class => f[:css]}= f[:value]
+
