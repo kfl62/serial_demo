@@ -42,30 +42,18 @@ module Ib
             lang = I18n.locale
             lang == I18n.default_locale ? "" : "/#{lang}"
           end
-          
-          def camelize(lower_case_and_underscored_word, first_letter_in_uppercase = true)
-            if first_letter_in_uppercase
-              lower_case_and_underscored_word.to_s.gsub(/\/(.?)/) { "::#{$1.upcase}" }.gsub(/(?:^|_)(.)/) { $1.upcase }
-            else
-              lower_case_and_underscored_word.to_s[0].chr.downcase + camelize(lower_case_and_underscored_word)[1..-1]
-            end
-          end          
-          def constantize(camel_cased_word)
-            names = camel_cased_word.split('::')
-            names.shift if names.empty? || names.first.empty?
-
-            constant = Object
-            names.each do |name|
-              constant = constant.const_defined?(name) ? constant.const_get(name) : constant.const_missing(name)
-            end
-            constant
-          end
+          # @todo
           def modelize(str)
-            a, b = str.split('_')
-            if a == 'hw'
-              Ib::Db::Hw.const_get(b.capitalize)
+            m, c = str.split('_')
+            guess_model(m).const_get(c.capitalize)
+          end
+          # @todo
+          def guess_model(str)
+            case str
+            when "hw"       then Ib::Db::Hw
+            when "persons"  then Ib::Db::Persons
             else
-              Ib::Db::Persons.const_get(b.capitalize)
+              Object
             end
           end
         end
