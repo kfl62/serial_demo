@@ -1,6 +1,6 @@
 #encoding: utf-8
 =begin
-#IButton Database Hardware-Device create statement#
+#IButton Database Hardware-Devices create statement#
 =end
 
 class CreateTableHwDevices < Sequel::Migration
@@ -9,8 +9,8 @@ class CreateTableHwDevices < Sequel::Migration
     create_table(:hw_devices) do
       primary_key   :id
       foreign_key   :node_id,             :hw_nodes
-      column        :name,                String
-      column        :order,               String,       :size => 2
+      foreign_key   :task_id,             :hw_tasks
+      column        :name,                String,     :size => 20
       column        :created_at,          DateTime
       column        :updated_at,          DateTime
     end

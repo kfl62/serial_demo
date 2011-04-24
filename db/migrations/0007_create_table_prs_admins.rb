@@ -9,8 +9,8 @@ class CreateTablePrsAdmins < Sequel::Migration
     create_table('prs_admins') do
       primary_key   :id
       foreign_key   :owner_id,            :prs_owners
-      column        :login_name,          String
-      column        :email,               String
+      column        :login_name,          String,     :size => 20
+      column        :email,               String,     :size => 50
       column        :salt,                String
       column        :hashed_password,     String
       column        :created_at,          DateTime

@@ -1,14 +1,14 @@
 #encoding: utf-8
 =begin
-#IButton Database Hardware-Readers create statement#
+#IButton Database Hardware-Tasks create statement#
 =end
 
-class CreateTableHwReaders < Sequel::Migration
+class CreateTableHwTasks < Sequel::Migration
 
   def up
-    create_table(:hw_readers) do
+    create_table(:hw_tasks) do
       primary_key   :id
-      foreign_key   :node_id,             :hw_nodes
+      column        :taskId,              Fixnum
       column        :name,                String,     :size => 20
       column        :created_at,          DateTime
       column        :updated_at,          DateTime
@@ -16,7 +16,7 @@ class CreateTableHwReaders < Sequel::Migration
   end
 
   def down
-    drop_table(:hw_readers)
+    drop_table(:hw_tasks)
   end
 
 end

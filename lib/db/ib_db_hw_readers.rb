@@ -4,13 +4,12 @@ module Ib
   module Db
     module Hw
       # #IButton Database Hardware-Reader model
-      # ##Migration 003_create_table_hw_readers.rb
+      # ##Migration 0003_create_table_hw_readers.rb
       #     def up
       #       create_table(:hw_readers) do
       #         primary_key :id
       #         foreign_key :node_id,       :hw_nodes
-      #         column      :name,          String
-      #         column      :order,         String,     :size => 2
+      #         column      :name,          String,     :size => 20
       #         column      :created_at,    DateTime
       #         column      :updated_at,    DateTime
       #       end
@@ -19,17 +18,22 @@ module Ib
       #       drop_table(:hw_readers)
       #     end
       # ##Loaded plugins
-      #   `plugin :timestamps` more info ({http://sequel.rubyforge.org/rdoc-plugins/classes/Sequel/Plugins/Timestamps.html Sequel plugin timestams})
+      #   `plugin :timestamps` more info ({http://sequel.rubyforge.org/rdoc-plugins/classes/Sequel/Plugins/Timestamps.html Sequel plugin timestamps})
       # ##Associations
-      #   *many_to_one* -> {Ib::Db::Hw::Node}
+      #   *many_to_one* -> node         {Ib::Db::Hw::Node}<br />
+      #   *one_to_many* -> permissions  {Ib::Db::Persons::Permission}
       # @example Connected to node?
       #   r = Reader.first
       #   r.node.sid         #=> Integer connected node's sid
+      # @example Permissions
+      #   r = Reader.first
+      #   r.permissions      #> Array of {Ib::Db::Persons::Permission} objects
       class Reader < Sequel::Model
         set_dataset :hw_readers
         plugin :timestamps
 
         many_to_one :node
+        one_to_many :permissions, :class => "Ib::Db::Persons::Permission", :key => :request_reader
         # @return [Array of Hashes] one Hash for each column
         # @example Each hash contains:
         #   {

@@ -4,7 +4,7 @@ module Ib
   module Db
     module Hw
       # #IButton Database Hardware-Key model
-      # ##Migration 001_create_table_hw_keys.rb
+      # ##Migration 0001_create_table_hw_keys.rb
       #     def up
       #       create_table(:hw_keys) do
       #         primary_key :id
@@ -19,7 +19,7 @@ module Ib
       # ##Loaded plugins
       #   `plugin :timestamps` more info ({http://sequel.rubyforge.org/rdoc-plugins/classes/Sequel/Plugins/Timestamps.html Sequel plugins timestamps})
       # ##Associations
-      # *one_to_one* -> {Ib::Db::Persons::Owner}
+      # *one_to_one* -> owner {Ib::Db::Persons::Owner}
       # @example Owners first name
       #   k = Key.first
       #   k.owner.first_name #=> first name of the keys owner
@@ -28,7 +28,6 @@ module Ib
         plugin :timestamps
 
         one_to_one :owner, :class => "Ib::Db::Persons::Owner"
-
         # @return [Array of Hashes] one Hash for each column
         # @example Each hash contains:
         #   {

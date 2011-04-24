@@ -4,13 +4,13 @@ module Ib
   module Db
     module Persons
       # #IButton Database Persons-Admins model
-      # ##Migration 006_create_table_persons_admins.rb
+      # ##Migration 0007_create_table_persons_admins.rb
       #     def up
       #       create_table(:persons_admins) do
       #         primary_key :id
       #         foreign_key :owner_id,          :prs_owners
-      #         column      :login_name,        String
-      #         column      :email,             String
+      #         column      :login_name,        String,     :size => 20
+      #         column      :email,             String,     :size => 20
       #         column      :salt,              String
       #         column      :hashed_password,   String
       #         column      :created_at,        DateTime
@@ -21,9 +21,9 @@ module Ib
       #       drop_table(:persons_admins)
       #     end
       # ##Loaded plugins
-      #   `plugin :timestamps` more info ({http://sequel.rubyforge.org/rdoc-plugins/classes/Sequel/Plugins/Timestamps.html Sequel plugin timestams})
+      #   `plugin :timestamps` more info ({http://sequel.rubyforge.org/rdoc-plugins/classes/Sequel/Plugins/Timestamps.html Sequel plugin timestamps})
       # ##Associations
-      #   *many_to_one* -> {Ib::Db::Persons::Owner}
+      #   *many_to_one* -> owner {Ib::Db::Persons::Owner}
       # @example Owners keyId
       #   o = Owner.first
       #   o.key.keyId                   #=> String key's keyId

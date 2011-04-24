@@ -4,16 +4,15 @@ module Ib
   module Db
     module Hw
       # #IButton Database Hardware-Node model
-      # ##Migration 002_create_table_hw_nodes.rb
+      # ##Migration 0002_create_table_hw_nodes.rb
       #     def up
       #       create_table(:hw_nodes) do
       #         primary_key :id
       #         column      :sid,           String,     :size => 4, :default => "2046"
       #         column      :sid_at,        DateTime
-      #         column      :name,          String
+      #         column      :name,          String,     :size => 20
       #         column      :readers_nr,    Fixnum,     :size => 2
       #         column      :devices_nr,    Fixnum,     :size => 2
-      #         column      :answer_status, TrueClass,              :default => false
       #         column      :created_at,    DateTime
       #         column      :updated_at,    DateTime
       #       end
@@ -22,20 +21,28 @@ module Ib
       #       drop_table(:hw_nodes)
       #     end
       # ##Loaded plugins
-      #   `plugin :timestamps` more info ({http://sequel.rubyforge.org/rdoc-plugins/classes/Sequel/Plugins/Timestamps.html Sequel plugin timestams})
+      #   `plugin :timestamps` more info ({http://sequel.rubyforge.org/rdoc-plugins/classes/Sequel/Plugins/Timestamps.html Sequel plugin timestamps})
       # ##Associations
-      #   *one_to_many* -> {Ib::Db::Hw::Reader}<br />
-      #   *one_to_many* -> {Ib::Db::Hw::Device}
+      #   *one_to_many* -> readers              {Ib::Db::Hw::Reader}<br />
+      #   *one_to_many* -> devices              {Ib::Db::Hw::Device}<br />
+      #   *one_to_many* -> request_permissions  {Ib::Db::Persons::Permission}<br />
+      #   *one_to_many* -> response_permissions {Ib::Db::Persons::Permission}
       # @example Connected readers/devices
       #   n = Node.first
       #   n.readers         #=> Array of connected readers
       #   n.devices.length  #=> Integer the count of connected devices
+      # @example Permissions
+      #   n = Node.first
+      #   n.request_permissions   #> Array of {Ib::Db::Persons::Permission} objects
+      #   n.response_permissions  #> Array of {Ib::Db::Persons::Permission} objects
       class Node < Sequel::Model
         set_dataset :hw_nodes
         plugin :timestamps
 
         one_to_many :readers
         one_to_many :devices
+        one_to_many :request_permissions,  :class => "Ib::Db::Persons::Permission", :key => :request_node
+        one_to_many :response_permissions, :class => "Ib::Db::Persons::Permission", :key => :response_node
         # @return [Array of Hashes] one Hash for each column
         # @example Each hash contains:
         #   {

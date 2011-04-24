@@ -1,6 +1,6 @@
 #encoding: utf-8
 =begin
-#IButton Database Persons-Owner create statement#
+#IButton Database Persons-Owners create statement#
 =end
 
 class CreateTablePrsOwners < Sequel::Migration
@@ -9,8 +9,8 @@ class CreateTablePrsOwners < Sequel::Migration
     create_table('prs_owners') do
       primary_key   :id
       foreign_key   :key_id,              :hw_keys
-      column        :first_name,          String
-      column        :last_name,           String
+      column        :first_name,          String,     :size => 20
+      column        :last_name,           String,     :size => 20
       column        :created_at,          DateTime
       column        :updated_at,          DateTime
     end

@@ -1,6 +1,6 @@
 #encoding: utf-8
 =begin
-#IButton Database Hardware-Key create statement#
+#IButton Database Hardware-Keys create statement#
 =end
 
 class CreateTableHwKeys < Sequel::Migration
