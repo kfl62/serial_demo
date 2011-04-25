@@ -6,6 +6,7 @@ en:
   hw_key:
     title: "Working on <b>Keys</b> table, <b>\"hw_keys\"</b> in DB"
     keyId: "Key name"
+    delete_message: "I was deleted, the former owner's (%{data}) keyId is set now to a fake one (123456789ABC). Please do something!"
   hw_node:
     title: "Working on <b>Nodes</b> table, <b>\"hw_nodes\"</b> in DB"
     sid: "SId"
@@ -13,22 +14,28 @@ en:
     name: "Name"
     readers_nr: "Nr. of readers"
     devices_nr: "Nr. of devices"
-    answer_status: "Answer status"
+    delete_message: "I was deleted, you just orphaned %{readers} readers, %{devices} devices and deleted  %{request_permissions} request_permission rules, %{response_permissions} release_permission rules!"
   hw_reader:
     title: "Working on <b>Readers</b> table, <b>\"hw_readers\"</b> in DB"
     node_id: "On node"
     name: "Name"
-    order: "Order"
+    delete_message: "I was deleted, you just deleted  %{permissions} permission rule!"
   hw_device:
     title: "Working on <b>Devices</b> table, <b>\"hw_devices\"</b> in DB"
     node_id: "On node"
     name: "Name"
-    order: "Order"
+    delete_message: "I was deleted, you just deleted  %{permissions} permission rule!"
+  hw_task:
+    title: "Working on <b>Tasks</b> table, <b>\"hw_tasks\"</b> in DB"
+    taskId: "Integer(32)"
+    name: "Name"
+    delete_message: "I was deleted, you just have freed  %{devices} devices!"
   persons_owner:
     title: "Working on <b>Owners</b> table, <b>\"persons_owners\"</b> in DB"
     key_id: "Key's id"
     first_name: "First name"
     last_name: "Last name"
+    delete_message: "%{data} was deleted and his/her admin account (if he/she had one) was deleted to!"
   persons_admin:
     title: "Working on <b>Admins</b> table, <b>\"persons_admins\"</b> in DB"
     owner_id: "Owner's id"
@@ -44,6 +51,7 @@ de:
   hw_key:
     title: "Working on <b>Keys</b> table, <b>\"hw_keys\"</b> in DB"
     keyId: "Key name"
+    delete_message: "I was deleted, the former owner's (%{data}) keyId is set now to a fake one (123456789ABC). Please do something!"
   hw_node:
     title: "Working on <b>Nodes</b> table, <b>\"hw_nodes\"</b> in DB"
     sid: "SId"
@@ -51,17 +59,22 @@ de:
     name: "Name"
     readers_nr: "Nr. of readers"
     devices_nr: "Nr. of devices"
-    answer_status: "Answer status"
+    delete_message: "I was deleted, you just orphaned %{readers} readers, %{devices} devices and deleted  %{request_permissions} request_permission rules, %{response_permissions} release_permission rules!"
   hw_reader:
     title: "Working on <b>Readers</b> table, <b>\"hw_readers\"</b> in DB"
     node_id: "On node"
     name: "Name"
-    order: "Order"
+    delete_message: "I was deleted, you just deleted  %{permissions} permission rule!"
   hw_device:
     title: "Working on <b>Devices</b> table, <b>\"hw_devices\"</b> in DB"
     node_id: "On node"
     name: "Name"
-    order: "Order"
+    delete_message: "I was deleted, you just deleted  %{permissions} permission rule!"
+  hw_task:
+    title: "Working on <b>Tasks</b> table, <b>\"hw_tasks\"</b> in DB"
+    taskId: "Integer(32)"
+    name: "Name"
+    delete_message: "I was deleted, you just have freed  %{devices} devices!"
   persons_owner:
     title: "Working on <b>Owners</b> table, <b>\"persons_owners\"</b> in DB"
     key_id: "Key's id"
@@ -82,6 +95,7 @@ ro:
   hw_key:
     title: "Working on <b>Keys</b> table, <b>\"hw_keys\"</b> in DB"
     keyId: "Key name"
+    delete_message: "I was deleted, the former owner's (%{data}) keyId is set now to a fake one (123456789ABC). Please do something!"
   hw_node:
     title: "Working on <b>Nodes</b> table, <b>\"hw_nodes\"</b> in DB"
     sid: "SId"
@@ -89,17 +103,22 @@ ro:
     name: "Name"
     readers_nr: "Nr. of readers"
     devices_nr: "Nr. of devices"
-    answer_status: "Answer status"
+    delete_message: "I was deleted, you just orphaned %{readers} readers, %{devices} devices and deleted  %{request_permissions} request_permission rules, %{response_permissions} release_permission rules!"
   hw_reader:
     title: "Working on <b>Readers</b> table, <b>\"hw_readers\"</b> in DB"
     node_id: "On node"
     name: "Name"
-    order: "Order"
+    delete_message: "I was deleted, you just deleted  %{permissions} permission rule!"
   hw_device:
     title: "Working on <b>Devices</b> table, <b>\"hw_devices\"</b> in DB"
     node_id: "On node"
     name: "Name"
-    order: "Order"
+    delete_message: "I was deleted, you just deleted  %{permissions} permission rule!"
+  hw_task:
+    title: "Working on <b>Tasks</b> table, <b>\"hw_tasks\"</b> in DB"
+    taskId: "Integer(32)"
+    name: "Name"
+    delete_message: "I was deleted, you just have freed  %{devices} devices!"
   persons_owner:
     title: "Working on <b>Owners</b> table, <b>\"persons_owners\"</b> in DB"
     key_id: "Key's id"
@@ -120,6 +139,7 @@ hu:
   hw_key:
     title: "Working on <b>Keys</b> table, <b>\"hw_keys\"</b> in DB"
     keyId: "Key name"
+    delete_message: "I was deleted, the former owner's (%{data}) keyId is set now to a fake one (123456789ABC). Please do something!"
   hw_node:
     title: "Working on <b>Nodes</b> table, <b>\"hw_nodes\"</b> in DB"
     sid: "SId"
@@ -127,17 +147,22 @@ hu:
     name: "Name"
     readers_nr: "Nr. of readers"
     devices_nr: "Nr. of devices"
-    answer_status: "Answer status"
+    delete_message: "I was deleted, you just orphaned %{readers} readers, %{devices} devices and deleted  %{request_permissions} request_permission rules, %{response_permissions} release_permission rules!"
   hw_reader:
     title: "Working on <b>Readers</b> table, <b>\"hw_readers\"</b> in DB"
     node_id: "On node"
     name: "Name"
-    order: "Order"
+    delete_message: "I was deleted, you just deleted  %{permissions} permission rule!"
   hw_device:
     title: "Working on <b>Devices</b> table, <b>\"hw_devices\"</b> in DB"
     node_id: "On node"
     name: "Name"
-    order: "Order"
+    delete_message: "I was deleted, you just deleted  %{permissions} permission rule!"
+  hw_task:
+    title: "Working on <b>Tasks</b> table, <b>\"hw_tasks\"</b> in DB"
+    taskId: "Integer(32)"
+    name: "Name"
+    delete_message: "I was deleted, you just have freed  %{devices} devices!"
   persons_owner:
     title: "Working on <b>Owners</b> table, <b>\"persons_owners\"</b> in DB"
     key_id: "Key's id"
