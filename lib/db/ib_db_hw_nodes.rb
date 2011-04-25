@@ -21,12 +21,15 @@ module Ib
       #       drop_table(:hw_nodes)
       #     end
       # ##Loaded plugins
-      #   `plugin :timestamps` more info ({http://sequel.rubyforge.org/rdoc-plugins/classes/Sequel/Plugins/Timestamps.html Sequel plugin timestamps})
+      #   `plugin :timestamps` more info ({http://sequel.rubyforge.org/rdoc-plugins/classes/Sequel/Plugins/Timestamps.html Sequel plugin timestamps})<br />
+      #   `plugin :validation_helpers` more info ({http://sequel.rubyforge.org/rdoc-plugins/classes/Sequel/Plugins/ValidationHelpers.html Sequel plugins validation_helpers})
       # ##Associations
       #   *one_to_many* -> readers              {Ib::Db::Hw::Reader}<br />
       #   *one_to_many* -> devices              {Ib::Db::Hw::Device}<br />
       #   *one_to_many* -> request_permissions  {Ib::Db::Persons::Permission}<br />
       #   *one_to_many* -> response_permissions {Ib::Db::Persons::Permission}
+      # ##Validations
+      #   TODO document validations
       # @example Connected readers/devices
       #   n = Node.first
       #   n.readers         #=> Array of connected readers
@@ -38,11 +41,25 @@ module Ib
       class Node < Sequel::Model
         set_dataset :hw_nodes
         plugin :timestamps
+        plugin :validation_helpers
 
         one_to_many :readers
         one_to_many :devices
         one_to_many :request_permissions,  :class => "Ib::Db::Persons::Permission", :key => :request_node
         one_to_many :response_permissions, :class => "Ib::Db::Persons::Permission", :key => :response_node
+        # @todo
+        def validate
+          validates_presence [:name,:readers_nr,:devices_nr]
+          validates_integer [:readers_nr,:devices_nr], :allow_nil => true
+          validates_max_length(readers_nr, [:readers])
+          validates_max_length(devices_nr, [:devices])
+        end
+        # @todo
+        # @return [Log::Error]
+        def before_destroy
+          delete_message
+          super
+        end
         # @return [Array of Hashes] one Hash for each column
         # @example Each hash contains:
         #   {
@@ -59,10 +76,16 @@ module Ib
             {:css => "normal",:name  => "name",:label => I18n.t('hw_node.name'),:value => name},
             {:css => "integer",:name  => "readers_nr",:label => I18n.t('hw_node.readers_nr'),:value => readers_nr},
             {:css => "integer",:name  => "devices_nr",:label => I18n.t('hw_node.devices_nr'),:value => devices_nr},
-            {:css => "normal",:name  => "answer_status",:label => I18n.t('hw_node.answer_status'),:value => answer_status},
             {:css => "datetime",:name  => "created_at",:label => I18n.t('mdl.created_at'),:value => created_at},
             {:css => "datetime",:name  => "updated_at",:label => I18n.t('mdl.updated_at'),:value => updated_at}
           ]
+        end
+        protected
+        # Insert a translated warning message in {Ib::Db::Log::Error} table
+        # @return [Log::Error]
+        def delete_message
+          Log::Error.create(:from => "Hw::Node id=#{id}",
+                            :error => I18n.t("hw_node.delete_message", :readers => readers.length, :devices => devices.length, :request_permissions => request_permissions.length, :response_permissions => response_permissions.length))
         end
       end
     end

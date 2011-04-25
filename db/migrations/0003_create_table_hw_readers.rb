@@ -8,10 +8,10 @@ class CreateTableHwReaders < Sequel::Migration
   def up
     create_table(:hw_readers) do
       primary_key   :id
-      foreign_key   :node_id,             :hw_nodes
-      column        :name,                String,     :size => 20
-      column        :created_at,          DateTime
-      column        :updated_at,          DateTime
+      foreign_key   :node_id,    :hw_nodes, :on_delete => :set_null, :on_update => :cascade
+      column        :name,       String,    :size => 20
+      column        :created_at, DateTime
+      column        :updated_at, DateTime
     end
   end
 

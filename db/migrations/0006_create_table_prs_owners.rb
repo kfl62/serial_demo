@@ -8,11 +8,11 @@ class CreateTablePrsOwners < Sequel::Migration
   def up
     create_table('prs_owners') do
       primary_key   :id
-      foreign_key   :key_id,              :hw_keys
-      column        :first_name,          String,     :size => 20
-      column        :last_name,           String,     :size => 20
-      column        :created_at,          DateTime
-      column        :updated_at,          DateTime
+      foreign_key   :key_id,     :hw_keys, :default => 1, :on_delete => :set_default, :on_update => :cascade
+      column        :first_name, String,   :size => 20
+      column        :last_name,  String,   :size => 20
+      column        :created_at, DateTime
+      column        :updated_at, DateTime
     end
   end
 

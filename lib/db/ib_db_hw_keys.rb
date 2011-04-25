@@ -41,7 +41,7 @@ module Ib
         #   which is a fake key's id, with keyId = 123456789ABC
         # @return [Log::Error]
         def before_destroy
-          delete_msg
+          delete_message
           super
         end
         # @return [Array of Hashes] one Hash for each column
@@ -60,12 +60,12 @@ module Ib
             {:css => "datetime",:name  => "updated_at",:label => I18n.t('mdl.updated_at'),:value => updated_at}
           ]
         end
-        private
+        protected
         # Insert a translated warning message in {Ib::Db::Log::Error} table
-        #  @return [Log::Error]
-        def delete_msg
-          Log::Error.create(:from => "Db::Key id=#{id}",
-                            :error => I18n.t('hw_key.delete_msg',:data => owner.full_name))
+        # @return [Log::Error]
+        def delete_message
+          Log::Error.create(:from => "Hw::Key id=#{id}",
+                            :error => I18n.t('hw_key.delete_message',:data => owner.full_name))
         end
       end
     end
