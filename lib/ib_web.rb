@@ -21,10 +21,6 @@ module Ib
     Sinatra::Base.set(:root, WebConfig.sinatra_root)
     Sinatra::Base.set(:haml, :format => :html5, :attr_wrapper => '"')
 
-    I18n.load_path += Dir.glob(File.join(WebConfig.sinatra_translations, '*.yml'))
-    I18n.load_path += Dir.glob(File.join(WebConfig.db_models, '*.yml'))
-    I18n.default_locale = :en
-
     # @todo document this method
     def self.server
       Rack::Builder.new do

@@ -44,6 +44,10 @@ module Ib
       :mysql_password   => "ibutton",
       :db_models        => File.join(app_path, 'lib', 'db')
     )
+
+    I18n.load_path += Dir.glob(File.join(WebConfig.sinatra_translations, '*.yml'))
+    I18n.load_path += Dir.glob(File.join(WebConfig.db_models, '*.yml'))
+    I18n.default_locale = :en
   end
 end
 
