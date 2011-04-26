@@ -1,8 +1,16 @@
 #encoding: utf-8
-require "bundler/setup"
-require "sequel"
 
+task :default => "doc"
+
+desc "Generate API docs"
+task :doc do
+  puts "Generating API docs"
+  exec "yardoc"
+  puts "Done. Docs are in ./public/docs/ folder"
+end
 task :environment do
+  require "bundler/setup"
+  require "sequel"
   DB = Sequel.connect("sqlite://db/ibutton.sqlite3")
   ::Sequel.extension :migration
 end
