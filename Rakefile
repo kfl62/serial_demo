@@ -31,7 +31,7 @@ end
 namespace :run do
   desc "Start web server"
   task :web do
-    exec "thin start"
+    exec "rackup -sthin -p3000"
   end
 end
 
