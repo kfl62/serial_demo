@@ -1,5 +1,6 @@
 source "http://rubygems.org"
 gem "sinatra", :git => "git://github.com/sinatra/sinatra.git", :require => "sinatra/base"
+gem "thin"
 gem "rack-flash"
 gem "rack-rewrite", :require => "rack/rewrite"
 gem "haml"
