@@ -31,7 +31,16 @@ end
 namespace :run do
   desc "Start web server"
   task :web do
+    puts "Starting thin on port 3000"
     exec "rackup -sthin -p3000"
+  end
+  desc "Watching serial port"
+  task :serial do
+    require "./lib/ib_serial.rb"
+    puts "Listening on #{Ib::Serial::SerialConfig.dev}"
+    while true
+      Ib::Serial.server
+    end
   end
 end
 
