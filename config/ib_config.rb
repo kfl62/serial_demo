@@ -30,20 +30,27 @@ module Ib
       :db_models            => File.join(app_path, 'lib', 'db')
     )
 
-    SerialConfig = OpenStruct.new(
-      :dev       => '/dev/ttyS0',
-      :baud      => 115200
-    )
+    if File.exists?("./config/simple_conf.yaml")
+      c =  YAML.load_file("./config/simple_conf.yaml")
+      SerialConfig = OpenStruct.new c["SerialConfig"]
+      DbConfig = OpenStruct.new c["DbConfig"]
+      DbConfig.db_models = File.join(app_path, 'lib', 'db')
+    else
+      SerialConfig = OpenStruct.new(
+        :dev       => '/dev/ttyS0',
+        :baud      => 115200
+      )
 
-    DbConfig = OpenStruct.new(
-      :database         => 'sqlite',
-      :sqlite_path      => 'db',
-      :sqlite_file      => 'ibutton.sqlite3',
-      :mysql_dbname     => "ibutton",
-      :mysql_username   => "root",
-      :mysql_password   => "ibutton",
-      :db_models        => File.join(app_path, 'lib', 'db')
-    )
+      DbConfig = OpenStruct.new(
+        :database         => 'sqlite',
+        :sqlite_path      => 'db',
+        :sqlite_file      => 'ibutton.sqlite3',
+        :mysql_dbname     => "ibutton",
+        :mysql_username   => "root",
+        :mysql_password   => "ibutton",
+        :db_models        => File.join(app_path, 'lib', 'db')
+      )
+    end
 
     I18n.load_path += Dir.glob(File.join(WebConfig.sinatra_translations, '*.yml'))
     I18n.load_path += Dir.glob(File.join(WebConfig.db_models, '*.yml'))
