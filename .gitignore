@@ -6,4 +6,5 @@ tmp/*
 db/*.sqlite3
 public/docs/*
 /config/simple_conf.yaml
+Gemfile.lock
 
