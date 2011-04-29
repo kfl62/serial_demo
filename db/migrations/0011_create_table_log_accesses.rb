@@ -14,7 +14,7 @@ class CreateTableLogAccesses < Sequel::Migration
       column      :node,       String,     :size => 20
       column      :reader,     String,     :size => 20
       column      :device,     String,     :size => 20
-      column      :task,       String,     :size => 20
+      column      :task,       String,     :size => 40
       column      :status,     TrueClass, :default => true
     end
   end
