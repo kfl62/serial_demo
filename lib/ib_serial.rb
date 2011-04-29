@@ -9,12 +9,10 @@ module Ib
   module Serial
     include Config
     require 'ib_serial_server'
+    require 'ib_serial_msg'
 
     START_BYTE = ">"      # hexa
     STOP_BYTE  = "\n"     # hexa
-
-    #TODO set in db
-    RESPONSEDATA = 1
 
     #opcodes
     ACCESS_REQUEST  = "01"
@@ -39,7 +37,7 @@ module Ib
     def self.server
       ibs = Server.new(SerialConfig.dev, SerialConfig.baud)
       msg = ibs.gets
-      ibs.handle(ibs,msg)
+      ibs.handle(msg)
     end
   end
 end
