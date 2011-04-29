@@ -9,9 +9,8 @@ module Ib
       #        create_table('log_errors') do
       #          primary_key :id
       #          column      :created_at, DateTime
-      #          column      :node_id,    Fixnum
-      #          column      :node,       String,     :size => 20
-      #          column      :error,      String,     :size => 20
+      #          column      :from,       String
+      #          column      :error,      String
       #        end
       #      end
       #      def down
