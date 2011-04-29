@@ -45,8 +45,8 @@ module Ib
 
         one_to_many :readers
         one_to_many :devices
-        one_to_many :request_permissions,  :class => "Ib::Db::Persons::Permission", :key => :request_node
-        one_to_many :response_permissions, :class => "Ib::Db::Persons::Permission", :key => :response_node
+        one_to_many :request_permissions,  :class => "Ib::Db::Persons::Permission", :key => :request_node_id
+        one_to_many :response_permissions, :class => "Ib::Db::Persons::Permission", :key => :response_node_id
         # @todo
         def validate
           validates_presence [:name,:readers_nr,:devices_nr]

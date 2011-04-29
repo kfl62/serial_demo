@@ -37,7 +37,7 @@ module Ib
         plugin :validation_helpers
 
         many_to_one :node
-        one_to_many :permissions, :class => "Ib::Db::Persons::Permission", :key => :request_reader
+        one_to_many :permissions, :class => "Ib::Db::Persons::Permission", :key => :request_reader_id
         class << self
           # Orphaned readers (does not belong to any node)
           # @return [Array]

@@ -43,7 +43,7 @@ module Ib
 
         many_to_one :node
         many_to_one :task
-        one_to_many :permissions, :class => "Ib::Db::Persons::Permission", :key => :response_device
+        one_to_many :permissions, :class => "Ib::Db::Persons::Permission", :key => :response_device_id
         class << self
           # Orphaned devices (does not belong to any node)
           # @return [Array]

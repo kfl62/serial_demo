@@ -8,13 +8,13 @@ module Ib
       #     def up
       #       create_table(:prs_permissions) do
       #         primary_key   :id
-      #         foreign_key   :group_id,          :prs_groups
-      #         foreign_key   :request_node,      :hw_nodes
-      #         foreign_key   :request_reader,    :hw_reader
-      #         foreign_key   :response_node,     :hw_nodes
-      #         foreign_key   :response_device,   :hw_devices
-      #         column        :created_at,        DateTime
-      #         column        :updated_at,        DateTime
+      #         foreign_key   :group_id,           :prs_groups
+      #         foreign_key   :request_node_id,    :hw_nodes
+      #         foreign_key   :request_reader_id,  :hw_reader
+      #         foreign_key   :response_node_id,   :hw_nodes
+      #         foreign_key   :response_device_id, :hw_devices
+      #         column        :created_at,         DateTime
+      #         column        :updated_at,         DateTime
       #       end
       #     end
       #     def down
@@ -38,13 +38,13 @@ module Ib
         plugin :validation_helpers
 
         many_to_one :group
-        many_to_one :request_node,     :class => "Ib::Db::Hw::Node",  :key => :id
-        many_to_one :request_reader,   :class => "Ib::Db::Hw::Reader",:key => :id
-        many_to_one :response_node,    :class => "Ib::Db::Hw::Node",  :key => :id
-        many_to_one :response_device,  :class => "Ib::Db::Hw::Device",:key => :id
+        many_to_one :request_node,     :class => "Ib::Db::Hw::Node"
+        many_to_one :request_reader,   :class => "Ib::Db::Hw::Reader"
+        many_to_one :response_node,    :class => "Ib::Db::Hw::Node"
+        many_to_one :response_device,  :class => "Ib::Db::Hw::Device"
         # @todo
         def validate
-          validates_presence [:group, :request_node, :request_reader, :response_node, :response_device]
+          #validates_presence [:group, :request_node, :request_reader, :response_node, :response_device]
         end
         # @return [Log::Error]
         def before_destroy
@@ -63,6 +63,31 @@ module Ib
           [
           ]
         end
+
+        def msg_request_node_sid
+          retval = "%04d" % request_node.id
+          retval = retval[2,2] + retval[0,2]
+          retval
+        end
+
+        def msg_request_reader_id
+          "%02d" % request_reader.id
+        end
+
+        def msg_response_node_sid
+          retval = "%04d" % response_node.id
+          retval = retval[2,2] + retval[0,2]
+          retval
+        end
+
+        def msg_response_device_id
+          "%02d" % response_device.id
+        end
+
+        def msg_response_device_taskId
+          "%08d" % response_device.task.taskId.to_s(16)
+        end
+
         protected
         # Insert a translated warning message in {Ib::Db::Log::Error} table
         # @return [Log::Error]
