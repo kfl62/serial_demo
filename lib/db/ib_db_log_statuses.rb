@@ -23,6 +23,9 @@ module Ib
         set_dataset :log_statuses
         plugin :timestamps
 
+        def is_alive
+          Time.now.to_i - updated_at.to_i > 60 ? "DEAD" : "ALIVE"
+        end
         # @return [Array of Hashes] one Hash for each column
         # @example Each hash contains:
         #   {
@@ -36,7 +39,8 @@ module Ib
             {:css => "datetime",:name  => "created_at",:label => I18n.t('log_status.created_at'),:value => created_at},
             {:css => "integer",:name  => "node_id",:label => I18n.t('log_status.node_id'),:value => node_id},
             {:css => "normal",:name  => "node",:label => I18n.t('log_status.node'),:value => node},
-            {:css => "datetime",:name  => "updated_at",:label => I18n.t('log_status.updated_at'),:value => updated_at}
+            {:css => "ce bo",:name  => "is_alive",:label => I18n.t('log_status.is_alive'),:value => is_alive},
+            {:css => "time",:name  => "updated_at",:label => I18n.t('log_status.updated_at'),:value => updated_at}
           ]
         end
       end

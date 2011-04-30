@@ -76,7 +76,8 @@ en:
     created_at: "Date/Time"
     node_id: "Node"
     node: "Name"
-    updated_at: "Alive"
+    is_alive: "Status"
+    updated_at: "Last alive"
 de:
   mdl:
     id: "Id"
