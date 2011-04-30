@@ -1,0 +1,40 @@
+table.list
+  border:
+    style: solid
+    color: rgba(62, 62, 62, 1)
+    width: 1px
+    spacing: 0px
+  +border-radius(0.5em)
+  margin: auto
+  padding: 5px
+  font-size: 0.9em
+  tr
+    &:first-child
+      td
+        border-top: solid 1px rgba(62, 62, 62, 1)
+    &.odd
+      background-color: rgba(210, 210, 210, 1)
+  td
+    border-right: solid 1px rgba(62, 62, 62, 1)
+    &:last-child
+      border: none
+    span
+      margin: 0px 2px
+      display: block
+      &.integer
+        text-align: right
+      &.datetime, &.put, &.delete
+        cursor: pointer
+      &.put
+        background:
+          image: image_url(unquote("/images/icons/db_edit.png"))
+        width: 14px
+        height: 14px
+        float: left
+      &.delete
+        background:
+          image: image_url(unquote("/images/icons/db_remove.png"))
+        width: 14px
+        height: 14px
+        float: left
+
