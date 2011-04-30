@@ -52,6 +52,7 @@ module Ib
             case str
             when "hw"       then Ib::Db::Hw
             when "persons"  then Ib::Db::Persons
+            when "log"      then Ib::Db::Log
             else
               Object
             end
