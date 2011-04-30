@@ -12,7 +12,14 @@ module Ib
 
       # @todo Document this method
       def string_sid(msg)
-        msg[2,2] + msg[0,2]
+        if msg.class == Fixnum
+          retval = "%04X" % msg
+          retval= retval[2,2] + retval[0,2]
+        else
+         retval= msg[2,2] + msg[0,2]
+         retval = retval.to_i(16)
+        end
+        retval
       end
       # @todo Document this method
       def string_opcode(msg)
@@ -22,22 +29,33 @@ module Ib
       #   Ex. msg[6,2] on access request.
       # @return [String] readers ID #=> "01"
       def string_reader(msg)
-        msg[6,2]
+        retval = msg[6,2]
+        retval = retval.to_i(16) if msg.class == String
+        retval = "%02X" % msg if msg.class == Fixnum
+        retval
+      end
+      # @todo Document this method
+      def string_device(msg)
+        retval = msg[8,2]
+        retval = retval.to_i(16) if msg.class == String
+        retval = "%02X" % msg if msg.class == Fixnum
+        retval
       end
       # @todo Document this method
       def string_keyId(msg)
         msg[8,12]
       end
-      def msg_missing_hw_in_db(m)
-        msg_node = m[0].nil? ? nil : "Node with id #{m[0]} is not registered in DB" 
-        msg_reader = m[1].nil? ? nil : "Reader with id #{m[1]} is not registered in DB"
+      # @todo
+      def msg_missing_hw_in_db(m,msg)
+        msg_node = m[0].nil? ? nil : "Node id=#{m[0]} not in DB (opcode '#{string_opcode(msg)}')" 
+        msg_reader = m[1].nil? ? nil : "Reader id=#{m[1]} not in DB (opcode '#{string_opcode(msg)}'"
         unless msg_node.nil?
           Error.create(:from => "Missing node", :error => msg_node)
-          STDOUT << msg_node + "\n"
+          STDOUT << Time.now.to_s + " " + msg_node + "\n"
         end
         unless msg_reader.nil?
           Error.create(:from => "Missing reader", :error => msg_reader)
-          STDOUT << msg_reader + "\n"
+          STDOUT << Time.now.to_s + " " + msg_reader + "\n"
         end
       end
       # @todo Document this method
@@ -48,8 +66,8 @@ module Ib
                  Time.now,
                  k.owner.id.to_s,
                  k.owner.full_name,
-                 Node[:sid => string_sid(m).to_i].name,
-                 Reader[:id => string_reader(m).to_i].name,
+                 Node[:sid => string_sid(m)].name,
+                 Reader[:id => string_reader(m)].name,
                  "NDA",
                  "NDA",
                  "Access request",
@@ -64,8 +82,8 @@ module Ib
                  Time.now,
                  new_owner.id.to_s,
                  new_owner.full_name,
-                 Node[:sid => string_sid(m).to_i].name,
-                 Reader[:id => string_reader(m).to_i].name,
+                 Node[:sid => string_sid(m)].name,
+                 Reader[:id => string_reader(m)].name,
                  "NDA",
                  "NDA",
                  "Access request",
@@ -110,8 +128,8 @@ module Ib
                Time.now,
                k.owner.id.to_s,
                k.owner.full_name,
-               Node[:sid => string_sid(m).to_i].name,
-               Reader[:id => string_reader(m).to_i].name,
+               Node[:sid => string_sid(m)].name,
+               Reader[:id => string_reader(m)].name,
                "NDA",
                "NDA",
                "ACCESS_DENY (Error.id=#{error.id})",
@@ -128,8 +146,8 @@ module Ib
         if node_status.nil?
           msg = [nil,
                  Time.now,
-                 Node[:sid => string_sid(m).to_i].id,
-                 Node[:sid => string_sid(m).to_i].name,
+                 Node[:sid => string_sid(m)].id,
+                 Node[:sid => string_sid(m)].name,
                  Time.now
                 ]
           Status.insert(msg)
@@ -147,8 +165,69 @@ module Ib
         end
       end
       # @todo Document this method
+      def msg_newid_request(m)
+        k = Key[:keyId => string_keyId(m)]
+        msg = [nil,
+               Time.now,
+               k.owner.id.to_s,
+               k.owner.full_name,
+               string_sid(m),
+               string_reader(m),
+               "NDA",
+               "NDA",
+               "NEWID_REQUEST",
+               true
+              ]
+        Access.insert(msg)
+        msg =  msg.compact.join(' | ')
+        msg += "\n"
+        STDOUT << msg
+      end
+      # @todo Document this method
+      def msg_newid_accepted(m)
+        k = Key[:keyId => string_keyId(m)]
+        msg = [nil,
+               Time.now,
+               "NDA",
+               "Server",
+               string_sid(m),
+               string_reader(m),
+               string_sid(m[10,4]),
+               "NDA",
+               "NEWID_ACCEPTED",
+               true
+              ]
+        Node.insert(nil,
+                    string_sid(m),
+                    Time.now,
+                    "New Node",
+                    string_reader(m),
+                    string_device(m),
+                    Time.now,
+                    Time.now
+                   ) unless string_sid(m) == 2046
+        Access.insert(msg)
+        msg =  msg.compact.join(' | ')
+        msg += "\n"
+        STDOUT << msg
+      end
+      # @todo Document this method
       def msg_unknown_opcode(m)
-        #retval = "Unknown opcode (msg/opcode) " + msg +" / " + Msg.string_opcode(msg) + "\n"
+        msg = [nil,
+               Time.now,
+               "NDA",
+               "Node",
+               string_sid(m),
+               "NDA",
+               "NDA",
+               "NDA",
+               "Unknown opcode '#{string_opcode(m)}'",
+               false
+              ]
+        Access.insert(msg)
+        msg =  msg.compact.join(' | ')
+        msg += "\n"
+        STDOUT << msg
       end
     end # Msg
   end # Serial

@@ -18,22 +18,26 @@ module Ib
             access_request(msg)
           when COM_ALIVE
             Msg.msg_com_alive(msg)
-            #retval = "Alive message from node: " + Msg.string_sid(msg) + "\n"
+          when NEWID_REQUEST
+            newid_request(msg)
+          when NEWID_ACCEPTED
+            Msg.msg_newid_accepted(msg)
           else
             Msg.msg_unknown_opcode(msg)
           end
         else
-          Msg.msg_missing_hw_in_db(missing)
+          Msg.msg_missing_hw_in_db(missing,msg)
         end
       end
       # @todo Document this method
       def check_missing_hw_in_db(msg)
         opcode = Msg.string_opcode(msg)
-        missing_node = Node[:sid => Msg.string_sid(msg).to_i].nil? ? Msg.string_sid(msg).to_i : nil
-        missing_reader = Reader[:id => Msg.string_reader(msg).to_i].nil? ? Msg.string_reader(msg).to_i : nil
-        if opcode == ACCESS_REQUEST
+        missing_node = Node[:sid => Msg.string_sid(msg)].nil? ? Msg.string_sid(msg) : nil
+        missing_reader = Reader[:id => Msg.string_reader(msg)].nil? ? Msg.string_reader(msg) : nil
+        case opcode
+        when ACCESS_REQUEST
           missing = [missing_node, missing_reader]
-        elsif opcode == NEWID_REQUEST
+        when NEWID_REQUEST, NEWID_ACCEPTED
           missing = [nil, nil]
         else
           missing = [missing_node, nil]
@@ -55,7 +59,7 @@ module Ib
           write(START_BYTE + p.msg_response_node_sid + ACCESS_OK + p.msg_request_reader_id + p.msg_response_device_id + "00" +  p.msg_response_device_taskId + STOP_BYTE)
           Msg.msg_access_granted(msg,p)
         else
-          write(START_BYTE + Msg.string_sid(msg) + ACCESS_DENY + "01000000000000" + STOP_BYTE)
+          write(START_BYTE + msg[0,4] + ACCESS_DENY + "01000000000000" + STOP_BYTE)
           Msg.msg_access_denied(msg,error)
         end
       end
@@ -63,15 +67,25 @@ module Ib
       def check_permission(msg)
         permission = []
         group = Key[:keyId => Msg.string_keyId(msg)].owner.groups
-        node = Node[:sid => Msg.string_sid(msg).to_i].request_permissions
-        reader = Reader[:id => Msg.string_reader(msg).to_i].permissions
+        node = Node[:sid => Msg.string_sid(msg)].request_permissions
+        reader = Reader[:id => Msg.string_reader(msg)].permissions
         group.each{|g| permission << (g.permissions & node & reader)}
         error_group =  group.empty? ? "Group membership error!" : nil
         error_node = node.empty? ? "Request node has no permission defined!" : nil
         error_reader = reader.empty? ? "Request reader has no permission defined!" : nil
         [permission, [error_group,error_node,error_reader]]
       end
-
+      # @todo Document this method
+      def newid_request(msg)
+        for id in 1..2045
+          if Node[:sid  => id.to_s].nil?
+            new_sid = id
+            break
+          end
+        end
+        write(START_BYTE + Msg.string_sid(2046) + NEWID_SET + msg[6,2] + Msg.string_sid(new_sid) + "00000000" + STOP_BYTE)
+        Msg.msg_newid_request(msg)
+      end
     end # Server
   end # Serial
 end # Ib
