@@ -37,6 +37,7 @@ module Ib
                  Node[:sid => string_sid(m).to_i].name,
                  Reader[:id => string_reader(m).to_i].name,
                  "NDA",
+                 "NDA",
                  "Access request",
                  false
                 ]
@@ -51,6 +52,7 @@ module Ib
                  new_owner.full_name,
                  Node[:sid => string_sid(m).to_i].name,
                  Reader[:id => string_reader(m).to_i].name,
+                 "NDA",
                  "NDA",
                  "Access request",
                  false
@@ -74,6 +76,7 @@ module Ib
                k.owner.full_name,
                p.request_node.name,
                p.request_reader.name,
+               p.response_node.name,
                p.response_device.name,
                "ACCESS_OK",
                true
@@ -95,6 +98,7 @@ module Ib
                k.owner.full_name,
                Node[:sid => string_sid(m).to_i].name,
                Reader[:id => string_reader(m).to_i].name,
+               "NDA",
                "NDA",
                "ACCESS_DENY (Error.id=#{error.id})",
                false

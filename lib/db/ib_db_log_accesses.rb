@@ -11,8 +11,9 @@ module Ib
       #          column      :created_at, DateTime
       #          column      :owner_id,   Fixnum
       #          column      :owner,      String,     :size => 40
-      #          column      :node,       String,     :size => 20
+      #          column      :node_req,   String,     :size => 20
       #          column      :reader,     String,     :size => 20
+      #          column      :node_res,   String,     :size => 20
       #          column      :device,     String,     :size => 20
       #          column      :task,       String,     :size => 20
       #          column      :status,     TrueClass,               :default => true
@@ -40,8 +41,9 @@ module Ib
             {:css => "datetime",:name  => "created_at",:label => I18n.t('log_access.created_at'),:value => created_at},
             {:css => "integer",:name  => "owner_id",:label => I18n.t('log_access.owner_id'),:value => owner_id},
             {:css => "normal",:name  => "owner",:label => I18n.t('log_access.owner'),:value => owner},
-            {:css => "normal",:name  => "node",:label => I18n.t('log_access.node'),:value => node},
+            {:css => "normal",:name  => "node_req",:label => I18n.t('log_access.node_req'),:value => node_req},
             {:css => "normal",:name  => "reader",:label => I18n.t('log_access.reader'),:value => reader},
+            {:css => "normal",:name  => "node_res",:label => I18n.t('log_access.node_res'),:value => node_res},
             {:css => "normal",:name  => "device",:label => I18n.t('log_access.device'),:value => device},
             {:css => "normal",:name  => "task",:label => I18n.t('log_access.task'),:value => task},
             {:css => "normal",:name  => "status",:label => I18n.t('log_access.status'),:value => status}
