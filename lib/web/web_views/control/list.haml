@@ -1,5 +1,5 @@
-- rs = obj.all
-- pg = obj.paginate(1,20)
+- rs = obj.name.include?("Log") ? obj.order(:id.desc).all : obj.all 
+- pg = obj.paginate(1,25)
 - i = 0
 %p.title= pretty_title(obj)
 - unless rs.empty?
@@ -16,6 +16,8 @@
             %td
               - if f[:css] == 'datetime'
                 %span{:class => f[:css], :title => f[:value].strftime('%H:%M:%S')}= f[:value].strftime('%Y-%m-%d')
+              - elsif f[:css] == 'time'
+                %span{:class => f[:css], :title => f[:value].strftime('%Y-%m-%d')}= f[:value].strftime('%H:%M:%S')
               - else
                 %span{:class => f[:css]}= f[:value]
           %td
