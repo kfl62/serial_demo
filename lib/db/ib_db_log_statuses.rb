@@ -33,6 +33,10 @@ module Ib
         #   }
         def table_data
           [
+            {:css => "datetime",:name  => "created_at",:label => I18n.t('log_status.created_at'),:value => created_at},
+            {:css => "integer",:name  => "node_id",:label => I18n.t('log_status.node_id'),:value => node_id},
+            {:css => "normal",:name  => "node",:label => I18n.t('log_status.node'),:value => node},
+            {:css => "datetime",:name  => "updated_at",:label => I18n.t('log_status.updated_at'),:value => updated_at}
           ]
         end
       end

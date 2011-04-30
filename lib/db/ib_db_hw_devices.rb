@@ -82,9 +82,9 @@ module Ib
         def table_data
           [
             {:css => "integer",:name => "id",:label => I18n.t('mdl.id'),:value => id},
-            {:css => "integer",:name => "node_id",:label => I18n.t('hw_device.node_id'),:value => node_id},
-            {:css => "integer",:name => "task_id",:label => I18n.t('hw_device.node_id'),:value => task_id},
             {:css => "normal",:name  => "name",:label => I18n.t('hw_device.name'),:value => name},
+            {:css => "integer",:name => "node_id",:label => I18n.t('hw_device.node_id'),:value => node.name},
+            {:css => "integer",:name => "task_id",:label => I18n.t('hw_device.task_id'),:value => task.name},
             {:css => "datetime",:name  => "created_at",:label => I18n.t('mdl.created_at'),:value => created_at},
             {:css => "datetime",:name  => "updated_at",:label => I18n.t('mdl.updated_at'),:value => updated_at}
           ]

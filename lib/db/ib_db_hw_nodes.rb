@@ -60,6 +60,14 @@ module Ib
           delete_message
           super
         end
+        # @todo
+        def max_con_readers
+          readers_nr.to_s + '/' + readers.length.to_s
+        end
+        # @todo
+        def max_con_devices
+          devices_nr.to_s + '/' + devices.length.to_s
+        end
         # @return [Array of Hashes] one Hash for each column
         # @example Each hash contains:
         #   {
@@ -71,11 +79,11 @@ module Ib
         def table_data
           [
             {:css => "integer",:name => "id",:label => I18n.t('mdl.id'),:value => id},
-            {:css => "normal",:name  => "sid",:label => I18n.t('hw_node.sid'),:value => sid},
+            {:css => "integer",:name  => "sid",:label => I18n.t('hw_node.sid'),:value => sid},
             {:css => "datetime",:name  => "sid_at",:label => I18n.t('hw_node.sid_at'),:value => sid_at},
             {:css => "normal",:name  => "name",:label => I18n.t('hw_node.name'),:value => name},
-            {:css => "integer",:name  => "readers_nr",:label => I18n.t('hw_node.readers_nr'),:value => readers_nr},
-            {:css => "integer",:name  => "devices_nr",:label => I18n.t('hw_node.devices_nr'),:value => devices_nr},
+            {:css => "integer",:name  => "readers_nr",:label => I18n.t('hw_node.readers_nr'),:value => max_con_readers},
+            {:css => "integer",:name  => "devices_nr",:label => I18n.t('hw_node.devices_nr'),:value => max_con_devices},
             {:css => "datetime",:name  => "created_at",:label => I18n.t('mdl.created_at'),:value => created_at},
             {:css => "datetime",:name  => "updated_at",:label => I18n.t('mdl.updated_at'),:value => updated_at}
           ]

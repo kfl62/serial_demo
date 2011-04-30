@@ -61,6 +61,14 @@ module Ib
         #   }
         def table_data
           [
+            {:css => "integer",:name => "id",:label => I18n.t('mdl.id'),:value => id},
+            {:css => "normal",:name  => "group_id",:label => I18n.t('persons_permission.group'),:value => group.name},
+            {:css => "normal",:name  => "request_node_id",:label => I18n.t('persons_permission.request_node'),:value => request_node.name},
+            {:css => "normal",:name  => "request_reader_id",:label => I18n.t('persons_permission.request_reader'),:value => request_reader.name},
+            {:css => "normal",:name  => "response_node_id",:label => I18n.t('persons_permission.response_node'),:value => response_node.name},
+            {:css => "normal",:name  => "response_devices_id",:label => I18n.t('persons_permission.response_device'),:value => response_device.name},
+            {:css => "datetime",:name  => "created_at",:label => I18n.t('mdl.created_at'),:value => created_at},
+            {:css => "datetime",:name  => "updated_at",:label => I18n.t('mdl.updated_at'),:value => updated_at}
           ]
         end
 

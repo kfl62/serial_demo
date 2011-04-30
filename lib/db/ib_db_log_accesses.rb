@@ -37,6 +37,14 @@ module Ib
         #   }
         def table_data
           [
+            {:css => "datetime",:name  => "created_at",:label => I18n.t('log_access.created_at'),:value => created_at},
+            {:css => "integer",:name  => "owner_id",:label => I18n.t('log_access.owner_id'),:value => owner_id},
+            {:css => "normal",:name  => "owner",:label => I18n.t('log_access.owner'),:value => owner},
+            {:css => "normal",:name  => "node",:label => I18n.t('log_access.node'),:value => node},
+            {:css => "normal",:name  => "reader",:label => I18n.t('log_access.reader'),:value => reader},
+            {:css => "normal",:name  => "device",:label => I18n.t('log_access.device'),:value => device},
+            {:css => "normal",:name  => "task",:label => I18n.t('log_access.task'),:value => task},
+            {:css => "normal",:name  => "status",:label => I18n.t('log_access.status'),:value => status}
           ]
         end
       end

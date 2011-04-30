@@ -89,11 +89,9 @@ module Ib
         def table_data
           [
             {:css => "integer",:name => "id",:label => I18n.t('mdl.id'),:value => id},
-            {:css => "integer",:name => "owner_id",:label => I18n.t('persons_admin.owner_id'),:value => owner_id},
+            {:css => "normal",:name => "owner_id",:label => I18n.t('persons_admin.owner_id'),:value => owner.full_name},
             {:css => "normal",:name  => "login_name",:label => I18n.t('persons_admin.login_name'),:value => login_name},
             {:css => "normal",:name  => "email",:label => I18n.t('persons_admin.email'),:value => email},
-            {:css => "normal",:name  => "salt",:label => I18n.t('persons_admin.salt'),:value => salt},
-            {:css => "normal",:name  => "hashed_password",:label => I18n.t('persons_admin.hashe_password'),:value => hashed_password},
             {:css => "datetime",:name  => "created_at",:label => I18n.t('mdl.created_at'),:value => created_at},
             {:css => "datetime",:name  => "updated_at",:label => I18n.t('mdl.updated_at'),:value => updated_at}
           ]

@@ -32,6 +32,9 @@ module Ib
         #   }
         def table_data
           [
+            {:css => "datetime",:name  => "created_at",:label => I18n.t('log_error.created_at'),:value => created_at},
+            {:css => "normal",:name  => "from",:label => I18n.t('log_error.from'),:value => from},
+            {:css => "normal",:name  => "error",:label => I18n.t('log_error.error'),:value => error}
           ]
         end
       end
