@@ -5,6 +5,14 @@
     %a{:href => "#"}= t('ib_web_menu.tabl')
     %ul
       %li
+        %a{:href => "#"}= t('ib_web_menu.tables.lg')
+      %li
+        %a.in{:href => "/ctrl/list/log_access"}= t('ib_web_menu.tables.log.accesses')
+      %li
+        %a.in{:href => "/ctrl/list/log_error"}= t('ib_web_menu.tables.log.errors')
+      %li
+        %a.in{:href => "/ctrl/list/log_status"}= t('ib_web_menu.tables.log.statuses')
+      %li
         %a{:href => "#"}= t('ib_web_menu.tables.hw')
       %li
         %a.in{:href => "/ctrl/list/hw_node"}= t('ib_web_menu.tables.hwd.nodes')
@@ -20,6 +28,10 @@
         %a.in{:href => "/ctrl/list/persons_owner"}= t('ib_web_menu.tables.psn.owners')
       %li
         %a.in{:href => "/ctrl/list/persons_admin"}= t('ib_web_menu.tables.psn.admins')
+      %li
+        %a.in{:href => "/ctrl/list/persons_group"}= t('ib_web_menu.tables.psn.groups')
+      %li
+        %a.in{:href => "/ctrl/list/persons_permission"}= t('ib_web_menu.tables.psn.permissions')
   %li
     %a{:href => "/ctrl/task"}= t('ib_web_menu.task')
 

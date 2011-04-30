@@ -5,6 +5,11 @@ en:
     info: "Info"
     tabl: "Tables"
     tables:
+      lg: "Log"
+      log:
+        accesses: "Access"
+        errors: "Error"
+        statuses: "Status"
       hw: "HW"
       hwd:
         nodes: "Node"
@@ -15,6 +20,8 @@ en:
       psn:
         owners: "Owner"
         admins: "Admin"
+        groups: "Group"
+        permissions: "Permission"
     task: "Tasks"
 de:
   ib_web_menu:
@@ -23,6 +30,11 @@ de:
     info: "Info"
     tabl: "Tables"
     tables:
+      lg: "Log"
+      log:
+        accesses: "Access"
+        errors: "Error"
+        statuses: "Status"
       hw: "HW"
       hwd:
         nodes: "Node"
@@ -33,6 +45,8 @@ de:
       psn:
         owners: "Owner"
         admins: "Admin"
+        groups: "Group"
+        permissions: "Permission"
     task: "Tasks"
 ro:
   ib_web_menu:
@@ -41,6 +55,11 @@ ro:
     info: "Info"
     tabl: "Tables"
     tables:
+      lg: "Log"
+      log:
+        accesses: "Access"
+        errors: "Error"
+        statuses: "Status"
       hw: "HW"
       hwd:
         nodes: "Node"
@@ -51,6 +70,8 @@ ro:
       psn:
         owners: "Owner"
         admins: "Admin"
+        groups: "Group"
+        permissions: "Permission"
     task: "Tasks"
 hu:
   ib_web_menu:
@@ -59,6 +80,11 @@ hu:
     info: "Info"
     tabl: "Tables"
     tables:
+      lg: "Log"
+      log:
+        accesses: "Access"
+        errors: "Error"
+        statuses: "Status"
       hw: "HW"
       hwd:
         nodes: "Node"
@@ -69,5 +95,7 @@ hu:
       psn:
         owners: "Owner"
         admins: "Admin"
+        groups: "Group"
+        permissions: "Permission"
     task: "Tasks"
 
