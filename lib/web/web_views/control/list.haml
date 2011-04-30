@@ -1,14 +1,35 @@
 - rs = obj.all
+- pg = obj.paginate(1,20)
+- i = 0
 %p.title= pretty_title(obj)
-%table.list{:cellspacing => "0"}
-  %thead
-    %tr
-      - pretty_column_names(obj).each do |column|
-        %th= column
-  %tbody
-    - rs.each do |r|
-      %tr.cycle
-        - r.table_data.each do |f|
+- unless rs.empty?
+  %table.list
+    %thead
+      %tr
+        - rs.first.table_data.each do |column|
+          %th= column[:label]
+        %th &nbsp;
+    %tbody
+      - rs.each do |r|
+        %tr{:class  => i.even? ? "even" : "odd"}
+          - r.table_data.each do |f|
+            %td
+              - if f[:css] == 'datetime'
+                %span{:class => f[:css], :title => f[:value].strftime('%H:%M:%S')}= f[:value].strftime('%Y-%m-%d')
+              - else
+                %span{:class => f[:css]}= f[:value]
           %td
-            %span{:class => f[:css]}= f[:value]
-
+            %span.put
+            %span.delete
+        - i += 1
+      - while i < 25
+        %tr
+          %td{:colspan => rs.first.table_data.length + 1}
+            %span &nbsp;
+        - i += 1
+    %tfoot
+      %tr
+        %td{:colspan => rs.first.table_data.length + 1}
+          %span Search, Add record, Paginate etc... comes here
+- else
+  %h4 Empty table
