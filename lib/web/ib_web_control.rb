@@ -18,10 +18,13 @@ module Ib
         haml :index
       end
       # @todo Document this method
-      get '/list/*' do
+      get '/list/*/*' do
         login_required
-        obj = modelize(params[:splat][0])
-        haml :list, :layout => request.xhr? ? false : :layout, :locals => {:obj  => obj}
+        model = params[:splat][0]
+        obj = modelize(model)
+        pg = params[:splat][1].to_i
+        ds = obj.name.include?("Log") ? obj.order(:id.desc).paginate(pg,25) : obj.paginate(pg,25)
+        haml :list, :layout => request.xhr? ? false : :layout, :locals => {:ds  => ds, :path => model}
       end
     end
   end

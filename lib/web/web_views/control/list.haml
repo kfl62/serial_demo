@@ -1,16 +1,14 @@
-- rs = obj.name.include?("Log") ? obj.order(:id.desc).all : obj.all 
-- pg = obj.paginate(1,25)
 - i = 0
-%p.title= pretty_title(obj)
-- unless rs.empty?
+%p.title= #pretty_title(obj)
+- unless ds.empty?
   %table.list
     %thead
       %tr
-        - rs.first.table_data.each do |column|
+        - ds.first.table_data.each do |column|
           %th= column[:label]
         %th &nbsp;
     %tbody
-      - rs.each do |r|
+      - ds.each do |r|
         %tr{:class  => i.even? ? "even" : "odd"}
           - r.table_data.each do |f|
             %td
@@ -26,12 +24,22 @@
         - i += 1
       - while i < 25
         %tr
-          %td{:colspan => rs.first.table_data.length + 1}
+          %td{:colspan => ds.first.table_data.length + 1}
             %span &nbsp;
         - i += 1
     %tfoot
       %tr
-        %td{:colspan => rs.first.table_data.length + 1}
-          %span Search, Add record, Paginate etc... comes here
+        %td{:colspan => ds.first.table_data.length + 1}
+          %span.paginate
+            - if ds.prev_page
+              - unless ds.first_page?
+                %a.bo{:href => "/ctrl/list/#{path}/1"} &laquo;
+              %a.bo{:href => "/ctrl/list/#{path}/#{ds.prev_page}"} &lsaquo;
+            Pg. #{ds.current_page} of #{ds.page_count} 
+            - if ds.next_page
+              %a.bo{:href => "/ctrl/list/#{path}/#{ds.next_page}"} &rsaquo;
+              - unless ds.last_page?
+                %a.bo{:href => "/ctrl/list/#{path}/#{ds.page_count}"} &raquo;
+          %span.last_row Search, Add record etc... comes here
 - else
   %h4 Empty table
