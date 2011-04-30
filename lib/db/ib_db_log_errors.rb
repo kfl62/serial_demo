@@ -21,7 +21,7 @@ module Ib
       class Error < Sequel::Model
         set_dataset :log_errors
         plugin :timestamps
-        
+
         # @return [Array of Hashes] one Hash for each column
         # @example Each hash contains:
         #   {
@@ -32,6 +32,7 @@ module Ib
         #   }
         def table_data
           [
+            {:css => "integer",:name => "id",:label => I18n.t('mdl.id'),:value => id},
             {:css => "datetime",:name  => "created_at",:label => I18n.t('log_error.created_at'),:value => created_at},
             {:css => "normal",:name  => "from",:label => I18n.t('log_error.from'),:value => from},
             {:css => "normal",:name  => "error",:label => I18n.t('log_error.error'),:value => error}
