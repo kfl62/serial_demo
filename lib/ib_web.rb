@@ -5,6 +5,11 @@ require './config/ib_config'
 require './lib/ib_db'
 
 module Ib
+  # #Ib::Web module
+  # ## Scope
+  #   A module wich includes four {http://www.sinatrarb.com/ Sinatra::Base} sub classes
+  #   {Ib::Web::Public}, {Ib::Web::Control}, {Ib::Web::ControlTsk}  and {Ib::Web::Utils}
+  #   ...
   # @todo document this model
   module Web
     include Config
