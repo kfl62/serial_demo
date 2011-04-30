@@ -11,10 +11,10 @@ module Ib
     require 'ib_serial_server'
     require 'ib_serial_msg'
 
-    START_BYTE = ">"      # hexa
-    STOP_BYTE  = "\n"     # hexa
+    START_BYTE = ">"
+    STOP_BYTE  = "\n"
 
-    #opcodes
+    # @private opcodes
     ACCESS_REQUEST  = "01"
     ACCESS_OK       = "02"
     ACCESS_DENY     = "03"
@@ -33,9 +33,12 @@ module Ib
     UPG_FINISH      = "15"
     UPG_FINISH_RESP = "16"
 
-    # @todo document this method
-    def self.server
-      ibs = Server.new(SerialConfig.dev, SerialConfig.baud)
+    # Connect to serial port and read/handle messages.
+    # @param device
+    # @param baud_rate
+    # @return [Server] an instance of {Server} which is sub-class of {http://rubygems.org/gems/serialport SerialPort}
+    def self.server(device = SerialConfig.dev, baud_rate = SerialConfig.baud)
+      ibs = Server.new(device, baud_rate)
       msg = ibs.gets
       ibs.handle(msg)
     end
