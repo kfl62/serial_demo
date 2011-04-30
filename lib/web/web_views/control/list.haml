@@ -19,8 +19,9 @@
               - else
                 %span{:class => f[:css]}= f[:value]
           %td
-            %span.put
-            %span.delete
+            - unless ds.model.name.include?("Log")
+              %span.put{:data => {:id => r.id, :model => path}, :onclick => "window.location='/ctrl/edit/#{path}/#{r.id}'"}
+            %span.delete{:data => {:id => r.id, :model => path}, :onclick => ""}
         - i += 1
       - while i < 25
         %tr
@@ -40,6 +41,6 @@
               %a.bo{:href => "/ctrl/list/#{path}/#{ds.next_page}"} &rsaquo;
               - unless ds.last_page?
                 %a.bo{:href => "/ctrl/list/#{path}/#{ds.page_count}"} &raquo;
-          %span.last_row Search, Add record etc... comes here
+          %span.last_row &nbsp;&nbsp;|&nbsp;&nbsp;Search, Add record etc... soon :)
 - else
   %h4 Empty table
