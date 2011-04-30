@@ -74,7 +74,7 @@ module Ib
         def table_data
           [
             {:css => "integer",:name => "id",:label => I18n.t('mdl.id'),:value => id},
-            {:css => "normal",:name => "key_id",:label => I18n.t('persons_owner.key_id'),:value => key.keyId},
+            {:css => (key.nil? ? "ce bo":"normal"),:name => "key_id",:label => I18n.t('persons_owner.key_id'),:value => (key.keyId rescue "has no Key")},
             {:css => "normal",:name  => "first_name",:label => I18n.t('persons_owner.first_name'),:value => first_name},
             {:css => "normal",:name  => "last_name",:label => I18n.t('persons_owner.last_name'),:value => last_name},
             {:css => "datetime",:name  => "created_at",:label => I18n.t('mdl.created_at'),:value => created_at},
