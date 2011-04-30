@@ -22,6 +22,8 @@ module Ib
       require file
     end
 
+    Sequel.extension :pagination
+
   end
 end
 
