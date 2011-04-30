@@ -8,9 +8,9 @@ module Ib
       #     def up
       #       create_table(:hw_nodes) do
       #         primary_key :id
-      #         column      :sid,           String,     :size => 4, :default => "2046"
+      #         column      :sid,           Fixnum,                 :default => 2046
       #         column      :sid_at,        DateTime
-      #         column      :name,          String,     :size => 20
+      #         column      :name,          String,     :size => 20,:default => "New node"
       #         column      :readers_nr,    Fixnum,     :size => 2
       #         column      :devices_nr,    Fixnum,     :size => 2
       #         column      :created_at,    DateTime
@@ -49,8 +49,8 @@ module Ib
         one_to_many :response_permissions, :class => "Ib::Db::Persons::Permission", :key => :response_node_id
         # @todo
         def validate
-          validates_presence [:name,:readers_nr,:devices_nr]
-          validates_integer [:readers_nr,:devices_nr], :allow_nil => true
+          validates_presence [:sid,:readers_nr,:devices_nr]
+          validates_integer [:sid,:readers_nr,:devices_nr], :allow_nil => true
           validates_max_length(readers_nr, [:readers])
           validates_max_length(devices_nr, [:devices])
         end

@@ -8,9 +8,9 @@ class CreateTableHwNodes < Sequel::Migration
   def up
     create_table(:hw_nodes) do
       primary_key   :id
-      column        :sid,               String,     :size => 4, :default => "2046"
+      column        :sid,               Fixnum,                 :default => 2046
       column        :sid_at,            DateTime
-      column        :name,              String,     :size => 20
+      column        :name,              String,     :size => 20,:default => "New node"
       column        :readers_nr,        Fixnum,     :size => 2
       column        :devices_nr,        Fixnum,     :size => 2
       column        :created_at,        DateTime
