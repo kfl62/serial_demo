@@ -11,16 +11,34 @@ module Ib
       # @todo Document this method
       def handle(msg)
         msg = msg.slice(/[^>+].*[^\n+]/)
-        case Msg.string_opcode(msg)
-        when ACCESS_REQUEST
-          access_request(msg)
-        when COM_ALIVE
-          Msg.msg_com_alive(msg)
-          #retval = "Alive message from node: " + Msg.string_sid(msg) + "\n"
+        missing = check_missing_hw_in_db(msg)
+        if missing.compact.empty?
+          case Msg.string_opcode(msg)
+          when ACCESS_REQUEST
+            access_request(msg)
+          when COM_ALIVE
+            Msg.msg_com_alive(msg)
+            #retval = "Alive message from node: " + Msg.string_sid(msg) + "\n"
+          else
+            Msg.msg_unknown_opcode(msg)
+          end
         else
-          Msg.msg_unknown_opcode(msg)
+          Msg.msg_missing_hw_in_db(missing)
         end
-        nil
+      end
+      # @todo Document this method
+      def check_missing_hw_in_db(msg)
+        opcode = Msg.string_opcode(msg)
+        missing_node = Node[:sid => Msg.string_sid(msg).to_i].nil? ? Msg.string_sid(msg).to_i : nil
+        missing_reader = Reader[:id => Msg.string_reader(msg).to_i].nil? ? Msg.string_reader(msg).to_i : nil
+        if opcode == ACCESS_REQUEST
+          missing = [missing_node, missing_reader]
+        elsif opcode == NEWID_REQUEST
+          missing = [nil, nil]
+        else
+          missing = [missing_node, nil]
+        end
+        missing
       end
       # @todo Document this method
       def access_request(msg)

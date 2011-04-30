@@ -18,13 +18,27 @@ module Ib
       def string_opcode(msg)
         msg[4,2]
       end
-      # @todo Document this method
+      # Readers ID part from ASCII message.
+      #   Ex. msg[6,2] on access request.
+      # @return [String] readers ID #=> "01"
       def string_reader(msg)
         msg[6,2]
       end
       # @todo Document this method
       def string_keyId(msg)
         msg[8,12]
+      end
+      def msg_missing_hw_in_db(m)
+        msg_node = m[0].nil? ? nil : "Node with id #{m[0]} is not registered in DB" 
+        msg_reader = m[1].nil? ? nil : "Reader with id #{m[1]} is not registered in DB"
+        unless msg_node.nil?
+          Error.create(:from => "Missing node", :error => msg_node)
+          STDOUT << msg_node + "\n"
+        end
+        unless msg_reader.nil?
+          Error.create(:from => "Missing reader", :error => msg_reader)
+          STDOUT << msg_reader + "\n"
+        end
       end
       # @todo Document this method
       def msg_access_request(m)
