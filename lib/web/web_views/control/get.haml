@@ -1,0 +1,22 @@
+%p.close{:onclick => "ib.crud.destroy()"}
+%p.crud_title= pretty_title(r.model)
+%table{:cellspacing => "0"}
+  %thead
+    %tr
+      %th Field
+      %th Value
+  %tbody
+    - r.table_data.each do |data|
+      %tr
+        %td
+          %span= data[:label]
+        %td
+          %span= data[:value]
+  %tfoot
+    %tr
+      %td.buttons_bottom{:colspan => "2"}
+        %span.button.put Edit
+        %span.button.delete Delete
+        %span.button.cancel Cancel
+        %span.button.post Create        
+

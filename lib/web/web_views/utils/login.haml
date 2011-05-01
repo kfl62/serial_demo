@@ -2,8 +2,8 @@
   :javascript
     ibttn.auth.init()
 -else
-  %p.close{:onclick => "ibttn.auth.destroy()"}
-  %p.task_title= t('ibttn_auth.login_title')
+  %p.close{:onclick => "ib.auth.destroy()"}
+  %p.task_title= t('ib_auth.login_title')
   %form#form_auth{:action => "/utils/login", :method => "post"}
     %table{:cellspacing => "0"}
       %thead
@@ -12,12 +12,12 @@
       %tbody
         %tr
           %td
-            %span= t('ibttn_auth.login_name')
+            %span= t('ib_auth.login_name')
           %td
             %input{:name => "[login_name]"}
         %tr
           %td
-            %span= t('ibttn_auth.login_pass')
+            %span= t('ib_auth.login_pass')
           %td
             %input#login_pass{:type => "password", :name => "[password]"}
       %tfoot

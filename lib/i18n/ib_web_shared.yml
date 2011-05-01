@@ -6,7 +6,7 @@ en:
     hu: "Hungarian"
     test: "Content in english!"
     change: "You have selected English language"
-  ibttn_auth:
+  ib_auth:
     login: "Login"
     login_title: "Authentication"
     login_name: "Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
@@ -17,6 +17,7 @@ en:
     logout: "Logout"
     logout_msg: "Logout successful."
     authenticated_as: "Authenticated as:"
+  loading: "Loading ..."
 de:
   lang:
     en: "Englisch"
@@ -44,7 +45,7 @@ ro:
     hu: "Maghiară"
     test: "Conţinut în limba română!"
     change: "Aţi ales limba romănâ"
-  ibttn_auth:
+  ib_auth:
     login: "Login"
     login_title: "Autentificare"
     login_name: "Nume"
@@ -63,7 +64,7 @@ hu:
     hu: "Magyar"
     test: "Tartalom magyar nyelven!"
     change: "A magyar nyelvet választotta"
-  ibttn_auth:
+  ib_auth:
     login: "Login"
     login_title: "Azonosítás"
     login_name: "Név&nbsp;&nbsp;&nbsp;"

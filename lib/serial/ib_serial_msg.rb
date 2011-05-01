@@ -3,6 +3,7 @@
 module Ib
   module Serial
     # @todo document this module
+    # @private module Msg{{{1
     module Msg
       include Db::Hw
       include Db::Persons
@@ -11,6 +12,7 @@ module Ib
       extend self
 
       # @todo Document this method
+      # @private def string_sid{{{2
       def string_sid(msg)
         if msg.class == Fixnum
           retval = "%04X" % msg
@@ -22,9 +24,11 @@ module Ib
         retval
       end
       # @todo Document this method
+      # @private def string_opcode{{{2
       def string_opcode(msg)
         msg[4,2]
       end
+      # @private def string_reader{{{2
       # Readers ID part from ASCII message.
       #   Ex. msg[6,2] on access request.
       # @return [String] readers ID #=> "01"
@@ -35,6 +39,7 @@ module Ib
         retval
       end
       # @todo Document this method
+      # @private def string_device{{{2
       def string_device(msg)
         retval = msg[8,2]
         retval = retval.to_i(16) if msg.class == String
@@ -42,10 +47,12 @@ module Ib
         retval
       end
       # @todo Document this method
+      # @private def string_keyId {{{2
       def string_keyId(msg)
         msg[8,12]
       end
       # @todo
+      # @private def msg_missing_hw_in_db{{{2
       def msg_missing_hw_in_db(m,msg)
         msg_node = m[0].nil? ? nil : "Node id=#{m[0]} not in DB (opcode '#{string_opcode(msg)}')" 
         msg_reader = m[1].nil? ? nil : "Reader id=#{m[1]} not in DB (opcode '#{string_opcode(msg)}'"
@@ -59,6 +66,7 @@ module Ib
         end
       end
       # @todo Document this method
+      # @private def msg_access_request{{{2
       def msg_access_request(m)
         k = Key[:keyId => string_keyId(m)]
         unless k.nil?
@@ -100,6 +108,7 @@ module Ib
         STDOUT << msg
       end
       # @todo Document this method
+      # @private def msg_access_granted{{{2
       def msg_access_granted(m,p)
         k = Key[:keyId => string_keyId(m)]
         msg = [nil,
@@ -119,6 +128,7 @@ module Ib
         STDOUT << msg
       end
       # @todo Document this method
+      # @private def msg_access_denied{{{2
       def msg_access_denied(m,e)
         error = Error.create(:from => "Hw::Node id=#{string_sid(m)}",
                              :error => "ACCESS_DENY reason: #{e.join(',')}"
@@ -141,6 +151,7 @@ module Ib
         STDOUT << msg
       end
       # @todo Document this method
+      # @private def msg_com_alive{{{2
       def msg_com_alive(m)
         node_status = Status[:node_id => Node[:sid => string_sid(m).to_i].id]
         if node_status.nil?
@@ -165,6 +176,7 @@ module Ib
         end
       end
       # @todo Document this method
+      # @private def msg_newid_request{{{2
       def msg_newid_request(m)
         k = Key[:keyId => string_keyId(m)]
         msg = [nil,
@@ -184,6 +196,7 @@ module Ib
         STDOUT << msg
       end
       # @todo Document this method
+      # @private def msg_newid_accepted{{{2
       def msg_newid_accepted(m)
         k = Key[:keyId => string_keyId(m)]
         msg = [nil,
@@ -212,6 +225,7 @@ module Ib
         STDOUT << msg
       end
       # @todo Document this method
+      # @private def msg_unknown_opcode{{{2
       def msg_unknown_opcode(m)
         msg = [nil,
                Time.now,

@@ -1,13 +1,13 @@
 %p.header_title.em.st.ce IButton web interface
 %p.header_auth.ri
   %span
-    %a#login_status.st.em{:href => "/utils/logout"}= t('ibttn_auth.logout')
+    %a#login_status.st.em{:href => "/utils/logout"}= t('ib_auth.logout')
     &nbsp;|&nbsp;
     %a.st.em{:href => "http://google.com"} IButton
     %br
   %br
   %br
-  %span #{t('ibttn_auth.authenticated_as')}<br>
+  %span #{t('ib_auth.authenticated_as')}<br>
   %span#login_name.st.em #{current_user.login_name}
 %span#I18n
   %a{:href => "/utils/lang/en",:title => t('lang.en')}

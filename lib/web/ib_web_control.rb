@@ -15,16 +15,81 @@ module Ib
       # @todo Document this method
       get '/' do
         login_required
-        haml :index
+        haml :index, :layout => request.xhr? ? false : :layout
+      end
+      # @todo nojs & js list records Document this method
+      get '/list/:model/:page' do |m,p|
+        login_required
+        obj = modelize(m)
+        ds = obj.name.include?("Log") ? obj.order(:id.desc).paginate(p.to_i,25) : obj.paginate(p.to_i,25)
+        haml :list, :layout => request.xhr? ? false : :layout, :locals => {:ds  => ds, :path => m}
+      end
+      # @todo js edit Document this method
+      get '/:model/:id' do |m,id|
+        login_required
+        obj = modelize(m)
+        r = obj[id.to_i]
+        haml :get, :layout => request.xhr? ? false : :layout, :locals => {:r  => r, :path => m}
+      end
+      # @todo js update Document this method
+      put '/:model/:id' do |m,id|
+        #login_required
+        #obj = modelize(m)
+        #r = obj[id.to_i]
+        #haml :edit, :layout => request.xhr? ? false : :layout, :locals => {:r  => r, :path => m}
+      end
+      # @todo js new Document this method
+      post '/:model/' do |m|
+        #login_required
+        #obj = modelize(m)
+        #r = obj[id.to_i]
+        #haml :edit, :layout => request.xhr? ? false : :layout, :locals => {:r  => r, :path => m}
       end
       # @todo Document this method
-      get '/list/*/*' do
+      delete '/:model/:id' do |m,id|
         login_required
-        model = params[:splat][0]
-        obj = modelize(model)
-        pg = params[:splat][1].to_i
-        ds = obj.name.include?("Log") ? obj.order(:id.desc).paginate(pg,25) : obj.paginate(pg,25)
-        haml :list, :layout => request.xhr? ? false : :layout, :locals => {:ds  => ds, :path => model}
+        obj = modelize(m)
+        r = obj[id.to_i]
+        r.destroy
+        flash[:msg] = {:msg => {:txt => I18n.t('mdl.delete', :data => r.model.name), :class => "info"}}.to_json
+      end
+
+      # @private Routes for browsers with js disabled
+      #
+      # @todo nojs new Document this method
+      post '/:model/new' do |m|
+        #login_required
+        #obj = modelize(m)
+        #r = obj[id.to_i]
+        #haml :edit, :layout => request.xhr? ? false : :layout, :locals => {:r  => r, :path => m}
+      end
+      # @todo nojs edit Document this method
+      get '/:model/:id/edit' do |m,id|
+        #login_required
+        #obj = modelize(m)
+        #r = obj[id.to_i]
+        #haml :edit, :layout => request.xhr? ? false : :layout, :locals => {:r  => r, :path => m}
+      end
+      # @todo nojs edit Document this method
+      post '/:model/:id/edit' do |m,id|
+        #login_required
+        #obj = modelize(m)
+        #r = obj[id.to_i]
+        #haml :edit, :layout => request.xhr? ? false : :layout, :locals => {:r  => r, :path => m}
+      end
+      # @todo nojs form for delete Document this method
+      get '/:model/:id/delete' do |m,id|
+        #login_required
+        #obj = modelize(m)
+        #r = obj[id.to_i]
+        #r.destroy
+      end
+      # @todo nojs delete Document this method
+      post '/:model/:id/delete' do |m,id|
+        #login_required
+        #obj = modelize(m)
+        #r = obj[id.to_i]
+        #r.destroy
       end
     end
   end

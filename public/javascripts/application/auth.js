@@ -1,5 +1,5 @@
-dojo.provide("ibttn.auth");
-ibttn.auth = {
+dojo.provide("ib.auth");
+ib.auth = {
   init: function(){
     if (dojo.query('[id^="auth"]').length == 0){
       this.auth_overlay();
@@ -17,10 +17,10 @@ ibttn.auth = {
         node.innerHTML = data;
         dojo.connect(dojo.byId('login_pass'),'onkeypress',function(e){
             if (e.keyCode == 13)
-            ibttn.auth.submit();
+            ib.auth.submit();
         });
         dojo.connect(dojo.byId('login_button'),'onclick',function(e){
-            ibttn.auth.submit();
+            ib.auth.submit();
         });
       }
     })

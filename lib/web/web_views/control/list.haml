@@ -1,5 +1,5 @@
 - i = 0
-%p.title= #pretty_title(obj)
+%p.title= pretty_title(ds.model)
 - unless ds.empty?
   %table.list
     %thead
@@ -19,9 +19,11 @@
               - else
                 %span{:class => f[:css]}= f[:value]
           %td
-            - unless ds.model.name.include?("Log")
-              %span.put{:data => {:id => r.id, :model => path}, :onclick => "window.location='/ctrl/edit/#{path}/#{r.id}'"}
-            %span.delete{:data => {:id => r.id, :model => path}, :onclick => ""}
+            %span
+              %a.get{:href => "/ctrl/#{path}/#{r.id}/edit", :data => {:referrer => "/ctrl/list/#{path}/#{ds.current_page}"}}
+              - unless ds.model.name.include?("Log")
+                %a.put{:href => "/ctrl/#{path}/#{r.id}/edit", :data => {:referrer => "/ctrl/list/#{path}/#{ds.current_page}"}}
+              %a.delete{:href => "/ctrl/#{path}/#{r.id}/delete", :data => {:referrer => "/ctrl/list/#{path}/#{ds.current_page}"}}
         - i += 1
       - while i < 25
         %tr

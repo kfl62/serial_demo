@@ -33,10 +33,10 @@ module Ib
       post '/login' do
         if user = Admin.authenticate(params[:login_name], params[:password])
           session[:user] = user.id
-          flash[:msg] = {:msg => {:txt => I18n.t('ibttn_auth.login_msg'), :class => "info"}}.to_json
+          flash[:msg] = {:msg => {:txt => I18n.t('ib_auth.login_msg'), :class => "info"}}.to_json
           redirect "#{lang_path}/ctrl"
         else
-          flash[:msg] = {:msg => {:txt => I18n.t('ibttn_auth.login_err'), :class => "error"}}.to_json
+          flash[:msg] = {:msg => {:txt => I18n.t('ib_auth.login_err'), :class => "error"}}.to_json
           redirect "#{lang_path}/"
         end
       end
@@ -44,7 +44,7 @@ module Ib
       # Logout
       get '/logout' do
         session[:user] = nil
-        flash[:msg] = {:msg => {:txt => I18n.t('ibttn_auth.logout_msg'), :class => "info"}}.to_json
+        flash[:msg] = {:msg => {:txt => I18n.t('ib_auth.logout_msg'), :class => "info"}}.to_json
         redirect "#{lang_path}/"
       end
     end

@@ -3,6 +3,7 @@ en:
     id: "Id"
     created_at: "Created at"
     updated_at: "Updated at"
+    delete: "Record deleted from <b>%{data}</b> !"
   hw_key:
     title: "Working on <b>Keys</b> table, <b>\"hw_keys\"</b> in DB"
     keyId: "Key name"

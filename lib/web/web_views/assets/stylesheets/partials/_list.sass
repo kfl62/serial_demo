@@ -25,21 +25,28 @@ table.list
         text-align: right
       &.datetime, &.time, &.put, &.delete
         cursor: pointer
-      &.put
-        background:
-          image: image_url(unquote("/images/icons/db_edit.png"))
-        width: 14px
-        height: 14px
-        float: left
-      &.delete
-        background:
-          image: image_url(unquote("/images/icons/db_remove.png"))
-        width: 14px
-        height: 14px
-        float: left
       &.paginate, &.last_row
         display: inline
         a
           text-decoration: none
           font-size: 1.2em
-
+      a
+        &.get
+          background:
+            image: image_url(unquote("/images/icons/db_get.png"))
+          width: 14px
+          height: 14px
+          float: left
+        &.put
+          background:
+            image: image_url(unquote("/images/icons/db_edit.png"))
+          width: 14px
+          height: 14px
+          float: left
+        &.delete
+          background:
+            image: image_url(unquote("/images/icons/db_remove.png"))
+          width: 14px
+          height: 14px
+          float: left
+      

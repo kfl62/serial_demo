@@ -1,0 +1,117 @@
+#crud_overlay
+  background-color: rgba(62, 62, 62, 1)
+  +opacity(0.3)
+  top: 0px
+  left: 0px
+  width: 100%
+  height: 100%
+  position: absolute
+  z-index: 99
+#crud_window
+  background-color: rgba(245, 245, 245, 1)
+  +single-box-shadow( rgba(62, 62, 62, 1), 0.5em, 0.5em)
+  +border-radius(0.5em)
+  padding: 0.5em 1.0em
+  position: absolute
+  z-index: 100
+  .close
+    margin: -1.0em -1.5em
+  .crud_title
+    border-bottom: ridge 1px rgba(62, 62, 62, 1)
+    font-style: italic
+    font-weight: bolder
+  table
+    border-collapse: collapse
+    width: 100%
+    input
+      font-family: Verdana, Helvetica, Arial, sans-serif
+      margin: 0px
+      padding: 1px 0px
+      width: 150px
+    td
+      vertical-align: top
+      span.limit-width
+        float: left
+        max-width: 400px
+    tr.normal, tr.integer, tr.array, tr.hash
+      background-color: rgba(245, 245, 245, 1)
+    tr.integer
+      input
+        width: 50px
+        text-align: center
+        font-weight: bolder
+    tr.relations
+      background-color: rgba(230, 230, 230, 1)
+    tr.localized
+      background-color: rgba(220, 220, 220, 1)
+      input
+        width: 200px
+    tr.datetime
+      background-color: rgba(210, 210, 210, 1)
+    td.buttons_bottom
+      text-align: center
+      line-height: 2.5em
+      vertical-align: center
+    td.footer_note
+      font-size: smaller
+  span.button
+    background:
+      color: rgba(230, 230, 230, 1)
+      position: 2px 0px
+      repeat: no-repeat
+    border: outset 1px rgba(0, 0, 0, 1)
+    +border-radius(0.25em)
+    font-style: italic
+    font-size: 0.9em
+    font-weight: bolder
+    padding: 0.25em 0.5em 0.25em 2.25em
+    &:hover
+      background-color: rgba(255, 255, 190, 0.8)
+      cursor: pointer
+    &.login
+      background:
+        image: image_url(unquote("/images/icons/db_login.png"))
+    &.put
+      background:
+        image: image_url(unquote("/images/icons/db_edit.png"))
+    &.post
+      background:
+        image: image_url(unquote("/images/icons/db_new.png"))
+        position: 0px 0px
+    &.delete
+      background:
+        image: image_url(unquote("/images/icons/db_remove.png"))
+    &.save
+      background:
+        image: image_url(unquote("/images/icons/db_save.png"))
+        position: 2px 2px
+    &.cancel
+      background:
+        image: image_url(unquote("/images/icons/db_cancel.png"))
+        position: 2px 2px
+    &.print
+      background:
+        image: image_url(unquote("/images/icons/db_pdf.png"))
+        position: 2px 1px
+  span.db-relations-add
+    background:
+      image: image_url(unquote("/images/icons/db_relations_add.png"))
+    cursor: pointer
+    float: right
+    width: 14px
+    height: 14px
+    margin: 0px 3px
+    padding: 0px
+  span.db-relations-del
+    background:
+      image: image_url(unquote("/images/icons/db_relations_del.png"))
+    cursor: pointer
+    float: right
+    width: 14px
+    height: 14px
+    margin: 0px 3px 0px 0px
+    padding: 0px
+  sup
+    font-size: smaller
+    vertical-align: super
+
