@@ -8,7 +8,8 @@ module Ib
       #     def up
       #       create_table(:hw_readers) do
       #         primary_key :id
-      #         foreign_key :node_id,     :hw_nodes,  :on_delete => :set_null, :on_update => :cascade
+      #         foreign_key :node_id,     :hw_nodes,  :on_delete => :cascade, :on_update => :cascade
+      #         column      :order,       Fixnum,     :size => 4,   :default => 1
       #         column      :name,        String,     :size => 20
       #         column      :created_at,  DateTime
       #         column      :updated_at,  DateTime
@@ -71,6 +72,7 @@ module Ib
             {:css => "integer",:name => "id",:label => I18n.t('mdl.id'),:value => id},
             {:css => "normal",:name  => "name",:label => I18n.t('hw_reader.name'),:value => name},
             {:css => (node.nil? ? "ce bo":"normal"),:name => "node_id",:label => I18n.t('hw_reader.node_id'),:value => (node.name rescue 'orphan')},
+            {:css => "integer",:name  => "name",:label => I18n.t('hw_reader.order'),:value => order},
             {:css => "datetime",:name  => "created_at",:label => I18n.t('mdl.created_at'),:value => created_at},
             {:css => "datetime",:name  => "updated_at",:label => I18n.t('mdl.updated_at'),:value => updated_at}
           ]
