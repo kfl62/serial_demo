@@ -26,8 +26,7 @@ module Ib
       :sinatra_conf         => File.join(app_path, 'config'),
       :sinatra_views        => File.join(app_path, 'lib', 'web', 'web_views'),
       :sinatra_translations => File.join(app_path, 'lib', 'web', 'web_translations'),
-      :i18n_default         => 'en',
-      :db_models            => File.join(app_path, 'lib', 'db')
+      :i18n_default         => 'en'
     )
 
     if File.exists?("./config/simple_conf.yaml")
@@ -52,8 +51,7 @@ module Ib
       )
     end
 
-    I18n.load_path += Dir.glob(File.join(WebConfig.sinatra_translations, '*.yml'))
-    I18n.load_path += Dir.glob(File.join(WebConfig.db_models, '*.yml'))
+    I18n.load_path += Dir.glob(File.join(app_path,'lib', 'i18n', '*.yml'))
     I18n.default_locale = :en
   end
 end
