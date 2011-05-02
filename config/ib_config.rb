@@ -34,6 +34,7 @@ module Ib
       SerialConfig = OpenStruct.new c["SerialConfig"]
       DbConfig = OpenStruct.new c["DbConfig"]
       DbConfig.db_models = File.join(app_path, 'lib', 'db')
+      WebConfig.dojo_cdn = c["WebConfig"]["dojo_cdn"]
     else
       SerialConfig = OpenStruct.new(
         :dev       => '/dev/ttyS0',
