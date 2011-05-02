@@ -18,12 +18,12 @@
                 %span{:class => f[:css], :title => f[:value].strftime('%Y-%m-%d')}= f[:value].strftime('%H:%M:%S')
               - else
                 %span{:class => f[:css]}= f[:value]
-          %td
+          %td.buttons_left
             %span
-              %a.get{:href => "/ctrl/#{path}/#{r.id}/edit", :data => {:referrer => "/ctrl/list/#{path}/#{ds.current_page}"}}
+              %a.get{:href => "/ctrl/#{path}/#{r.id}", :data => {:referrer => "/ctrl/#{path}/#{ds.current_page}/list"}}
               - unless ds.model.name.include?("Log")
-                %a.put{:href => "/ctrl/#{path}/#{r.id}/edit", :data => {:referrer => "/ctrl/list/#{path}/#{ds.current_page}"}}
-              %a.delete{:href => "/ctrl/#{path}/#{r.id}/delete", :data => {:referrer => "/ctrl/list/#{path}/#{ds.current_page}"}}
+                %a.put{:href => "/ctrl/#{path}/#{r.id}/edit", :data => {:referrer => "/ctrl/#{path}/#{ds.current_page}/list"}}
+              %a.delete{:href => "/ctrl/#{path}/#{r.id}/delete", :data => {:referrer => "/ctrl/#{path}/#{ds.current_page}/list"}}
         - i += 1
       - while i < 25
         %tr
@@ -36,13 +36,13 @@
           %span.paginate
             - if ds.prev_page
               - unless ds.first_page?
-                %a.bo{:href => "/ctrl/list/#{path}/1"} &laquo;
-              %a.bo{:href => "/ctrl/list/#{path}/#{ds.prev_page}"} &lsaquo;
+                %a.bo{:href => "/ctrl/#{path}/1/list"} &laquo;
+              %a.bo{:href => "/ctrl/#{path}/#{ds.prev_page}/list"} &lsaquo;
             Pg. #{ds.current_page} of #{ds.page_count} 
             - if ds.next_page
-              %a.bo{:href => "/ctrl/list/#{path}/#{ds.next_page}"} &rsaquo;
+              %a.bo{:href => "/ctrl/#{path}/#{ds.next_page}/list"} &rsaquo;
               - unless ds.last_page?
-                %a.bo{:href => "/ctrl/list/#{path}/#{ds.page_count}"} &raquo;
+                %a.bo{:href => "/ctrl/#{path}/#{ds.page_count}/list"} &raquo;
           %span.last_row &nbsp;&nbsp;|&nbsp;&nbsp;Search, Add record etc... soon :)
 - else
   %h4 Empty table

@@ -153,7 +153,7 @@ module Ib
       # @todo Document this method
       # @private def msg_com_alive{{{2
       def msg_com_alive(m)
-        node_status = Status[:node_id => Node[:sid => string_sid(m).to_i].id]
+        node_status = Status[:node_id => Node[:sid => string_sid(m)].id]
         if node_status.nil?
           msg = [nil,
                  Time.now,

@@ -1,4 +1,5 @@
-%p.close{:onclick => "ib.crud.destroy()"}
+- if request.xhr?
+  %p.close{:onclick => "ib.crud.destroy()"}
 %p.crud_title= pretty_title(r.model)
 %table{:cellspacing => "0"}
   %thead
@@ -15,7 +16,8 @@
   %tfoot
     %tr
       %td.buttons_bottom{:colspan => "2"}
-        %span.button.put Edit
+        %span.button
+          %a.put{:href => "#"} Edit
         %span.button.delete Delete
         %span.button.cancel Cancel
         %span.button.post Create        

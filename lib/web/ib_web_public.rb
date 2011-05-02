@@ -10,12 +10,15 @@ module Ib
 
       set :views, File.join(Ib::Config::WebConfig.sinatra_views, 'public')
 
-      # @todo Document this method
+      # @private GET '/'{{{2
+      # Just returns the index.html.
+      #
+      # In our case the index.hml is the README.md rendered using
+      # the public layout.
       get '/' do
         haml :index
       end
-
-    end
-  end
-end
+    end # public
+  end # web
+end # ib
 

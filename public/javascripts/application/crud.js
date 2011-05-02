@@ -8,7 +8,7 @@ ib.crud = {
   // get {{{2
   get: function(node){
     var path = node.href;
-    path = path.split('/').slice(-4,-1).join('/');
+    path = path.split('/').slice(-3).join('/');
     xhrArgs = {
       url: '/' + path,
       load: function(data){
@@ -25,7 +25,7 @@ ib.crud = {
   },
   put: function(node){
     var path = node.href;
-    path = path.split('/').slice(-4,-1).join('/');
+    path = path.split('/').slice(-4).join('/');
     xhrArgs = {
       url: '/' + path,
       load: function(data){
@@ -125,21 +125,12 @@ ib.crud = {
   connect: function(){
     dojo.forEach(this.connections, dojo.disconnect);
     this.connections.length = 0;
-    dojo.query('a.get').forEach(function(a){
-      ib.crud.connections.push(
-        dojo.connect(a, 'onclick', function(e){e.preventDefault(),ib.crud.get(e.target)})
-      )
-    })
-    dojo.query('a.put').forEach(function(a){
-      ib.crud.connections.push(
-        dojo.connect(a, 'onclick', function(e){e.preventDefault(),ib.crud.put(e.target)})
-      )
-    })
-    dojo.query('a.delete').forEach(function(a){
-      ib.crud.connections.push(
-        dojo.connect(a, 'onclick', function(e){e.preventDefault(),ib.crud.delete(e.target)})
-      )
-    })
+    //dojo.query('td.buttons_left > span > a').forEach(function(a){
+    //  var verb = a.className;
+    //  ib.crud.connections.push(
+    //    dojo.connect(a, 'onclick', function(e){e.preventDefault();ib.crud[verb](e.target)}) 
+    //  )
+    //})
   },
   //// connect buttons in crudWindow{{{2
   connect_buttons: function(){
