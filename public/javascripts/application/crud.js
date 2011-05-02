@@ -125,12 +125,12 @@ ib.crud = {
   connect: function(){
     dojo.forEach(this.connections, dojo.disconnect);
     this.connections.length = 0;
-    //dojo.query('td.buttons_left > span > a').forEach(function(a){
-    //  var verb = a.className;
-    //  ib.crud.connections.push(
-    //    dojo.connect(a, 'onclick', function(e){e.preventDefault();ib.crud[verb](e.target)}) 
-    //  )
-    //})
+    dojo.query('td.buttons_left > span > a').forEach(function(a){
+      var verb = a.className;
+      ib.crud.connections.push(
+        dojo.connect(a, 'onclick', function(e){e.preventDefault();ib.crud[verb](e.target)}) 
+      )
+    })
   },
   //// connect buttons in crudWindow{{{2
   connect_buttons: function(){
