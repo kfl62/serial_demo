@@ -61,7 +61,7 @@ en:
   log_access:
     title: "Listing <b>Accesses</b> table, <b>\"log_accesses\"</b> in DB"
     created_at: "Date/Time"
-    owner_id: "Ow.Id"
+    owner_id: "OId"
     owner: "Owner"
     node_req: "Req.node"
     reader: "Reader"
