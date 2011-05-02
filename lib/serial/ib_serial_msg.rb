@@ -102,7 +102,7 @@ module Ib
            Error.create(:from => "Persons:Owner id=#{new_owner.id}",
                         :error => "A new owner with key=#{new_key.keyId} was created! Please rename and join group!")
         end
-        Access.insert(msg)
+        #Access.insert(msg) # Commented out on Attila's request
         msg =  msg.compact.join(' | ')
         msg += "\n"
         STDOUT << msg
@@ -142,7 +142,7 @@ module Ib
                Reader[:id => string_reader(m)].name,
                "NDA",
                "NDA",
-               "ACCESS_DENY (Error.id=#{error.id})",
+               "ACCESS_DENY",
                false
               ]
         Access.insert(msg)
