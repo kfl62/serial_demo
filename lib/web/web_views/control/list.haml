@@ -1,5 +1,7 @@
 - i = 0
-%p.title= pretty_title(ds.model)
+%p.title
+  = pretty_title(ds.model)
+  %span.reload{:onclick => "ib.crud.reload('/ctrl/#{path}/#{ds.current_page}/list')", :title => "Reload page"}
 - unless ds.empty?
   %table.list
     %thead
@@ -13,7 +15,10 @@
           - r.table_data.each do |f|
             %td
               - if f[:css] == 'datetime'
-                %span{:class => f[:css], :title => f[:value].strftime('%H:%M:%S')}= f[:value].strftime('%Y-%m-%d')
+                -if path == 'log_access'
+                  %span{:class => f[:css], :title => f[:value].strftime('%H:%M:%S')}= f[:value].strftime('%Y-%m-%d %H:%M:%S')
+                -else
+                  %span{:class => f[:css], :title => f[:value].strftime('%H:%M:%S')}= f[:value].strftime('%Y-%m-%d')
               - elsif f[:css] == 'time'
                 %span{:class => f[:css], :title => f[:value].strftime('%Y-%m-%d')}= f[:value].strftime('%H:%M:%S')
               - else
