@@ -8,11 +8,11 @@
       %th Value
   %tbody
     - r.table_data.each do |data|
-      %tr
+      %tr{:class => data[:css]}
         %td
-          %span= data[:label]
+          %span= data[:label].gsub('<br/>',' ')
         %td
-          %span= data[:value]
+          %span :&nbsp;#{data[:value]}
   %tfoot
     %tr
       %td.buttons_bottom{:colspan => "2"}

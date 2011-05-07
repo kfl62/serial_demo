@@ -12,10 +12,12 @@
         - unless data[:css] == 'datetime'
           %tr
             %td
-              %span= data[:label]
+              %span= data[:label].gsub('<br/>',' ')
             %td
-              - unless data[:name] =~ /name|keyId|order/
-                %span= data[:value]
+              - unless data[:name] =~ /name|keyId|order|email/
+                %span :&nbsp;#{data[:value]}
+                %span.no-edit= t('crud.msg.no_edit') if data[:name] == 'id'
+                %span.no-edit= t('crud.msg.no_edit_associations') unless data[:name] == 'id'
               - else
                 %input{:id => r.id, :name => "[form][#{data[:name]}]", :value => data[:value]}
     %tfoot

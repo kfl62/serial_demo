@@ -14,6 +14,8 @@ en:
       put: "Record from %{model} id=%{id} was updated!"
       post: "A new record was created in %{model}!"
       delete: "Record from  %{model} id=%{id} was deleted!"
+      no_edit: "Edit is forbidden!"
+      no_edit_associations: "Edit using Associations!"
     log:
       put: "Record updated. Take care of the associations!"
       post: "New record created. Take care of the associations!"
