@@ -23,6 +23,10 @@ en:
         admins: "Admin"
         groups: "Group"
         permissions: "Permission"
+    associations: "Associations"
+    assoc:
+        owner_key: "Owner &laquo;&raquo; Key"
+        owner_group: "Owner &laquo;&raquo; Group"
     task: "Tasks"
 de:
   ib_web_menu:
