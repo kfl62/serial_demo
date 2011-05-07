@@ -1,23 +1,26 @@
-%h4 PUT
-%p.close{:onclick => "ib.crud.destroy()"}
-%p.crud_title= pretty_title(r.model)
-%table{:cellspacing => "0"}
-  %thead
-    %tr
-      %th Field
-      %th Value
-  %tbody
-    - r.table_data.each do |data|
+- if request.xhr?
+  %p.close{:onclick => "ib.crud.destroy()"}
+%p.crud_title= crud_title(r.model,'edit')
+%form{:action => "/ctrl/#{path}/#{r.id}/edit", :method => "post", :data => {:referrer => "/ctrl/#{path}/#{r.id.div(25) + 1}/list"}}
+  %table{:cellspacing => "0"}
+    %thead
       %tr
-        %td
-          %span= data[:label]
-        %td
-          %span= data[:value]
-  %tfoot
-    %tr
-      %td.buttons_bottom{:colspan => "2"}
-        %span.button.put Edit
-        %span.button.delete Delete
-        %span.button.cancel Cancel
-        %span.button.post Create        
+        %th Field
+        %th Value
+    %tbody
+      - r.table_data.each do |data|
+        - unless data[:css] == 'datetime'
+          %tr
+            %td
+              %span= data[:label]
+            %td
+              - unless data[:name] =~ /name|keyId|order/
+                %span= data[:value]
+              - else
+                %input{:id => r.id, :name => "[form][#{data[:name]}]", :value => data[:value]}
+    %tfoot
+      %tr
+        %td.buttons_bottom{:colspan => "2"}
+          %input.put{:type => "submit", :value => "Save"}
+          %input.destroy{:type => "reset", :value => "Cancel"}
 

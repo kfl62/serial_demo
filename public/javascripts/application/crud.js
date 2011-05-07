@@ -23,7 +23,8 @@ ib.crud = {
     dojo.publish('xhrMsg',['loading','info']);
     var deferred = dojo.xhrGet(xhrArgs);
   },
-  put: function(node){
+  // edit
+  edit: function(node){
     var path = node.href;
     path = path.split('/').slice(-4).join('/');
     xhrArgs = {
@@ -41,20 +42,23 @@ ib.crud = {
     var deferred = dojo.xhrGet(xhrArgs);
   },
   // put {{{2
-  //put: function(){
-  //  xhrArgs = {
-  //    form: dojo.query('form')[0],
-  //    url: this.url.join('/'),
-  //    load: function(data){
-  //      dojo.publish('xhrMsg',['flash']);
-  //      trst.task.drawBox(data);
-  //    },
-  //    error: function(error){
-  //      dojo.publish('xhrMsg',['error','error',error]);
-  //    }
-  //  };
-  //  var deferred = dojo.xhrPut(xhrArgs);
-  //},
+  put: function(node){
+    var path = node.action.split('/').slice(-4,-1).join('/');
+    xhrArgs = {
+      form: node,
+      url:'/' + path,
+      load: function(data){
+        dojo.publish('xhrMsg',['flash']);
+      },
+      error: function(error){
+        dojo.publish('xhrMsg',['error','error',error]);
+      }
+    };
+    var deferred = dojo.xhrPut(xhrArgs);
+    ib.crud.destroy();
+    reload_path = node.getAttribute('data-referrer');
+    ib.crud.reload(reload_path)
+  },
   // delete {{{2
   delete: function(node){
     var path = node.href;
@@ -69,6 +73,7 @@ ib.crud = {
       }
     };
     var deferred = dojo.xhrDelete(xhrArgs);
+    ib.crud.destroy();
     reload_path = node.getAttribute('data-referrer');
     ib.crud.reload(reload_path)
   },
@@ -128,7 +133,7 @@ ib.crud = {
     dojo.query('td.buttons_left > span > a').forEach(function(a){
       var verb = a.className;
       ib.crud.connections.push(
-        dojo.connect(a, 'onclick', function(e){e.preventDefault();ib.crud[verb](e.target)}) 
+        dojo.connect(a, 'onclick', function(e){e.preventDefault();ib.crud[verb](e.target)})
       )
     })
   },
@@ -136,34 +141,20 @@ ib.crud = {
   connect_buttons: function(){
     dojo.forEach(this.buttons, dojo.disconnect);
     this.buttons.length = 0;
-    dojo.query('td.buttons_bottom > span').forEach(function(span){
-      if (dojo.hasClass(span,'put')){
-        ib.crud.buttons.push(
-          dojo.connect(span,'onclick', function(e){e.preventDefault(),ib.crud.not_ready('Edit')})
-        )
-      }
-      else if(dojo.hasClass(span,'cancel')){
-        ib.crud.buttons.push(
-          dojo.connect(span, 'onclick', function(e){e.preventDefault(),ib.crud.destroy()})
-        )
-      }
-      else if (dojo.hasClass(span,'delete')){
-        ib.crud.buttons.push(
-          dojo.connect(span,'onclick', function(e){e.preventDefault(),ib.crud.not_ready('Delete')})
-        )
-      }
-      else if (dojo.hasClass(span,'post')){
-        ib.crud.buttons.push(
-          dojo.connect(span,'onclick', function(e){e.preventDefault(),ib.crud.not_ready('Create')})
-        )
-      }
-      else{
-        //
-      }
+    dojo.query('td.buttons_bottom > span > a').forEach(function(a){
+      var verb = a.className;
+      ib.crud.connections.push(
+        dojo.connect(a, 'onclick', function(e){e.preventDefault();ib.crud[verb](e.target)})
+      )
+    })
+    dojo.query('td.buttons_bottom > input').forEach(function(a){
+      var verb = a.className;
+      ib.crud.connections.push(
+        dojo.connect(a, 'onclick', function(e){e.preventDefault();ib.crud[verb](e.target.form)})
+      )
     })
   },
   not_ready: function(msg){
-    console.debug("Clicked");
     alert("Coming soon - " + msg + " - !");
   }
 }

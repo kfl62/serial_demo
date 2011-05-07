@@ -19,7 +19,6 @@
   .crud_title
     border-bottom: ridge 1px rgba(62, 62, 62, 1)
     font-style: italic
-    font-weight: bolder
   table
     border-collapse: collapse
     width: 100%
@@ -52,9 +51,12 @@
       text-align: center
       line-height: 2.5em
       vertical-align: center
+      input
+        width: auto
+        cursor: pointer
     td.footer_note
       font-size: smaller
-  span.button
+  span.button, input.put, input.destroy
     background:
       color: rgba(230, 230, 230, 1)
       position: 2px 0px
@@ -67,13 +69,11 @@
     padding: 0.25em 0.5em 0.25em 2.25em
     &:hover
       background-color: rgba(255, 255, 190, 0.8)
-      cursor: pointer
-    &.login
-      background:
-        image: image_url(unquote("/images/icons/db_login.png"))
+      //cursor: pointer
     &.put
       background:
         image: image_url(unquote("/images/icons/db_edit.png"))
+      color: rgba(0, 0, 238,1)
     &.post
       background:
         image: image_url(unquote("/images/icons/db_new.png"))
@@ -85,32 +85,13 @@
       background:
         image: image_url(unquote("/images/icons/db_save.png"))
         position: 2px 2px
-    &.cancel
+    &.cancel, &.destroy
       background:
         image: image_url(unquote("/images/icons/db_cancel.png"))
         position: 2px 2px
-    &.print
-      background:
-        image: image_url(unquote("/images/icons/db_pdf.png"))
-        position: 2px 1px
-  span.db-relations-add
-    background:
-      image: image_url(unquote("/images/icons/db_relations_add.png"))
-    cursor: pointer
-    float: right
-    width: 14px
-    height: 14px
-    margin: 0px 3px
-    padding: 0px
-  span.db-relations-del
-    background:
-      image: image_url(unquote("/images/icons/db_relations_del.png"))
-    cursor: pointer
-    float: right
-    width: 14px
-    height: 14px
-    margin: 0px 3px 0px 0px
-    padding: 0px
+      color: rgba(0, 0, 238,1)
+    a
+      text-decoration: none
   sup
     font-size: smaller
     vertical-align: super

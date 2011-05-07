@@ -1,6 +1,6 @@
 - i = 0
 %p.title
-  = pretty_title(ds.model)
+  = crud_title(ds.model,'get_list')
   %span.reload{:onclick => "ib.crud.reload('/ctrl/#{path}/#{ds.current_page}/list')", :title => "Reload page"}
 - unless ds.empty?
   %table.list
@@ -27,7 +27,7 @@
             %span
               %a.get{:href => "/ctrl/#{path}/#{r.id}", :data => {:referrer => "/ctrl/#{path}/#{ds.current_page}/list"}}
               - unless ds.model.name.include?("Log")
-                %a.put{:href => "/ctrl/#{path}/#{r.id}/edit", :data => {:referrer => "/ctrl/#{path}/#{ds.current_page}/list"}}
+                %a.edit{:href => "/ctrl/#{path}/#{r.id}/edit", :data => {:referrer => "/ctrl/#{path}/#{ds.current_page}/list"}}
               %a.delete{:href => "/ctrl/#{path}/#{r.id}/delete", :data => {:referrer => "/ctrl/#{path}/#{ds.current_page}/list"}}
         - i += 1
       - while i < 25
