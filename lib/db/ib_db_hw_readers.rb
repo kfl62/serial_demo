@@ -72,7 +72,7 @@ module Ib
             {:css => "integer",:name => "id",:label => I18n.t('mdl.id'),:value => id},
             {:css => "normal",:name  => "name",:label => I18n.t('hw_reader.name'),:value => name},
             {:css => (node.nil? ? "ce bo":"normal"),:name => "node_id",:label => I18n.t('hw_reader.node_id'),:value => (node.name rescue 'orphan')},
-            {:css => "integer",:name  => "name",:label => I18n.t('hw_reader.order'),:value => order},
+            {:css => "integer",:name  => "order",:label => I18n.t('hw_reader.order'),:value => order},
             {:css => "datetime",:name  => "created_at",:label => I18n.t('mdl.created_at'),:value => created_at},
             {:css => "datetime",:name  => "updated_at",:label => I18n.t('mdl.updated_at'),:value => updated_at}
           ]
