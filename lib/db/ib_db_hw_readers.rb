@@ -82,7 +82,7 @@ module Ib
         # @return [Log::Error]
         def delete_message
           Log::Error.create(:from => "Hw::Reader id=#{id}",
-                            :error => I18n.t("hw_reader.delete_message", :permissions => permissions.length))
+                            :error => I18n.t('crud.log.delete'))
         end
       end
     end

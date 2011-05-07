@@ -72,7 +72,8 @@ module Ib
         login_required
         obj = modelize(m)
         r = obj[id.to_i]
-        #r.update(params[:form])
+        r.update(params[:form])
+        haml :get, :layout => request.xhr? ? false : :layout, :locals => {:r  => r, :path => m}
       end
       # @private PUT '/:model/:id'{{{2
       # Route for saving edited content of one record in browsers with
@@ -87,7 +88,8 @@ module Ib
         login_required
         obj = modelize(m)
         r = obj[id.to_i]
-        #r.update(params[:form])}
+        r.update(params[:form])
+        flash[:msg] = {:msg => {:txt => t('crud.msg.put', :model => r.model.name, :id => r.id.to_s), :class => "info"}}.to_json
       end
       # @private GET '/:model/:id/delete'{{{2
       # Route for delete content of one record in browsers with
@@ -134,7 +136,7 @@ module Ib
         obj = modelize(m)
         r = obj[id.to_i]
         r.destroy
-        flash[:msg] = {:msg => {:txt => I18n.t('mdl.delete', :data => r.model.name), :class => "info"}}.to_json
+        flash[:msg] = {:msg => {:txt => t('crud.msg.delete', :model => r.model.name, :id => r.id.to_s), :class => "info"}}.to_json
       end
       # @private GET '/:model/new'{{{2
       # Route for creating content for a new record in browsers with

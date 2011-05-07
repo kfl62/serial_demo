@@ -101,7 +101,7 @@ module Ib
         # @return [Log::Error]
         def delete_message
           Log::Error.create(:from => "Persons::Permission id=#{id}",
-                            :error => I18n.t('persons_permission.delete_message'))
+                            :error => I18n.t('crud.log.delete'))
         end
       end
     end

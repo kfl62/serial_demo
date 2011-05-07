@@ -1,0 +1,80 @@
+en:
+  crud:
+    title: "Managing <b>%{model} &raquo %{action} &laquo</b> (Table: '%{table}')"
+    action:
+      get_list: "List"
+      get_record: "View"
+      edit: "Edit"
+      put: "Update"
+      post: "Create"
+      delete: "Delete"
+    msg:
+      get: "Loading..."
+      edit: "Loading..."
+      put: "Record from %{model} id=%{id} was updated!"
+      post: "A new record was created in %{model}!"
+      delete: "Record from  %{model} id=%{id} was deleted!"
+    log:
+      put: "Record updated. Take care of the associations!"
+      post: "New record created. Take care of the associations!"
+      delete: "Record deleted. Take care of the associations!"
+de:
+  crud:
+    title: "Managing <b>%{model} &raquo %{action} &laquo</b> (Table: '%{table}')"
+    action:
+      get_list: "List"
+      get_record: "View"
+      edit: "Edit"
+      put: "Update"
+      post: "Create"
+      delete: "Delete"
+    msg:
+      get: "Loading..."
+      edit: "Loading..."
+      put: "Record from %{model} id=%{id} was updated!"
+      post: "A new record was created in %{model}!"
+      delete: "Record from  %{model} id=%{id} was deleted!"
+    log:
+      put: "Record updated. Take care of the associations!"
+      post: "New record created. Take care of the associations!"
+      delete: "Record deleted. Take care of the associations!"
+ro:
+  crud:
+    title: "Managing <b>%{model} &raquo %{action} &laquo</b> (Table: '%{table}')"
+    action:
+      get_list: "List"
+      get_record: "View"
+      edit: "Edit"
+      put: "Update"
+      post: "Create"
+      delete: "Delete"
+    msg:
+      get: "Loading..."
+      edit: "Loading..."
+      put: "Record from %{model} id=%{id} was updated!"
+      post: "A new record was created in %{model}!"
+      delete: "Record from  %{model} id=%{id} was deleted!"
+    log:
+      put: "Record updated. Take care of the associations!"
+      post: "New record created. Take care of the associations!"
+      delete: "Record deleted. Take care of the associations!"
+hu:
+  crud:
+    title: "Managing <b>%{model} &raquo %{action} &laquo</b> (Table: '%{table}')"
+    action:
+      get_list: "List"
+      get_record: "View"
+      edit: "Edit"
+      put: "Update"
+      post: "Create"
+      delete: "Delete"
+    msg:
+      get: "Loading..."
+      edit: "Loading..."
+      put: "Record from %{model} id=%{id} was updated!"
+      post: "A new record was created in %{model}!"
+      delete: "Record from  %{model} id=%{id} was deleted!"
+    log:
+      put: "Record updated. Take care of the associations!"
+      post: "New record created. Take care of the associations!"
+      delete: "Record deleted. Take care of the associations!"

@@ -65,7 +65,7 @@ module Ib
         # @return [Log::Error]
         def delete_message
           Log::Error.create(:from => "Hw::Key id=#{id}",
-                            :error => I18n.t('hw_key.delete_message',:data => owner.full_name))
+                            :error => I18n.t('crud.log.delete'))
         end
       end
     end

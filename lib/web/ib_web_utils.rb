@@ -14,15 +14,15 @@ module Ib
         if w == 'flash'
           retval = flash[:msg]
         else
-          retval = {:msg => {:txt => I18n.t(w, :data => params[:data]), :class => k}}.to_json
+          retval = {:msg => {:txt => t(w, :data => params[:data]), :class => k}}.to_json
         end
         retval
       end
       # @todo Document this method
       get '/lang/:lang' do |l|
-        I18n.locale = l.to_sym
+        locale = l.to_sym
         path = logged_in? ?  "#{lang_path}/ctrl" :  "#{lang_path}/"
-        flash[:msg] = {:msg => {:txt => I18n.t('lang.change'), :class => "info"}}.to_json
+        flash[:msg] = {:msg => {:txt => t('lang.change'), :class => "info"}}.to_json
         redirect path
       end
       # Render login screen
@@ -33,10 +33,10 @@ module Ib
       post '/login' do
         if user = Admin.authenticate(params[:login_name], params[:password])
           session[:user] = user.id
-          flash[:msg] = {:msg => {:txt => I18n.t('ib_auth.login_msg'), :class => "info"}}.to_json
+          flash[:msg] = {:msg => {:txt => t('ib_auth.login_msg'), :class => "info"}}.to_json
           redirect "#{lang_path}/ctrl"
         else
-          flash[:msg] = {:msg => {:txt => I18n.t('ib_auth.login_err'), :class => "error"}}.to_json
+          flash[:msg] = {:msg => {:txt => t('ib_auth.login_err'), :class => "error"}}.to_json
           redirect "#{lang_path}/"
         end
       end
@@ -44,7 +44,7 @@ module Ib
       # Logout
       get '/logout' do
         session[:user] = nil
-        flash[:msg] = {:msg => {:txt => I18n.t('ib_auth.logout_msg'), :class => "info"}}.to_json
+        flash[:msg] = {:msg => {:txt => t('ib_auth.logout_msg'), :class => "info"}}.to_json
         redirect "#{lang_path}/"
       end
     end

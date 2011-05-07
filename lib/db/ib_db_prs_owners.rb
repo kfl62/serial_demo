@@ -85,8 +85,8 @@ module Ib
         # Insert a translated warning message in {Ib::Db::Log::Error} table
         # @return [Log::Error]
         def delete_message
-          Log::Error.create(:from => "Persons::Group id=#{id}",
-                            :error => I18n.t('persons_group.delete_message', :data => name))
+          Log::Error.create(:from => "Persons::Owner id=#{id}",
+                            :error => I18n.t('crud.log.delete'))
         end
       end
     end

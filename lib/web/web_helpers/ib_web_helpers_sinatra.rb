@@ -43,6 +43,11 @@ module Ib
             lang == I18n.default_locale ? "" : "/#{lang}"
           end
           # @todo
+          # @return [String] translated string
+          def t(*args)
+            I18n::t(*args)
+          end
+          # @todo
           def modelize(str)
             m, c = str.split('_')
             guess_model(m).const_get(c.capitalize)

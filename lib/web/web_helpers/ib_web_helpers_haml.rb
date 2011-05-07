@@ -27,9 +27,9 @@ module Ib
 
           # @return [String]
           # @todo Document this method
-          def t(text, options={})
+          def t(*args)
             I18n.reload!
-            translation = I18n.t(text,options)
+            I18n::t(*args)
           end
           # @return [String]
           # @todo Document this method
@@ -58,23 +58,12 @@ module Ib
             retval
           end
           # @todo
-          def pretty_title(obj)
-            prefix = obj.model.to_s.downcase.split('::')[-2..-1].join("_")
-            t("#{prefix}.title")
-          end
-          # @todo
-          def pretty_column_names(obj)
-            retval = []
-            prefix = obj.model.to_s.downcase.split('::')[-2..-1].join("_")
-            obj.columns.each do |name|
-              name = name.to_s
-              if (name =~ /id|created_at|updated_at/) == 0
-                retval << t("mdl.#{name}")
-              else
-                retval << t("#{prefix}.#{name}")
-              end
-            end
-            retval
+          # @return [String]
+          def crud_title(obj,action)
+            model = obj.model.name.split('::')[-1]
+            table = obj.model.table_name.to_s
+            action = t("crud.action.#{action}")
+            t("crud.title", :model => model, :table => table, :action => action)
           end
         end
       end

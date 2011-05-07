@@ -93,7 +93,7 @@ module Ib
         # @return [Log::Error]
         def delete_message
           Log::Error.create(:from => "Hw::Node id=#{id}",
-                            :error => I18n.t("hw_node.delete_message", :readers => readers.length, :devices => devices.length, :request_permissions => request_permissions.length, :response_permissions => response_permissions.length))
+                            :error => I18n.t('crud.log.delete'))
         end
       end
     end

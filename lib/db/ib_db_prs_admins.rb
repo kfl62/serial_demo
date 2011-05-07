@@ -109,7 +109,7 @@ module Ib
         # @return [Log::Error]
         def delete_message
           Log::Error.create(:from => "Persons::Admin id=#{id}",
-                            :error => I18n.t('persons_admin.delete_message', :data => name))
+                            :error => I18n.t('crud.log.delete'))
         end
       end
     end

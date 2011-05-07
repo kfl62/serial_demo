@@ -17,7 +17,8 @@ en:
     logout: "Logout"
     logout_msg: "Logout successful."
     authenticated_as: "Authenticated as:"
-  loading: "Loading ..."
+  loading: "Loading... "
+  error: "Error... %{data}"
 de:
   lang:
     en: "Englisch"
@@ -37,6 +38,8 @@ de:
     logout: "Abmelden"
     logout_msg: "Abmeldung erfolgreich."
     authenticated_as: "Authentifizierte als:"
+  loading: "Loading... "
+  error: "Error... %{data}"
 ro:
   lang:
     en: "Engleză"
@@ -56,6 +59,8 @@ ro:
     logout: "Logout"
     logout_msg: "La revedere!"
     authenticated_as: "Autentificat ca şi:"
+  loading: "Loading... "
+  error: "Error... %{data}"
 hu:
   lang:
     en: "Angol"
@@ -75,4 +80,5 @@ hu:
     logout: "Logout"
     logout_msg: "Viszontlátásra!"
     authenticated_as: "Azonosítva mint:"
-
+  loading: "Loading... "
+  error: "Error... %{data}"
