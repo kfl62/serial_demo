@@ -88,8 +88,8 @@ module Ib
           retval
         end
 
-        def msg_response_device_id
-          "%02d" % response_device.id
+        def msg_response_device_order
+          "%02d" % response_device.order
         end
 
         def msg_response_device_taskId
