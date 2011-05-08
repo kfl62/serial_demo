@@ -86,8 +86,10 @@ ib.crud = {
         dojo.byId('xhr_content').innerHTML = data;
         dojo.attr('xhr_msg','class','hidden');
         var isLoop = dojo.query('span.reload')[0];
-        dojo.addClass(isLoop,'active')
-        isLoop.setAttribute('title','Stop Auto-Reload')
+        if (isLoop){
+          dojo.addClass(isLoop,'active')
+          isLoop.setAttribute('title','Stop Auto-Reload')
+        }
         ib.crud.connect();
       },
       error: function(error){
@@ -156,7 +158,8 @@ ib.crud = {
       )
     })
     var isLoop = dojo.query('span.reload')[0];
-    dojo.connect(isLoop,'onclick',function(e){ib.crud.auto_reload(e.target)})
+    if (isLoop)
+      dojo.connect(isLoop,'onclick',function(e){ib.crud.auto_reload(e.target)})
   },
   //// connect buttons in crudWindow{{{2
   connect_buttons: function(){
