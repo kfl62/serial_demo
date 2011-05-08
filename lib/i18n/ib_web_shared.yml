@@ -27,7 +27,7 @@ de:
     hu: "Ungarisch"
     test: "Inhalt in Deutsch!"
     change: "Sie haben ausgewählt Deutsch"
-  ibttn_auth:
+  ib_auth:
     login: "Login"
     login_title: "Authentication"
     login_name: "Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
