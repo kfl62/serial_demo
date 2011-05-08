@@ -19,7 +19,8 @@ module Ib
       # @see Ib::Web The Rack::Builder mapps
       get '/' do
         login_required
-        haml :index, :layout => request.xhr? ? false : :layout
+        ds = Ib::Db::Log::Access.order(:id.desc).limit(15)
+        haml :index, :layout => request.xhr? ? false : :layout, :locals => {:ds  => ds}
       end
       # @private GET '/:model/:page/list'{{{2
       # Route for listing tables content in record/row manner in 

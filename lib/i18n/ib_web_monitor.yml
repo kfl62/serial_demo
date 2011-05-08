@@ -1,0 +1,16 @@
+en:
+  monitor:
+    title: "Ibutton server monitoring"
+    auto_reload_start: "Auto-Reload in every 5 seconds!"
+    auto_reload_stop: "Auto-Reload stoped!"
+    server:
+      title: "Server status"
+      server: "Ibutton server"
+      status: "Status"
+      uptime: "Uptime"
+      connected_nodes: "Connected nodes"
+      node: "Node"
+      alive: "Last alive"
+    log:
+      title: "Access log"
+      info: "Only the last 15 records from log_accesses table. More on <b>Tables-Log-Access</b> menu!"

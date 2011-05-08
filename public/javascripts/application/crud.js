@@ -3,6 +3,7 @@ ib.crud = {
   // variables {{{1
   connections: new Array,
   buttons: new Array,
+  timer: 0,
   crudOverlay: dojo.create('div',{id:"crud_overlay"}),
   crudWindow: dojo.create('div',{id:"crud_window"}),
   // get {{{2
@@ -84,6 +85,9 @@ ib.crud = {
       load: function(data){
         dojo.byId('xhr_content').innerHTML = data;
         dojo.attr('xhr_msg','class','hidden');
+        var isLoop = dojo.query('span.reload')[0];
+        dojo.addClass(isLoop,'active')
+        isLoop.setAttribute('title','Stop Auto-Reload')
         ib.crud.connect();
       },
       error: function(error){
@@ -91,6 +95,21 @@ ib.crud = {
       }
     };
     var deferred = dojo.xhrGet(xhrArgs);
+  },
+  auto_reload: function(node){
+    var path = node.getAttribute('data-referrer');
+    var duration = node.getAttribute('data-duration');
+    if (dojo.hasClass(node,'active')){
+      dojo.removeClass(node,'active')
+      node.setAttribute('title','Start Auto-Reload')
+      clearInterval (this.timer)
+      dojo.publish('xhrMsg',['monitor.auto_reload_stop','info'])
+    }else{
+      dojo.addClass(node,'active')
+      node.setAttribute('title','Stop Auto-Reload')
+      this.timer = setInterval ("ib.crud.reload('" + path + "')",duration);
+      dojo.publish('xhrMsg',['monitor.auto_reload_start','info'])
+    }
   },
   // position the taskWindow{{{2
   positionBox: function(o1,o2){
@@ -136,6 +155,8 @@ ib.crud = {
         dojo.connect(a, 'onclick', function(e){e.preventDefault();ib.crud[verb](e.target)})
       )
     })
+    var isLoop = dojo.query('span.reload')[0];
+    dojo.connect(isLoop,'onclick',function(e){ib.crud.auto_reload(e.target)})
   },
   //// connect buttons in crudWindow{{{2
   connect_buttons: function(){

@@ -1,3 +1,39 @@
-%p= t('lang.test')
-%p "Control Center"
-
+- i = 0
+- nodes = Ib::Db::Log::Status.order(:node_id.asc).all
+%h4.ce<
+  = t('monitor.title')
+  %span.reload{:data => {:duration => 5000, :referrer => "/ctrl/"}, :title => "Start Auto-Reload"}
+%article#xhr_srv
+  %p.title= t('monitor.server.title')
+  %p.server<
+    #{t('monitor.server.server')}&nbsp;&raquo;&nbsp;
+    %span.text #{t('monitor.server.status')}:&nbsp;
+    %span.server_status DEAD
+    %span.text &raquo;&nbsp;#{t('monitor.server.uptime')}:&nbsp;
+    %span.server_uptime 1day:23:05:24
+  %p.nodes_title #{t('monitor.server.connected_nodes')}:
+  %p.nodes
+    %span  #{t('monitor.server.node')}:<br /> #{t('monitor.server.status')}:<br /> #{t('monitor.server.alive')}:
+    - nodes.each do |n|
+      %span{:class => n.is_alive == 'DEAD' ? 'node_dead' : 'node_alive'} #{n.node}<br />#{n.is_alive}<br />#{n.updated_at.strftime('%H:%M:%S')}
+%article#xhr_log
+  %p.title<
+    = t('monitor.log.title')
+  %table
+    %thead
+      %tr
+        - ds.first.table_data.each do |column|
+          %th{:scope => "col"}= column[:label]
+    %tbody
+      - ds.each do |r|
+        %tr{:class  => i.even? ? "even" : "odd"}
+          - r.table_data.each do |f|
+            %td
+              - if f[:css] == 'datetime'
+                %span{:class => f[:css], :title => f[:value].strftime('%H:%M:%S')}= f[:value].strftime('%Y-%m-%d %H:%M:%S')
+              - else
+                %span= f[:value]
+        - i += 1
+    %tfoot
+      %tr
+        %td{:colspan => "9"}= t('monitor.log.info')

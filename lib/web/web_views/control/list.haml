@@ -1,7 +1,8 @@
 - i = 0
 %p.title
   = crud_title(ds.model,'get_list')
-  %span.reload{:onclick => "ib.crud.reload('/ctrl/#{path}/#{ds.current_page}/list')", :title => "Reload page"}
+  - if ds.model.name.include?("Log")
+    %span.reload{:data => {:duration => 5000, :referrer => "/ctrl/#{path}/#{ds.current_page}/list"}, :title => "Start Auto-Reload"}
 - unless ds.empty?
   %table.list
     %thead
