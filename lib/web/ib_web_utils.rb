@@ -20,7 +20,7 @@ module Ib
       end
       # @todo Document this method
       get '/lang/:lang' do |l|
-        locale = l.to_sym
+        I18n.locale = l.to_sym
         path = logged_in? ?  "#{lang_path}/ctrl" :  "#{lang_path}/"
         flash[:msg] = {:msg => {:txt => t('lang.change'), :class => "info"}}.to_json
         redirect path
