@@ -85,7 +85,7 @@ module Ib
             {:css => "integer",:name => "id",:label => I18n.t('mdl.id'),:value => id},
             {:css => "normal",:name  => "name",:label => I18n.t('hw_device.name'),:value => name},
             {:css => (node.nil? ? "ce bo":"normal"),:name => "node_id",:label => I18n.t('hw_device.node_id'),:value => (node.name rescue "orphan")},
-            {:css => "integer",:name  => "name",:label => I18n.t('hw_device.order'),:value => order},
+            {:css => "integer",:name  => "order",:label => I18n.t('hw_device.order'),:value => order},
             {:css => (task.nil? ? "ce bo":"normal"),:name => "task_id",:label => I18n.t('hw_device.task_id'),:value => (task.name rescue "free")},
             {:css => "datetime",:name  => "created_at",:label => I18n.t('mdl.created_at'),:value => created_at},
             {:css => "datetime",:name  => "updated_at",:label => I18n.t('mdl.updated_at'),:value => updated_at}
