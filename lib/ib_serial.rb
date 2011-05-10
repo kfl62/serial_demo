@@ -36,7 +36,8 @@ module Ib
     # Connect to serial port and read/handle messages.
     # @param device
     # @param baud_rate
-    # @return [Server] an instance of {Server} which is sub-class of {http://rubygems.org/gems/serialport SerialPort}
+    # @return [Server] an instance of {Server} which is sub-class of
+    # {http://rubygems.org/gems/serialport SerialPort}
     def self.server(device = SerialConfig.dev, baud_rate = SerialConfig.baud)
       ibs = Server.new(device, baud_rate)
       msg = ibs.gets

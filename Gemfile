@@ -12,4 +12,3 @@ gem "sqlite3"
 gem "serialport"
 gem "rdiscount"
 gem "wirble", :group => :development
-
