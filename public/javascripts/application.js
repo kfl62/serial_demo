@@ -29,7 +29,7 @@ var sysMsg = dojo.subscribe('xhrMsg',function(what,kind,data){
 })
 
 var xhrMenu = function(param){
-  var content_node = dojo.byId('xhr_content'),
+  var content_node = dojo.byId('xhr_content');
       xhrArgs = {
     url: param,
     load: function(data){
@@ -52,7 +52,7 @@ function init(){
     dojo.require('ib.auth')
   }
   dojo.publish('xhrMsg',['flash']);
-  dojo.query('#menu ul > li > a').onclick(function(e){e.preventDefault();xhrMenu(e.target.href);});
+  dojo.query('#menu ul > li > a:not(.edit)').onclick(function(e){e.preventDefault();xhrMenu(e.target.href);});
   dojo.query('span.paginate > a').onclick(function(e){e.preventDefault();xhrMenu(e.target.href);});
 }
 dojo.ready(init);

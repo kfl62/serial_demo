@@ -5,21 +5,14 @@
   %meta{:name => "description", :content => ""}
   %meta{:name => "keywords", :content => ""}
   %meta{:name => "viewport", :content => "initial-scale=1.0, user-scalable=no"}
-  %link{:href => "/stylesheets/screen.css",
-        :media => "all",
-        :rel => "stylesheet",
-        :type => "text/css"}
   :javascript
     djConfig = {baseUrl: "./", modulePaths: {ib: '/javascripts/application'}}
   - if Ib::Config::WebConfig.dojo_cdn
-    %script{:language => "javascript",
-            :src => "http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js",
-            :type => "text/javascript"}
+    %script{:language => "javascript",:src => "http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js",:type => "text/javascript"}
+    %link{:href=> "http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/soria/soria.css",:media => "all",:rel => "stylesheet",:type => "text/css"}
   - else
-    %script{:language => "javascript",
-            :src => "/javascripts/dojo/dojo.js",
-            :type => "text/javascript"}
-  %script{:language => "javascript",
-          :src => "/javascripts/application.js",
-          :type => "text/javascript"}
+    %script{:language => "javascript",:src => "/javascripts/dojo/dojo/dojo.js",:type => "text/javascript"}
+    %link{:href=> "/javascripts/dojo/dijit/themes/soria/soria.css",:media => "all",:rel => "stylesheet",:type => "text/css"}
+  %script{:language => "javascript",:src => "/javascripts/application.js",:type => "text/javascript"}
+  %link{:href => "/stylesheets/screen.css",:media => "all",:rel => "stylesheet",:type => "text/css"}
 

@@ -1,9 +1,13 @@
+dojo.require("dojo.data.ItemFileReadStore")
+dojo.require("dijit.form.FilteringSelect")
 dojo.provide("ib.crud");
 ib.crud = {
   // variables {{{1
   connections: new Array,
   buttons: new Array,
+  search_ary: new Array,
   timer: 0,
+  associate: false,
   crudOverlay: dojo.create('div',{id:"crud_overlay"}),
   crudWindow: dojo.create('div',{id:"crud_window"}),
   // get {{{2
@@ -26,12 +30,17 @@ ib.crud = {
   },
   // edit
   edit: function(node){
+    this.associate = node.href.split('/').slice(-3,-2).toString() == 'associations'
+    if (this.associate)
+      this.search_ary = node.href.split('/').slice(-2)
     var path = node.href;
     path = path.split('/').slice(-4).join('/');
     xhrArgs = {
       url: '/' + path,
       load: function(data){
         ib.crud.drawBox(data);
+        if (ib.crud.associate)
+          ib.crud.search(ib.crud.search_ary);
         dojo.attr('xhr_msg','class','hidden');
         ib.crud.connect_buttons();
       },
@@ -44,7 +53,13 @@ ib.crud = {
   },
   // put {{{2
   put: function(node){
-    var path = node.action.split('/').slice(-4,-1).join('/');
+    var path = node.action
+    if (this.associate){
+      path = path.split('/').slice(-5,-1).join('/');
+      this.associate = false;
+    }else{
+      path = path.split('/').slice(-4,-1).join('/');
+    }
     xhrArgs = {
       form: node,
       url:'/' + path,
@@ -146,12 +161,16 @@ ib.crud = {
   // destroy the taskWindow and reset vars{{{2
   destroy: function(){
     dojo.query('[id^="crud"]').forEach("dojo.destroy(item)");
+    if (this.search_ary.length > 0) {
+      this.search_ary.forEach(function(d){dijit.byId(d).destroy()});
+      this.search_ary.length = 0;
+    }
   },
   // connect actions in list{{{2
   connect: function(){
     dojo.forEach(this.connections, dojo.disconnect);
     this.connections.length = 0;
-    dojo.query('td.buttons_left > span > a').forEach(function(a){
+    dojo.query('td.buttons_left > span > a,#menu ul > li > a.edit').forEach(function(a){
       var verb = a.className;
       ib.crud.connections.push(
         dojo.connect(a, 'onclick', function(e){e.preventDefault();ib.crud[verb](e.target)})
@@ -171,7 +190,7 @@ ib.crud = {
         dojo.connect(a, 'onclick', function(e){e.preventDefault();ib.crud[verb](e.target)})
       )
     })
-    dojo.query('td.buttons_bottom > input').forEach(function(a){
+    dojo.query('.buttons_bottom > input').forEach(function(a){
       var verb = a.className;
       ib.crud.connections.push(
         dojo.connect(a, 'onclick', function(e){e.preventDefault();ib.crud[verb](e.target.form)})
@@ -180,11 +199,31 @@ ib.crud = {
   },
   not_ready: function(msg){
     alert("Coming soon - " + msg + " - !");
+  },
+  search: function(ary){
+    var what = {};
+    for (i=0;i<ary.length;i++) {
+      what.input_id = ary[i]
+      what.input_name = (i == 0) ? "what_id" : "with_id"
+      what.store = new dojo.data.ItemFileReadStore({
+          url: "/utils/search/" + ary[i] + "/" + ary[Math.abs(i-1)]
+      });
+      var filteringSelect = new dijit.form.FilteringSelect({
+          id: what.input_id,
+          name: what.input_name,
+          value: "0",
+          store: what.store,
+          searchAttr: "name",
+          labelAttr: "label",
+          labelType: "html"
+      },
+      what.input_id);
+    }
   }
 }
 // initialize on load{{{2
-function init(){
+function init_crud(){
   ib.crud.connect();
 }
-dojo.ready(init);
+dojo.ready(init_crud);
 
