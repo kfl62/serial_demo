@@ -65,7 +65,15 @@ module Ib
             action = t("crud.action.#{action}")
             t("crud.title", :model => model, :table => table, :action => action)
           end
-        end
+           # @todo
+          # @return [String]
+          def association_title(obj)
+            ary = obj.split('_')
+            what = ary[0]
+            with = ary[1..-1].join(', ')
+            t("associate.title", :what => what.capitalize, :with => with.capitalize)
+          end
+       end
       end
     end
   end

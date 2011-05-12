@@ -23,7 +23,7 @@ module Ib
         haml :index, :layout => request.xhr? ? false : :layout, :locals => {:ds  => ds}
       end
       # @private GET '/:model/:page/list'{{{2
-      # Route for listing tables content in record/row manner in 
+      # Route for listing tables content in record/row manner in
       # browsers in browsers with _js enabled || disabled_.<br />
       # Instead of REST-ful `GET /model` which returns a list of
       # all records, we have this route because of pagination
@@ -161,6 +161,38 @@ module Ib
         #obj = modelize(m)
         #r = obj[id.to_i]
         #haml :edit, :layout => request.xhr? ? false : :layout, :locals => {:r  => r, :path => m}
+      end
+      # @private GET '/:what/:whit'{{{2
+      # Define associations route
+      # @todo Document this route
+      get '/associations/:what/:with' do |what,with|
+
+        haml :associations, :layout => request.xhr? ? false : :layout, :locals => {:what => what,:with => with}
+      end
+      # @private PUT '/:what/:whit'{{{2
+      # Save associations route
+      # @todo Document this route
+      put '/associations/:what/:with' do |what,with|
+        if  params[:what_id] == "0"
+          target_with = modelize(with)[params[:with_id].to_i]
+          target_with.send "#{what.split('_')[1]}=", nil
+          target_with.save
+        elsif params[:with_id] == "0"
+          target_what = modelize(what)[params[:what_id].to_i]
+          target_what.send "#{with.split('_')[1]}=", nil
+          target_what.save
+        else
+          target_what = modelize(what)[params[:what_id].to_i]
+          target_with = modelize(with)[params[:with_id].to_i]
+          target_what.send "#{with.split('_')[1]}=", target_with
+          target_what.save
+        end
+      end
+      # @private POST '/:what/:whit'{{{2
+      # Save associations route
+      # @todo Document this route
+      post '/associations/:what/:with/edit' do |what,with|
+        "Coming soon...."
       end
     end # Control
   end # Web

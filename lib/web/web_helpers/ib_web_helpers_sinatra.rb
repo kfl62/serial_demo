@@ -62,6 +62,20 @@ module Ib
               Object
             end
           end
+          # @todo
+          def check_association(what,with,what_id,with_id)
+            if what_id == "0"
+              model = modelize(with)[with_id.to_i]
+              data  = nil
+            elsif with_id == "0"
+              model = modelize(what)[what_id.to_i]
+              data  = nil
+            else
+              model = modelize(what)[what_id.to_i]
+              data  = modelize(with)[with_id.to_i]
+            end
+            return [model,method,data]
+          end
         end
       end
     end

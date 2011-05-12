@@ -47,6 +47,11 @@ module Ib
         flash[:msg] = {:msg => {:txt => t('ib_auth.logout_msg'), :class => "info"}}.to_json
         redirect "#{lang_path}/"
       end
+      # Search
+      get '/search/:where/:env' do |w,e|
+        obj = modelize(w)
+        obj.auto_search(e).to_json
+      end
     end
   end
 end
