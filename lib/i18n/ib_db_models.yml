@@ -4,6 +4,7 @@ en:
     created_at: "Created at"
     updated_at: "Updated at"
   hw_key:
+    owner_id: "Owner"
     keyId: "Key name"
   hw_node:
     sid: "SId"
@@ -24,7 +25,6 @@ en:
     taskId: "Integer(32)"
     name: "Name"
   persons_owner:
-    key_id: "Key's id"
     first_name: "First name"
     last_name: "Last name"
   persons_admin:
@@ -65,6 +65,7 @@ de:
     created_at: "Created at"
     updated_at: "Updated at"
   hw_key:
+    owner_id: "Owner"
     keyId: "Key name"
   hw_node:
     sid: "SId"
@@ -85,7 +86,6 @@ de:
     taskId: "Integer(32)"
     name: "Name"
   persons_owner:
-    key_id: "Key's id"
     first_name: "First name"
     last_name: "Last name"
   persons_admin:
@@ -126,6 +126,7 @@ ro:
     created_at: "Created at"
     updated_at: "Updated at"
   hw_key:
+    owner_id: "Owner"
     keyId: "Key name"
   hw_node:
     sid: "SId"
@@ -146,7 +147,6 @@ ro:
     taskId: "Integer(32)"
     name: "Name"
   persons_owner:
-    key_id: "Key's id"
     first_name: "First name"
     last_name: "Last name"
   persons_admin:
@@ -187,6 +187,7 @@ hu:
     created_at: "Created at"
     updated_at: "Updated at"
   hw_key:
+    owner_id: "Owner"
     keyId: "Key name"
   hw_node:
     sid: "SId"
@@ -207,7 +208,6 @@ hu:
     taskId: "Integer(32)"
     name: "Name"
   persons_owner:
-    key_id: "Key's id"
     first_name: "First name"
     last_name: "Last name"
   persons_admin:

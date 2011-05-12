@@ -25,7 +25,10 @@ en:
         permissions: "Permission"
     associations: "Associations"
     assoc:
-        owner_key: "Owner &laquo;&raquo; Key"
+        key_owner: "Key &laquo;&raquo; Owner"
+        reader_node: "Reader &laquo;&raquo; Node"
+        device_node: "Device &laquo;&raquo; Node"
+        device_task: "Device &laquo;&raquo; Task"
         owner_group: "Owner &laquo;&raquo; Group"
     task: "Tasks"
 de:
@@ -53,6 +56,13 @@ de:
         admins: "Admin"
         groups: "Group"
         permissions: "Permission"
+    associations: "Associations"
+    assoc:
+        key_owner: "Key &laquo;&raquo; Owner"
+        reader_node: "Reader &laquo;&raquo; Node"
+        device_node: "Device &laquo;&raquo; Node"
+        device_task: "Device &laquo;&raquo; Task"
+        owner_group: "Owner &laquo;&raquo; Group"
     task: "Tasks"
 ro:
   ib_web_menu:
@@ -79,6 +89,13 @@ ro:
         admins: "Admin"
         groups: "Group"
         permissions: "Permission"
+    associations: "Associations"
+    assoc:
+        key_owner: "Key &laquo;&raquo; Owner"
+        reader_node: "Reader &laquo;&raquo; Node"
+        device_node: "Device &laquo;&raquo; Node"
+        device_task: "Device &laquo;&raquo; Task"
+        owner_group: "Owner &laquo;&raquo; Group"
     task: "Tasks"
 hu:
   ib_web_menu:
@@ -105,5 +122,11 @@ hu:
         admins: "Admin"
         groups: "Group"
         permissions: "Permission"
+    associations: "Associations"
+    assoc:
+        key_owner: "Key &laquo;&raquo; Owner"
+        reader_node: "Reader &laquo;&raquo; Node"
+        device_node: "Device &laquo;&raquo; Node"
+        device_task: "Device &laquo;&raquo; Task"
+        owner_group: "Owner &laquo;&raquo; Group"
     task: "Tasks"
-

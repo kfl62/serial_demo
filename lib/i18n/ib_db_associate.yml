@@ -1,0 +1,12 @@
+en:
+  associate:
+    title: "Associate %{what} with %{with}"
+de:
+  associate:
+    title: "Associate %{what} with %{with}"
+ro:
+  associate:
+    title: "Associate %{what} with %{with}"
+hu:
+  associate:
+    title: "Associate %{what} with %{with}"
