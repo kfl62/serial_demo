@@ -100,4 +100,27 @@
   sup
     font-size: smaller
     vertical-align: super
-
+  p.container
+    display: inline-block
+    line-height: 1.0em
+    span
+      float: left
+      display: block
+      &.label
+        line-height: 1.3em
+        margin-right: 5px
+  p.buttons_bottom
+    text-align: center
+    line-height: 2.5em
+    vertical-align: center
+    margin: 0em
+span.warning
+  background:
+    color: rgba(255, 204, 204, 0.9)
+    image: image_url(unquote("/images/icons/warning.png"))
+    position: 0em 0em
+    repeat: no-repeat
+  display: block
+  text-indent: 20px
+input.dijitInputInner
+  font-size: 0.9em

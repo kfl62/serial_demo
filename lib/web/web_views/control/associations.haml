@@ -1,0 +1,32 @@
+- associate = [what.split('_')[1],with.split('_')[1]].join('_')
+- target_what = modelize(what)
+- target_with = modelize(with)
+- what_empty = target_what.auto_search(with)[:items].empty?
+- with_empty =  target_with.auto_search(what)[:items].empty?
+- if request.xhr?
+  %p.close{:onclick => "ib.crud.destroy()"}
+%p.crud_title= association_title(associate)
+
+- if associate == "owner_group"
+  %h4 Many_to_Many associations later :(
+
+- else
+  - if what_empty && with_empty
+    %p nothing to associate
+  - else
+    - if  what_empty || with_empty
+      - if what_empty
+        %p No what
+      -if with_empty
+        %p No with
+    - else
+      %form{:action => "/ctrl/associations/#{what}/#{with}/edit", :method => "post",:data => {:referrer => "/ctrl/#{what}/1/list"}}
+        %p.container
+          %span.label= "#{what.split('_')[1].capitalize}<br />#{with.split('_')[1].capitalize}"
+          %span<
+            %input{:id => "#{what}"}
+            %br
+            %input{:id => "#{with}"}
+        %p.buttons_bottom
+          %input.put{:type => "submit", :value => "Save"}
+          %input.destroy{:type => "reset", :value => "Cancel"}
