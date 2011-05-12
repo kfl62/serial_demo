@@ -8,7 +8,8 @@ class CreateTableHwKeys < Sequel::Migration
   def up
     create_table(:hw_keys) do
       primary_key   :id
-      column        :keyId,      String,   :size => 12
+      foreign_key   :owner_id,   :prs_owners, :default => 1, :on_delete => :set_default, :on_update => :cascade
+      column        :keyId,      String,      :size => 12
       column        :created_at, DateTime
       column        :updated_at, DateTime
     end

@@ -8,7 +8,6 @@ module Ib
       #     def up
       #       create_table(:persons_owners) do
       #         primary_key :id
-      #         foreign_key :key_id,        :hw_keys
       #         column      :first_name,    String,     :size => 20
       #         column      :last_name,     String,     :size => 20
       #         column      :created_at,    DateTime
@@ -39,9 +38,21 @@ module Ib
         plugin :timestamps
         plugin :validation_helpers
 
-        many_to_one  :key, :class => "Ib::Db::Hw::Key"
+        one_to_many  :ib_keys, :class => "Ib::Db::Hw::Key", :key => :owner_id
         one_to_one   :admin
         many_to_many :groups, :join_table => :prs_groups_owners
+
+        class << self
+          # @todo document this method
+          def auto_search(e)
+            owners = [:id => "0",:name => "Remove Owner",:label => "Remove Owner"]
+            all do |o|
+              owners << {:id => o.id,:name => o.full_name,:label => "#{o.full_name} #{o.ib_keys.empty? ? ' | has no Key' : ''}"}
+            end
+            {:identifier => "id",:items => owners}
+          end
+        end
+
         # @todo
         def validate
           validates_presence [:first_name, :last_name]
@@ -74,14 +85,13 @@ module Ib
         def table_data
           [
             {:css => "integer",:name => "id",:label => I18n.t('mdl.id'),:value => id},
-            {:css => (key.nil? ? "ce bo":"normal"),:name => "key_id",:label => I18n.t('persons_owner.key_id'),:value => (key.keyId rescue "has no Key")},
             {:css => "normal",:name  => "first_name",:label => I18n.t('persons_owner.first_name'),:value => first_name},
             {:css => "normal",:name  => "last_name",:label => I18n.t('persons_owner.last_name'),:value => last_name},
             {:css => "datetime",:name  => "created_at",:label => I18n.t('mdl.created_at'),:value => created_at},
             {:css => "datetime",:name  => "updated_at",:label => I18n.t('mdl.updated_at'),:value => updated_at}
           ]
         end
-        protected 
+        protected
         # Insert a translated warning message in {Ib::Db::Log::Error} table
         # @return [Log::Error]
         def delete_message

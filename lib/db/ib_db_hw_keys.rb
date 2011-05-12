@@ -8,7 +8,8 @@ module Ib
       #     def up
       #       create_table(:hw_keys) do
       #         primary_key :id
-      #         column      :keyId,       String,   :size => 12
+      #         foreign_key :owner_id,   :prs_owners,:default => 1, :on_delete => :set_default, :on_update => :cascade
+      #         column      :keyId,       String,    :size => 12
       #         column      :created_at,  DateTime
       #         column      :updated_at,  DateTime
       #       end
@@ -31,7 +32,19 @@ module Ib
         plugin :timestamps
         plugin :validation_helpers
 
-        one_to_one :owner, :class => "Ib::Db::Persons::Owner"
+        many_to_one :owner, :class => "Ib::Db::Persons::Owner"
+
+        class << self
+          # @todo document this method
+          def auto_search(e)
+            keys = [:id => "0",:name => "Warning: Change me!",:label => "<span class='warning'>Warning: Change me!</span>"]
+            all do |k|
+              keys << {:id => k.id,:name => k.keyId,:label =>"#{k.keyId} #{k.owner.nil? ? ' | has no Owner' : ''}"}
+            end
+            {:identifier => "id",:items => keys}
+          end
+        end
+
         # Exact length of keyId is 12
         def validate
           validates_exact_length 12, :keyId
@@ -55,6 +68,7 @@ module Ib
         def table_data
           [
             {:css => "integer",:name => "id",:label => I18n.t('mdl.id'),:value => id},
+            {:css => (owner.nil? ? "ce bo":"normal"),:name => "owner_id",:label => I18n.t('hw_key.owner_id'),:value => (owner.full_name rescue "has no Owner")},
             {:css => "normal",:name  => "keyId",:label => I18n.t('hw_key.keyId'),:value => keyId},
             {:css => "datetime",:name  => "created_at",:label => I18n.t('mdl.created_at'),:value => created_at},
             {:css => "datetime",:name  => "updated_at",:label => I18n.t('mdl.updated_at'),:value => updated_at}
