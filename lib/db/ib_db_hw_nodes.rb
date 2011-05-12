@@ -47,7 +47,22 @@ module Ib
         one_to_many :devices
         one_to_many :request_permissions,  :class => "Ib::Db::Persons::Permission", :key => :request_node_id
         one_to_many :response_permissions, :class => "Ib::Db::Persons::Permission", :key => :response_node_id
-        # @todo
+
+        class << self
+          # @todo document this method
+          def auto_search(e)
+            e = e.include?("device")
+            nodes = [:id => "0",:name => "Remove Node",:label => "Remove Node"]
+            all do |n|
+              label = "#{n.name} #{n.readers.empty? ? ' | has no Readers' : ''}"
+              label = "#{n.name} #{n.devices.empty? ? ' | has no Devices' : ''}" if e
+              nodes << {:id => n.id,:name => n.name,:label => label}
+            end
+            {:identifier => "id",:items => nodes}
+          end
+        end
+
+       # @todo
         def validate
           validates_presence [:sid,:readers_nr,:devices_nr]
           validates_integer [:sid,:readers_nr,:devices_nr], :allow_nil => true

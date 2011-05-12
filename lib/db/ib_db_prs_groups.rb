@@ -33,6 +33,18 @@ module Ib
 
         many_to_many :owners,      :join_table => :prs_groups_owners
         one_to_many  :permissions
+
+        class << self
+          # @todo document this method
+          def auto_search(env = nil)
+            groups = [:id => "0",:name => "Remove Group",:label => "Remove Group"]
+            all do |g|
+              groups << {:id => g.id,:name => g.name,:label => "#{g.name} #{g.owners.empty? ? ' | has no Members' : ''}"}
+            end
+            {:identifier => "id",:items => groups}
+          end
+        end
+
         # @todo
         def validate
           validates_presence :name

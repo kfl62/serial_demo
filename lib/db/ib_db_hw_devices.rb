@@ -45,6 +45,7 @@ module Ib
         many_to_one :node
         many_to_one :task
         one_to_many :permissions, :class => "Ib::Db::Persons::Permission", :key => :response_device_id
+
         class << self
           # Orphaned devices (does not belong to any node)
           # @return [Array]
@@ -60,7 +61,19 @@ module Ib
             all.each{|r| retval << r if r.task_id.nil?}
             retval
           end
+          # @todo document this method
+          def auto_search(e)
+            e = e.include?("task")
+            devices = [:id => "0",:name => "Warning: Change me!",:label => "<span class='warning'>Warning: Change me!</span>"]
+            all do |d|
+              label = "#{d.name} #{d.node.nil? ? ' | Orphan' : ''}"
+              label = "#{d.name} #{d.task.nil? ? ' | Free' : ''}" if e
+              devices << {:id => d.id,:name => d.name,:label => label}
+            end
+            {:identifier => "id",:items => devices}
+          end
         end
+
         # @todo
         def validate
           validates_presence :name

@@ -39,6 +39,7 @@ module Ib
 
         many_to_one :node
         one_to_many :permissions, :class => "Ib::Db::Persons::Permission", :key => :request_reader_id
+
         class << self
           # Orphaned readers (does not belong to any node)
           # @return [Array]
@@ -47,7 +48,16 @@ module Ib
             all.each{|r| retval << r if r.node_id.nil?}
             retval
           end
+          # @todo document this method
+          def auto_search(e)
+            readers = [:id => "0",:name => "Warning: Change me!",:label => "<span class='warning'>Warning: Change me!</span>"]
+            all do |r|
+              readers << {:id => r.id,:name => r.name,:label => "#{r.name} #{r.node.nil? ? ' | Orphan' : ''}"}
+            end
+            {:identifier => "id",:items => readers}
+          end
         end
+
         # @todo
         def validate
           validates_presence :name

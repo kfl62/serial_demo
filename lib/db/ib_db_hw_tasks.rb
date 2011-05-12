@@ -33,6 +33,16 @@ module Ib
         plugin :timestamps
 
         one_to_many :devices
+        class << self
+          # @todo document this method
+          def auto_search(env = nil)
+            tasks = [:id => "0",:name => "Remove Task",:label => "Remove Task"]
+            all do |t|
+              tasks << {:id => t.id,:name => t.name,:label => "#{t.name} #{t.devices.empty? ? ' | has no Devices' : ''}"}
+            end
+            {:identifier => "id",:items => tasks}
+          end
+        end
         # @todo
         def validate
           validates_presence [:name, :taskId]
