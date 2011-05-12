@@ -23,6 +23,18 @@ namespace :db do
     ::Sequel::Migrator.run DB, "db/migrations"
     puts "Done! Your tables are ready with initial data..."
   end
+  desc "Empty database (delete all)"
+  task :down => :environment do
+    puts "Empty database (delete all)"
+    ::Sequel::Migrator.run DB, "db/migrations", :target => 0
+    puts "Done! Your tables are deleted..."
+  end
+  desc "Create all tables from scratch"
+  task :up => :environment do
+    puts "Create all tables from scratch"
+    ::Sequel::Migrator.run DB, "db/migrations"
+    puts "Done! Your tables are ready with initial data..."
+  end
 end
 namespace :console do
   desc "Irb with DB environment loaded"
