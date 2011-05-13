@@ -54,7 +54,7 @@ module Ib
       # @todo
       # @private def msg_missing_hw_in_db{{{2
       def msg_missing_hw_in_db(m,msg)
-        msg_node = m[0].nil? ? nil : "Node id=#{m[0]} not in DB (opcode '#{string_opcode(msg)}')" 
+        msg_node = m[0].nil? ? nil : "Node id=#{m[0]} not in DB (opcode '#{string_opcode(msg)}')"
         msg_reader = m[1].nil? ? nil : "Reader id=#{m[1]} not in DB (opcode '#{string_opcode(msg)}'"
         unless msg_node.nil?
           Error.create(:from => "Missing node", :error => msg_node)
@@ -84,7 +84,7 @@ module Ib
         else
           new_key = Key.create(:keyId => string_keyId(m))
           new_owner = Owner.create(:first_name => "New", :last_name => "Owner")
-          new_owner.key= new_key
+          new_owner.add_key new_key
           new_owner.save
           msg = [nil,
                  Time.now,
