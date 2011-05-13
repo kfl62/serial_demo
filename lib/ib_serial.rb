@@ -41,7 +41,9 @@ module Ib
     def self.server(device = SerialConfig.dev, baud_rate = SerialConfig.baud)
       ibs = Server.new(device, baud_rate)
       msg = ibs.gets
-      ibs.handle(msg)
+      if msg.length == 22
+        ibs.handle(msg)
+      end
     end
   end
 end
