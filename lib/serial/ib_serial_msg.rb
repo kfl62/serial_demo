@@ -84,7 +84,7 @@ module Ib
         else
           new_key = Key.create(:keyId => string_keyId(m))
           new_owner = Owner.create(:first_name => "New", :last_name => "Owner")
-          new_owner.add_key new_key
+          new_owner.add_ib_key new_key
           new_owner.save
           msg = [nil,
                  Time.now,
