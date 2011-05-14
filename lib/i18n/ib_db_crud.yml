@@ -15,7 +15,11 @@ en:
       post: "A new record was created in %{model}!"
       delete: "Record from  %{model} id=%{id} was deleted!"
       no_edit: "Edit is forbidden!"
-      no_edit_associations: "Edit using Associations!"
+      no_edit_associations: "Edit with <b>Associations</b>!"
+      no_edit_task: "Edit with <b>Tasks</b>!"
+      edit_associations: "Defaults to <b>%{data}</b>. Edit with <b>Associations</b> !"
+      edit_table:  "Defaults to <b>%{data}</b>. Edit with <b>Tables</b> !"
+      edit_task:  "Defaults to <b>%{data}</b>. Edit with <b>Tasks</b> !"
     log:
       put: "Record updated. Take care of the associations!"
       post: "New record created. Take care of the associations!"

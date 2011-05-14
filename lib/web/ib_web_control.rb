@@ -37,6 +37,31 @@ module Ib
         ds = obj.name =~ sort_desc ? obj.order(:id.desc).paginate(p.to_i,25) : obj.paginate(p.to_i,25)
         haml :list, :layout => request.xhr? ? false : :layout, :locals => {:ds  => ds, :path => m}
       end
+      # @private GET '/:model/new'{{{2
+      # Route for creating content for a new record in browsers with
+      # _js enabled || disabled_.<br />Similar with REST-ful `POST /model/new` witch
+      # returns a form for creating a new record.
+      # @param :model conventionally == _Model.name.downcase.split('::')[-2..-1].join('\_')_
+      get '/:model/new' do |m|
+        login_required
+        obj = modelize(m)
+        r = obj
+        haml :post, :layout => request.xhr? ? false : :layout, :locals => {:r  => r, :path => m}
+      end
+      # @private POST '/:model/new'{{{2
+      # Route for creating (inserting) the new record in browsers with
+      # _js enabled || disabled_.<br />Similar with REST-ful `POST /model/new` witch
+      # returns the form again if the input is invalid, otherwise redirects
+      # to the new resource.
+      # @param :model conventionally == _Model.name.downcase.split('::')[-2..-1].join('\_')_
+      post '/:model/new' do |m|
+        login_required
+        obj = modelize(m)
+        fields = {}
+        params[:form].each_pair{|k,v| fields[k] = k.index(/_id|Id/).nil? ? v : (v == "nil" ? nil : v) }
+        r = obj.create(fields)
+        flash[:msg] = {:msg => {:txt => t('crud.msg.post', :model => r.model.name, :id => r.id.to_s), :class => "info"}}.to_json
+      end
       # @private GET '/:model/:id'{{{2
       # Route for viewing content of one record in browsers
       # with _js enabled || disabled_.<br />Similar with REST-ful
@@ -139,35 +164,14 @@ module Ib
         r.destroy
         flash[:msg] = {:msg => {:txt => t('crud.msg.delete', :model => r.model.name, :id => r.id.to_s), :class => "info"}}.to_json
       end
-      # @private GET '/:model/new'{{{2
-      # Route for creating content for a new record in browsers with
-      # _js enabled || disabled_.<br />Similar with REST-ful `POST /model/new` witch
-      # returns a form for creating a new record.
-      # @param :model conventionally == _Model.name.downcase.split('::')[-2..-1].join('\_')_
-      get '/:model/new' do |m|
-        #login_required
-        #obj = modelize(m)
-        #r = obj[id.to_i]
-        haml :post, :layout => request.xhr? ? false : :layout, :locals => {:r  => r, :path => m}
-      end
-      # @private POST '/:model/new'{{{2
-      # Route for creating (inserting) the new record in browsers with
-      # _js enabled || disabled_.<br />Similar with REST-ful `POST /model/new` witch
-      # returns the form again if the input is invalid, otherwise redirects
-      # to the new resource.
-      # @param :model conventionally == _Model.name.downcase.split('::')[-2..-1].join('\_')_
-      post '/:model/new' do |m|
-        #login_required
-        #obj = modelize(m)
-        #r = obj[id.to_i]
-        #haml :edit, :layout => request.xhr? ? false : :layout, :locals => {:r  => r, :path => m}
-      end
       # @private GET '/:what/:whit'{{{2
       # Define associations route
       # @todo Document this route
       get '/associations/:what/:with' do |what,with|
-
-        haml :associations, :layout => request.xhr? ? false : :layout, :locals => {:what => what,:with => with}
+        path = "#{what}/#{with}"
+        what = modelize(what)
+        with = modelize(whit)
+        haml :associations, :layout => request.xhr? ? false : :layout, :locals => {:path => path,:what => what,:with => with}
       end
       # @private PUT '/:what/:whit'{{{2
       # Save associations route

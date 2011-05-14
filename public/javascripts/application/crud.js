@@ -93,6 +93,42 @@ ib.crud = {
     reload_path = node.getAttribute('data-referrer');
     ib.crud.reload(reload_path)
   },
+  // new {{{2
+  new: function(node){
+    var path = node.href;
+    path = path.split('/').slice(-3).join('/');
+    xhrArgs = {
+      url: '/' + path,
+      load: function(data){
+        ib.crud.drawBox(data);
+        dojo.attr('xhr_msg','class','hidden');
+        ib.crud.connect_buttons();
+      },
+      error: function(error){
+        dojo.publish('xhrMsg',['error','error',error]);
+      }
+    };
+    var deferred = dojo.xhrGet(xhrArgs);
+    ib.crud.destroy();
+  },
+  post: function(node){
+    var path = node.action
+    path = path.split('/').slice(-3).join('/');
+    xhrArgs = {
+      form: node,
+      url:'/' + path,
+      load: function(data){
+        dojo.publish('xhrMsg',['flash']);
+      },
+      error: function(error){
+        dojo.publish('xhrMsg',['error','error',error]);
+      }
+    };
+    var deferred = dojo.xhrPost(xhrArgs);
+    ib.crud.destroy();
+    reload_path = node.getAttribute('data-referrer');
+    ib.crud.reload(reload_path)
+  },
   // reload the content{{{2
   reload: function(path){
     xhrArgs = {
@@ -170,7 +206,7 @@ ib.crud = {
   connect: function(){
     dojo.forEach(this.connections, dojo.disconnect);
     this.connections.length = 0;
-    dojo.query('td.buttons_left > span > a,#menu ul > li > a.edit').forEach(function(a){
+    dojo.query('#menu ul > li > a.edit,td.buttons_left > span > a,td.last_row > span > a').forEach(function(a){
       var verb = a.className;
       ib.crud.connections.push(
         dojo.connect(a, 'onclick', function(e){e.preventDefault();ib.crud[verb](e.target)})

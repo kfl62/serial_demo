@@ -50,6 +50,15 @@ module Ib
 
         class << self
           # @todo document this method
+          def new_record_defaults
+            [
+              {:css => "hidden",:name => "sid",:label => I18n.t('hw_node.sid'),:value => 2046},
+              {:css => "hidden",:name  => "readers_nr",:label => I18n.t('hw_node.readers_nr'),:value => 1},
+              {:css => "hidden",:name  => "devices_nr",:label => I18n.t('hw_node.devices_nr'),:value => 1},
+              {:css => "normal",:name  => "name",:label => I18n.t('hw_node.name'),:value => "New node"}
+            ]
+          end
+          # @todo document this method
           def auto_search(e)
             e = e.include?("device")
             nodes = [:id => "0",:name => "Remove Node",:label => "Remove Node"]

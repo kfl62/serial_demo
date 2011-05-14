@@ -1,0 +1,47 @@
+- if request.xhr?
+  %p.close{:onclick => "ib.crud.destroy()"}
+%p.crud_title= crud_title(r.model,'edit')
+- case path.split('_').last
+- when "admin"
+  %table{:cellspacing => "0"}
+    %tbody
+      %tr
+        %td
+          %p Creating admin users allowed only from CLI!
+          %p rake db:add_admin
+    %tfoot
+      %tr
+        %td.buttons_bottom{:colspan => "2"}
+          %span.button.cancel
+            %a.destroy{:href => "/ctrl/#{path}/#{r.count.div(25) + 1}/list"} Cancel
+
+- else
+  %form{:action => "/ctrl/#{path}/new", :method => "post", :data => {:referrer => "/ctrl/#{path}/#{r.count.div(25) + 1}/list"}}
+    %table{:cellspacing => "0"}
+      %thead
+        %tr
+          %th Field
+          %th Value
+      %tbody
+        - r.new_record_defaults.each do |data|
+          %tr
+            %td
+              %span= data[:label].gsub('<br/>',' ')
+            %td
+              - if data[:css] == 'hidden'
+                - if data[:name] =~ /_id|_nr|sid|taskId/
+                  - if data[:name] == 'order'
+                    %span.no-edit= t('crud.msg.edit_table',:data => data[:value])
+                  - elsif data[:name] == 'sid'
+                    %span.no-edit= t('crud.msg.edit_task',:data => data[:value])
+                  - else
+                    %span.no-edit= t('crud.msg.edit_associations',:data => data[:value])
+                  %input{:type => "hidden",:name => "[form][#{data[:name]}]", :value => data[:value]}
+              - else
+                %input{:name => "[form][#{data[:name]}]", :value => data[:value]}
+      %tfoot
+        %tr
+          %td.buttons_bottom{:colspan => "2"}
+            %input.post{:type => "submit", :value => "Create"}
+            %input.destroy{:type => "reset", :value => "Cancel"}
+

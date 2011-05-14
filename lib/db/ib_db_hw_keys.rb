@@ -36,6 +36,13 @@ module Ib
 
         class << self
           # @todo document this method
+          def new_record_defaults
+            [
+              {:css => "hidden",:name => "owner_id",:label => I18n.t('hw_key.owner_id'),:value => "nil"},
+              {:css => "normal",:name  => "keyId",:label => I18n.t('hw_key.keyId'),:value => "123456789ABC"}
+            ]
+          end
+          # @todo document this method
           def auto_search(e)
             keys = [:id => "0",:name => "Warning: Change me!",:label => "<span class='warning'>Warning: Change me!</span>"]
             all do |k|

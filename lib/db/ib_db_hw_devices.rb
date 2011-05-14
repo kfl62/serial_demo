@@ -47,6 +47,14 @@ module Ib
         one_to_many :permissions, :class => "Ib::Db::Persons::Permission", :key => :response_device_id
 
         class << self
+          def new_record_defaults
+            [
+              {:css => "hidden",:name  => "node_id",:label => I18n.t('hw_device.node_id'),:value => "nil"},
+              {:css => "hidden",:name  => "task_id",:label => I18n.t('hw_device.task_id'),:value => "nil"},
+              {:css => "normal",:name  => "name",:label => I18n.t('hw_device.name'),:value => "Device 1"},
+              {:css => "integer",:name  => "order",:label => I18n.t('hw_device.order'),:value => "1"}
+            ]
+          end
           # Orphaned devices (does not belong to any node)
           # @return [Array]
           def orphans

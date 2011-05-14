@@ -34,7 +34,13 @@ module Ib
 
         one_to_many :devices
         class << self
-          # @todo document this method
+           def new_record_defaults
+            [
+              {:css => "hidden",:name  => "taskId",:label => I18n.t('hw_task.taskId'),:value => 1},
+              {:css => "normal",:name  => "name",:label => I18n.t('hw_task.name'),:value => "New Task"}
+            ]
+          end
+         # @todo document this method
           def auto_search(env = nil)
             tasks = [:id => "0",:name => "Remove Task",:label => "Remove Task"]
             all do |t|

@@ -19,7 +19,7 @@
                 -if path == 'log_access'
                   %span{:class => f[:css], :title => f[:value].strftime('%H:%M:%S')}= f[:value].strftime('%Y-%m-%d %H:%M:%S')
                 -else
-                  %span{:class => f[:css], :title => f[:value].strftime('%H:%M:%S')}= f[:value].strftime('%Y-%m-%d')
+                  %span{:class => f[:css], :title => (f[:value].strftime('%H:%M:%S') rescue "NDA")}= (f[:value].strftime('%Y-%m-%d') rescue "NDA")
               - elsif f[:css] == 'time'
                 %span{:class => f[:css], :title => f[:value].strftime('%Y-%m-%d')}= f[:value].strftime('%H:%M:%S')
               - else
@@ -38,17 +38,20 @@
         - i += 1
     %tfoot
       %tr
-        %td{:colspan => ds.first.table_data.length + 1}
-          %span.paginate
-            - if ds.prev_page
-              - unless ds.first_page?
-                %a.bo{:href => "/ctrl/#{path}/1/list"} &laquo;
-              %a.bo{:href => "/ctrl/#{path}/#{ds.prev_page}/list"} &lsaquo;
-            Pg. #{ds.current_page} of #{ds.page_count} 
-            - if ds.next_page
-              %a.bo{:href => "/ctrl/#{path}/#{ds.next_page}/list"} &rsaquo;
-              - unless ds.last_page?
-                %a.bo{:href => "/ctrl/#{path}/#{ds.page_count}/list"} &raquo;
-          %span.last_row &nbsp;&nbsp;|&nbsp;&nbsp;Search, Add record etc... soon :)
+        %td.last_row{:colspan => ds.first.table_data.length + 1}
+          %span
+            %span.paginate<
+              - if ds.prev_page
+                - unless ds.first_page?
+                  %a.bo{:href => "/ctrl/#{path}/1/list"} &laquo;
+                %a.bo{:href => "/ctrl/#{path}/#{ds.prev_page}/list"} &lsaquo;
+              Pg. #{ds.current_page} of #{ds.page_count}
+              - if ds.next_page
+                %a.bo{:href => "/ctrl/#{path}/#{ds.next_page}/list"} &rsaquo;
+                - unless ds.last_page?
+                  %a.bo{:href => "/ctrl/#{path}/#{ds.page_count}/list"} &raquo;
+              &nbsp;&nbsp;|&nbsp;&nbsp;
+            %a.new{:href => "/ctrl/#{path}/new", :title => "Create new!"}
+            %span &nbsp;&nbsp;|&nbsp;&nbsp;Search... soon :)
 - else
   %h4 Empty table

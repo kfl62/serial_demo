@@ -44,6 +44,13 @@ module Ib
 
         class << self
           # @todo document this method
+          def new_record_defaults
+            [
+              {:css => "normal",:name => "first_name",:label => I18n.t('persons_owner.first_name'),:value => "FirstName"},
+              {:css => "normal",:name => "last_name",:label => I18n.t('persons_owner.last_name'),:value => "LastName"}
+            ]
+          end
+          # @todo document this method
           def auto_search(e)
             owners = [:id => "0",:name => "Remove Owner",:label => "Remove Owner"]
             all do |o|

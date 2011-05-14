@@ -36,6 +36,12 @@ module Ib
 
         class << self
           # @todo document this method
+          def new_record_defaults
+            [
+              {:css => "normal",:name => "name",:label => I18n.t('persons_group.name'),:value => "GroupName"}
+            ]
+          end
+          # @todo document this method
           def auto_search(env = nil)
             groups = [:id => "0",:name => "Remove Group",:label => "Remove Group"]
             all do |g|

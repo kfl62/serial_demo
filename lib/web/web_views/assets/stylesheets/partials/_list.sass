@@ -33,7 +33,7 @@ table.list
       &.datetime, &.time, &.put, &.delete
         cursor: pointer
       &.paginate, &.last_row
-        display: inline
+        float: left
         a
           text-decoration: none
           font-size: 1.2em
@@ -56,4 +56,10 @@ table.list
           width: 14px
           height: 14px
           float: left
-
+        &.post, &.new
+          background:
+            image: image_url(unquote("/images/icons/db_new.png"))
+            position: 0px 0px
+          width: 14px
+          height: 14px
+          float: left

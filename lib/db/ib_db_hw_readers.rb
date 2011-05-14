@@ -41,6 +41,14 @@ module Ib
         one_to_many :permissions, :class => "Ib::Db::Persons::Permission", :key => :request_reader_id
 
         class << self
+          # @todo document this method
+          def new_record_defaults
+            [
+              {:css => "hidden",:name  => "node_id",:label => I18n.t('hw_reader.node_id'),:value => "nil"},
+              {:css => "normal",:name  => "name",:label => I18n.t('hw_reader.name'),:value => "Reader 1"},
+              {:css => "integer",:name  => "order",:label => I18n.t('hw_reader.order'),:value => "1"}
+            ]
+          end
           # Orphaned readers (does not belong to any node)
           # @return [Array]
           def orphans

@@ -42,6 +42,20 @@ module Ib
         many_to_one :request_reader,   :class => "Ib::Db::Hw::Reader"
         many_to_one :response_node,    :class => "Ib::Db::Hw::Node"
         many_to_one :response_device,  :class => "Ib::Db::Hw::Device"
+
+        class << self
+          # @todo document this method
+          def new_record_defaults
+            [
+              {:css => "hidden",:name  => "group_id",:label => I18n.t('persons_permission.group'),:value => 1},
+              {:css => "hidden",:name  => "request_node_id",:label => I18n.t('persons_permission.request_node'),:value => 1},
+              {:css => "hidden",:name  => "request_reader_id",:label => I18n.t('persons_permission.request_reader'),:value => 1},
+              {:css => "hidden",:name  => "response_node_id",:label => I18n.t('persons_permission.response_node'),:value => 1},
+              {:css => "hidden",:name  => "response_device_id",:label => I18n.t('persons_permission.response_device'),:value => 1}
+            ]
+          end
+        end
+
         # @todo
         def validate
           #validates_presence [:group, :request_node, :request_reader, :response_node, :response_device]
@@ -66,7 +80,7 @@ module Ib
             {:css => "normal",:name  => "request_node_id",:label => I18n.t('persons_permission.request_node'),:value => request_node.name},
             {:css => "normal",:name  => "request_reader_id",:label => I18n.t('persons_permission.request_reader'),:value => request_reader.name},
             {:css => "normal",:name  => "response_node_id",:label => I18n.t('persons_permission.response_node'),:value => response_node.name},
-            {:css => "normal",:name  => "response_devices_id",:label => I18n.t('persons_permission.response_device'),:value => response_device.name},
+            {:css => "normal",:name  => "response_device_id",:label => I18n.t('persons_permission.response_device'),:value => response_device.name},
             {:css => "datetime",:name  => "created_at",:label => I18n.t('mdl.created_at'),:value => created_at},
             {:css => "datetime",:name  => "updated_at",:label => I18n.t('mdl.updated_at'),:value => updated_at}
           ]
@@ -79,7 +93,7 @@ module Ib
         end
 
         def msg_request_reader_id
-          "%02d" % request_reader.id
+          "%02d" % request_reader.order
         end
 
         def msg_response_node_sid
