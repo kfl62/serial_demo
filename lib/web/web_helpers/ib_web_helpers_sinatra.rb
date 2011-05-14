@@ -18,7 +18,7 @@ module Ib
             if current_user
               return true
             else
-              flash[:msg] = {:msg => {:txt => I18n.t('ibttn_auth.login_required'), :class => "error"}}.to_json
+              flash[:msg] = {:msg => {:txt => I18n.t('ib_auth.login_required'), :class => "error"}}.to_json
               redirect "#{lang_path}/"
               return false
             end
