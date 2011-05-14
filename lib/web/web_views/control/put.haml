@@ -1,28 +1,42 @@
 - if request.xhr?
   %p.close{:onclick => "ib.crud.destroy()"}
 %p.crud_title= crud_title(r.model,'edit')
-%form{:action => "/ctrl/#{path}/#{r.id}/edit", :method => "post", :data => {:referrer => "/ctrl/#{path}/#{r.id.div(25) + 1}/list"}}
+- case path.split('_').last
+- when "permission"
   %table{:cellspacing => "0"}
-    %thead
-      %tr
-        %th Field
-        %th Value
     %tbody
-      - r.table_data.each do |data|
-        - unless data[:css] == 'datetime'
-          %tr
-            %td
-              %span= data[:label].gsub('<br/>',' ')
-            %td
-              - unless data[:name] =~ /name|keyId|order|email/
-                %span :&nbsp;#{data[:value]}
-                %span.no-edit= t('crud.msg.no_edit') if data[:name] == 'id'
-                %span.no-edit= t('crud.msg.no_edit_associations') unless data[:name] == 'id'
-              - else
-                %input{:id => r.id, :name => "[form][#{data[:name]}]", :value => data[:value]}
+      %tr
+        %td
+          %p Editing permisions allowed only from <b>Associations</b> menu!
     %tfoot
       %tr
         %td.buttons_bottom{:colspan => "2"}
-          %input.put{:type => "submit", :value => "Save"}
-          %input.destroy{:type => "reset", :value => "Cancel"}
+          %span.button.cancel
+            %a.destroy{:href => "/ctrl/#{path}/#{r.id.div(25) + 1}/list"} Cancel
 
+- else
+  %form{:action => "/ctrl/#{path}/#{r.id}/edit", :method => "post", :data => {:referrer => "/ctrl/#{path}/#{r.id.div(25) + 1}/list"}}
+    %table{:cellspacing => "0"}
+      %thead
+        %tr
+          %th Field
+          %th Value
+      %tbody
+        - r.table_data.each do |data|
+          - unless data[:css] == 'datetime'
+            %tr
+              %td
+                %span= data[:label].gsub('<br/>',' ')
+              %td
+                - unless data[:name] =~ /name|keyId|order|email/
+                  %span :&nbsp;#{data[:value]}
+                  %span.no-edit= t('crud.msg.no_edit') if data[:name] == 'id'
+                  %span.no-edit= t('crud.msg.no_edit_task') if data[:name] == 'sid'
+                  %span.no-edit= t('crud.msg.no_edit_associations') unless data[:name] =~ /id|sid/
+                - else
+                  %input{:id => r.id, :name => "[form][#{data[:name]}]", :value => data[:value]}
+      %tfoot
+        %tr
+          %td.buttons_bottom{:colspan => "2"}
+            %input.put{:type => "submit", :value => "Save"}
+            %input.destroy{:type => "reset", :value => "Cancel"}
