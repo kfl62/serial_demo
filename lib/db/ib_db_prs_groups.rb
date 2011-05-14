@@ -42,7 +42,7 @@ module Ib
             ]
           end
           # @todo document this method
-          def auto_search(env = nil)
+          def auto_search(e)
             groups = [:id => "0",:name => "Remove Group",:label => "Remove Group"]
             all do |g|
               groups << {:id => g.id,:name => g.name,:label => "#{g.name} #{g.owners.empty? ? ' | has no Members' : ''}"}
