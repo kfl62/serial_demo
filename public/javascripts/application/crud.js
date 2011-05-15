@@ -226,7 +226,7 @@ ib.crud = {
         dojo.connect(a, 'onclick', function(e){e.preventDefault();ib.crud[verb](e.target)})
       )
     })
-    dojo.query('.buttons_bottom > input').forEach(function(a){
+    dojo.query('td.buttons_bottom > input').forEach(function(a){
       var verb = a.className;
       ib.crud.connections.push(
         dojo.connect(a, 'onclick', function(e){e.preventDefault();ib.crud[verb](e.target.form)})

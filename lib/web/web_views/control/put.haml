@@ -28,8 +28,9 @@
               %td
                 %span= data[:label].gsub('<br/>',' ')
               %td
+                &nbsp;:&nbsp;
                 - unless data[:name] =~ /name|keyId|order|email/
-                  %span :&nbsp;#{data[:value]}
+                  %span #{data[:value]}
                   %span.no-edit= t('crud.msg.no_edit') if data[:name] == 'id'
                   %span.no-edit= t('crud.msg.no_edit_task') if data[:name] == 'sid'
                   %span.no-edit= t('crud.msg.no_edit_associations') unless data[:name] =~ /id|sid/
