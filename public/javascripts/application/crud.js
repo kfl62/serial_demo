@@ -266,8 +266,8 @@ on_select: function(ary,id){
           dojo.byId('xhr_partial').innerHTML = data;
           if (ss){
             with_input(ary,id);
-            submit_button.removeAttribute("disabled")
           }
+          submit_button.removeAttribute("disabled")
           dojo.attr('xhr_msg','class','hidden');
         },
         error: function(error){
@@ -280,6 +280,8 @@ on_select: function(ary,id){
       var with_store = new dojo.data.ItemFileReadStore({
         url: "/utils/search/" + ary[1] + "/" + ary[0]
       });
+      if (dijit.byId(ary[1]))
+        dijit.byId(ary[1]).destroy();
       var with_select = new dijit.form.FilteringSelect({
         id: ary[1],
         name: "with_id",

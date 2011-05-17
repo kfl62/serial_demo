@@ -175,20 +175,22 @@ module Ib
       # Save associations route
       # @todo Document this route
       put '/associations/:what/:with' do |what,with|
-        if  params[:what_id] == "0"
-          target_with = modelize(with)[params[:with_id].to_i]
-          target_with.send "#{what.split('_')[1]}=", nil
-          target_with.save
-        elsif params[:with_id] == "0"
-          target_what = modelize(what)[params[:what_id].to_i]
-          target_what.send "#{with.split('_')[1]}=", nil
-          target_what.save
+        type = [what.split('_')[1],with.split('_')[1]]
+        if type.include?("group") && type.include?("owner")
+          ary = many_to_many_update(what,with,params)
+          ary.each do |a|
+            model,method,data = a
+            model.send method, data
+            model.save
+          end
+        elsif type.include?("permission")
+          #model,method,data = one_to_many_update(what,with,params)
         else
-          target_what = modelize(what)[params[:what_id].to_i]
-          target_with = modelize(with)[params[:with_id].to_i]
-          target_what.send "#{with.split('_')[1]}=", target_with
-          target_what.save
+          model,method,data = one_to_many_update(what,with,params)
+          model.send method, data
+          model.save
         end
+        flash[:msg] = {:msg => {:txt => t('assoc.msg', :model => modelize(what).model.name), :class => "info"}}.to_json
       end
       # @private POST '/:what/:whit'{{{2
       # Save associations route

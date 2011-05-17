@@ -63,19 +63,50 @@ module Ib
             end
           end
           # @todo
-          def check_association(what,with,what_id,with_id)
-            if what_id == "0"
-              model = modelize(with)[with_id.to_i]
+          def one_to_many_update(what,with,params)
+            what_id = params[:what_id].to_i
+            with_id = params[:with_id].to_i
+            what_model = modelize(what)[what_id]
+            with_model = modelize(with)[with_id]
+            what_method_base = what.split('_')[1]
+            with_method_base = with.split('_')[1]
+            if what_id == 0
+              model = with_model
+              method = what_method_base + "="
               data  = nil
-            elsif with_id == "0"
-              model = modelize(what)[what_id.to_i]
+            elsif with_id == 0
+              model = what_model
+              method = with_method_base + "="
               data  = nil
             else
-              model = modelize(what)[what_id.to_i]
-              data  = modelize(with)[with_id.to_i]
+              model = what_model
+              method = with_method_base + "="
+              data  = with_model
             end
             return [model,method,data]
           end
+          # @todo
+          def many_to_many_update(what,with,params)
+            what_id = params[:what_id].to_i
+            what_model = modelize(what)[what_id]
+            with_model = modelize(with)
+            with_method_base = with.split('_')[1]
+            retval = []
+            params[:with_id].each_pair do |k,v|
+              if v == "0"
+                method = "remove_" + with_method_base
+                data = with_model[k.to_i]
+                retval << [what_model,method,data]
+              else
+                method = "add_" + with_method_base
+                data = with_model[k.to_i]
+                dup = what_model.send("#{with_method_base}s_dataset").to_hash.has_key? k.to_i
+                retval << [what_model,method,data] unless dup
+              end
+            end
+            retval
+          end
+
         end
       end
     end

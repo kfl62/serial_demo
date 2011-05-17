@@ -6,10 +6,16 @@
       %td{:colspan => "2"}
         %span.mtm_label= r.name
         &nbsp;:&nbsp;
-        %input{:type => "radio",:checked => !what.groups_dataset.filter(:id => r.id).first.nil?,:name => "[id][#{r.id}]",:value => "1"}
-        %input{:type => "radio",:checked => what.groups_dataset.filter(:id => r.id).first.nil?,:name => "[id][#{r.id}]",:value => "0"}
+        %input{:type => "radio",:checked => what.groups_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "1"}
+        %input{:type => "radio",:checked => !what.groups_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "0"}
 - when "persons_group/persons_owner"
-  %p Not ready :(
+  - with.each do |r|
+    %tr
+      %td{:colspan => "2"}
+        %span.mtm_label= r.full_name
+        &nbsp;:&nbsp;
+        %input{:type => "radio",:checked => !what.owners_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "1"}
+        %input{:type => "radio",:checked => what.owners_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "0"}
 
 - when "persons_permissions/many_to_one"
   %p Not ready :(
@@ -17,6 +23,6 @@
   %tr
     %td
       %span= "#{tbody_else.split('_').last.capitalize}"
-    %td
+    %td{:class => tbody_else}
       &nbsp;:&nbsp;
       %input{:id => tbody_else}
