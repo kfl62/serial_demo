@@ -29,7 +29,9 @@ en:
         reader_node: "Reader &laquo;&raquo; Node"
         device_node: "Device &laquo;&raquo; Node"
         device_task: "Device &laquo;&raquo; Task"
-        owner_group: "Owner &laquo;&raquo; Group"
+        owner_group: "Owner &raquo; Group(s)"
+        group_owner: "Group members"
+        permission: "Permissions"
     task: "Tasks"
 de:
   ib_web_menu:

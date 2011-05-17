@@ -43,9 +43,13 @@ module Ib
           end
           # @todo document this method
           def auto_search(e)
-            groups = [:id => "0",:name => "Remove Group",:label => "Remove Group"]
+            e = e.include?("permission")
+            groups = []
+            groups = [:id => "0",:name => "Change Group",:label => "Change Group"] if e
             all do |g|
-              groups << {:id => g.id,:name => g.name,:label => "#{g.name} #{g.owners.empty? ? ' | has no Members' : ''}"}
+              label = "#{g.name} #{g.owners.empty? ? ' | has no Members' : ''}"
+              label = "#{g.name} #{g.permissions.empty? ? ' | has no Permissions' : ''}" if e
+              groups << {:id => g.id,:name => g.name,:label => label}
             end
             {:identifier => "id",:items => groups}
           end

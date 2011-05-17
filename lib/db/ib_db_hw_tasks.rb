@@ -41,8 +41,8 @@ module Ib
             ]
           end
          # @todo document this method
-          def auto_search(env = nil)
-            tasks = [:id => "0",:name => "Remove Task",:label => "Remove Task"]
+          def auto_search(e)
+            tasks = [:id => "0",:name => "Remove Task",:label => "<span class='warning'>Remove selected</span>"]
             all do |t|
               tasks << {:id => t.id,:name => t.name,:label => "#{t.name} #{t.devices.empty? ? ' | has no Devices' : ''}"}
             end

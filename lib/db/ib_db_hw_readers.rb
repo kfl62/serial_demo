@@ -58,7 +58,7 @@ module Ib
           end
           # @todo document this method
           def auto_search(e)
-            readers = [:id => "0",:name => "Warning: Change me!",:label => "<span class='warning'>Warning: Change me!</span>"]
+            readers = []
             all do |r|
               readers << {:id => r.id,:name => r.name,:label => "#{r.name} #{r.node.nil? ? ' | Orphan' : ''}"}
             end

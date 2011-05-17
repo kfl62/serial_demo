@@ -68,9 +68,9 @@ module Ib
            # @todo
           # @return [String]
           def association_title(obj)
-            ary = obj.split('_')
-            what = ary[0]
-            with = ary[1..-1].join(', ')
+            ary = obj.split('/')
+            what = ary[0].split('_')[1]
+            with = (what == 'permission') ? "all related" : ary[1].split('_')[1]
             t("associate.title", :what => what.capitalize, :with => with.capitalize)
           end
        end

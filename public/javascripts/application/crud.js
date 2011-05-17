@@ -198,7 +198,10 @@ ib.crud = {
   destroy: function(){
     dojo.query('[id^="crud"]').forEach("dojo.destroy(item)");
     if (this.search_ary.length > 0) {
-      this.search_ary.forEach(function(d){dijit.byId(d).destroy()});
+      this.search_ary.forEach(function(d){
+        if (dijit.byId(d) != undefined)
+        dijit.byId(d).destroyRecursive()
+      });
       this.search_ary.length = 0;
     }
   },
@@ -236,24 +239,67 @@ ib.crud = {
   not_ready: function(msg){
     alert("Coming soon - " + msg + " - !");
   },
-  search: function(ary){
-    var what = {};
-    for (i=0;i<ary.length;i++) {
-      what.input_id = ary[i]
-      what.input_name = (i == 0) ? "what_id" : "with_id"
-      what.store = new dojo.data.ItemFileReadStore({
-          url: "/utils/search/" + ary[i] + "/" + ary[Math.abs(i-1)]
+  search: function(ary,filter){
+    var what_store = new dojo.data.ItemFileReadStore({
+      url: "/utils/search/" + ary[0] + "/" + ary[1]
+    });
+    var what_select = new dijit.form.FilteringSelect({
+      id: ary[0],
+      name: "what_id",
+      value: "",
+      store: what_store,
+      searchAttr: "name",
+      labelAttr: "label",
+      placeHolder: "Select " + ary[0].split('_')[1],
+      onChange: function(id){
+        ib.crud.on_select(ary,id)
+      }
+    },ary[0]);
+  },
+//
+on_select: function(ary,id){
+    var submit_button = dojo.query("td.buttons_bottom > input")[0]
+    var render_partial = function(ary,id,ss){
+      xhrArgs = {
+        url: "/utils/search/" + ary[0] + "/" + id + "/" + ary[1],
+        load: function(data){
+          dojo.byId('xhr_partial').innerHTML = data;
+          if (ss){
+            with_input(ary,id);
+            submit_button.removeAttribute("disabled")
+          }
+          dojo.attr('xhr_msg','class','hidden');
+        },
+        error: function(error){
+          dojo.publish('xhrMsg',['error','error',error]);
+        }
+      };
+      var deferred = dojo.xhrGet(xhrArgs);
+    };
+    var with_input = function(ary,id){
+      var with_store = new dojo.data.ItemFileReadStore({
+        url: "/utils/search/" + ary[1] + "/" + ary[0]
       });
-      var filteringSelect = new dijit.form.FilteringSelect({
-          id: what.input_id,
-          name: what.input_name,
-          value: "0",
-          store: what.store,
-          searchAttr: "name",
-          labelAttr: "label",
-          labelType: "html"
-      },
-      what.input_id);
+      var with_select = new dijit.form.FilteringSelect({
+        id: ary[1],
+        name: "with_id",
+        value: "",
+        store: with_store,
+        searchAttr: "name",
+        placeHolder: "Select " + ary[1].split('_')[1],
+        labelAttr: "label",
+        labelType: "html"
+      },ary[1]);
+    };
+    if (ary.every(function(e){return e.search(/owner|group/) >= 0})){
+      //many_to_many
+      render_partial(ary,id,false)
+    }else if (ary.some(function(e){return e.search(/permission/) >=0 })){
+      //permissions
+      render_partial(ary,id,false)
+    }else{
+      //one_to_many
+      render_partial(ary,id,true)
     }
   }
 }

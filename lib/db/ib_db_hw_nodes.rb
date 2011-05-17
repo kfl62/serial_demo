@@ -61,7 +61,7 @@ module Ib
           # @todo document this method
           def auto_search(e)
             e = e.include?("device")
-            nodes = [:id => "0",:name => "Remove Node",:label => "Remove Node"]
+            nodes = [:id => "0",:name => "Remove Node",:label => "<span class='warning'>Remove selected</span>"]
             all do |n|
               label = "#{n.name} #{n.readers.empty? ? ' | has no Readers' : ''}"
               label = "#{n.name} #{n.devices.empty? ? ' | has no Devices' : ''}" if e

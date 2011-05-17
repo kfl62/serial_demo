@@ -52,9 +52,13 @@ module Ib
           end
           # @todo document this method
           def auto_search(e)
-            owners = [:id => "0",:name => "Remove Owner",:label => "Remove Owner"]
+            e = e.include?('group')
+            owners = [:id => "0",:name => "Remove Owner",:label => "<span class='warning'>Remove selected</span>"]
+            owners = [] if e
             all do |o|
-              owners << {:id => o.id,:name => o.full_name,:label => "#{o.full_name} #{o.ib_keys.empty? ? ' | has no Key' : ''}"}
+              label = "#{o.full_name} #{o.ib_keys.empty? ? ' | has no Key' : ''}"
+              label = "#{o.full_name} #{o.groups.empty? ? ' | has no Group' : ''}" if e
+              owners << {:id => o.id,:name => o.full_name,:label => label}
             end
             {:identifier => "id",:items => owners}
           end

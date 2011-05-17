@@ -169,9 +169,7 @@ module Ib
       # @todo Document this route
       get '/associations/:what/:with' do |what,with|
         path = "#{what}/#{with}"
-        what = modelize(what).auto_search(with)
-        with = modelize(with).auto_search(what)
-        haml :associations, :layout => request.xhr? ? false : :layout, :locals => {:path => path,:what => what,:with => with}
+        haml :associations, :layout => request.xhr? ? false : :layout, :locals => {:path => path,:what => what}
       end
       # @private PUT '/:what/:whit'{{{2
       # Save associations route

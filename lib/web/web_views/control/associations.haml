@@ -1,33 +1,18 @@
-- rows = path.split('/')
 - if request.xhr?
   %p.close{:onclick => "ib.crud.destroy()"}
 %p.crud_title= association_title(path)
--case path
-- when "persons_owner/persons_group"
-  %h4 Many_to_Many associations later :(
-
-- else
-  - if what[:items].empty? && with[:items].empty?
-    %p nothing to associate
-  - else
-    - if  what[:items].empty? || with[:items].empty?
-      - if what[:items].empty?
-        %p No what
-      -if with[:items].empty?
-        %p No with
-    - else
-      %form{:action => "/ctrl/associations/#{path}/edit", :method => "post",:data => {:referrer => "/ctrl/#{path.split('/')[0]}/1/list"}}
-        %table.associate
-          %tbody
-            -rows.each do |r|
-              %tr
-                %td
-                  %span= "#{r.split('_').last.capitalize}"
-                %td
-                  &nbsp;:&nbsp;
-                  %input{:id => r}
-          %tfoot
-            %tr
-              %td.buttons_bottom{:colspan => 2}
-                %input.put{:type => "submit", :value => "Save"}
-                %input.destroy{:type => "reset", :value => "Cancel"}
+%form{:action => "/ctrl/associations/#{path}/edit", :method => "post",:data => {:referrer => "/ctrl/#{path.split('/')[0]}/1/list"}}
+  %table.associate
+    %thead
+      %tr
+        %td
+          %span= "#{what.split('_').last.capitalize}"
+        %td
+          &nbsp;:&nbsp;
+          %input{:id => what}
+    %tbody#xhr_partial
+    %tfoot
+      %tr
+        %td.buttons_bottom{:colspan => 2}
+          %input.put{:type => "submit", :value => "Save", :disabled => true}
+          %input.destroy{:type => "reset", :value => "Cancel"}

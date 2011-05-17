@@ -1,0 +1,22 @@
+- tbody_else = path.split('/')[1]
+-case path
+- when "persons_owner/persons_group"
+  - with.each do |r|
+    %tr
+      %td{:colspan => "2"}
+        %span.mtm_label= r.name
+        &nbsp;:&nbsp;
+        %input{:type => "radio",:checked => !what.groups_dataset.filter(:id => r.id).first.nil?,:name => "[id][#{r.id}]",:value => "1"}
+        %input{:type => "radio",:checked => what.groups_dataset.filter(:id => r.id).first.nil?,:name => "[id][#{r.id}]",:value => "0"}
+- when "persons_group/persons_owner"
+  %p Not ready :(
+
+- when "persons_permissions/many_to_one"
+  %p Not ready :(
+- else
+  %tr
+    %td
+      %span= "#{tbody_else.split('_').last.capitalize}"
+    %td
+      &nbsp;:&nbsp;
+      %input{:id => tbody_else}

@@ -44,7 +44,7 @@ module Ib
           end
           # @todo document this method
           def auto_search(e)
-            keys = [:id => "0",:name => "Warning: Change me!",:label => "<span class='warning'>Warning: Change me!</span>"]
+            keys = []
             all do |k|
               keys << {:id => k.id,:name => k.keyId,:label =>"#{k.keyId} #{k.owner.nil? ? ' | has no Owner' : ''}"}
             end

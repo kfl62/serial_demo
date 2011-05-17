@@ -52,6 +52,13 @@ module Ib
         obj = modelize(w)
         obj.auto_search(e).to_json
       end
+      # Search
+      get '/search/:where/:id/:env' do |w,i,e|
+        path = "#{w}/#{e}"
+        what = modelize(w)[i]
+        with = modelize(e).all
+        haml :partial, :layout => request.xhr? ? false : :'layouts/default', :locals => {:path => path,:what => what, :with => with}
+      end
     end
   end
 end

@@ -72,7 +72,7 @@ module Ib
           # @todo document this method
           def auto_search(e)
             e = e.include?("task")
-            devices = [:id => "0",:name => "Warning: Change me!",:label => "<span class='warning'>Warning: Change me!</span>"]
+            devices = []
             all do |d|
               label = "#{d.name} #{d.node.nil? ? ' | Orphan' : ''}"
               label = "#{d.name} #{d.task.nil? ? ' | Free' : ''}" if e
