@@ -249,6 +249,9 @@ ib.crud = {
       value: "",
       store: what_store,
       searchAttr: "name",
+      queryExpr: "*${0}*",
+      highlightMatch: "all",
+      searchDelay: 500,
       labelAttr: "label",
       placeHolder: "Select " + ary[0].split('_')[1],
       onChange: function(id){
