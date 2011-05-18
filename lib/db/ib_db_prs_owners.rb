@@ -55,7 +55,7 @@ module Ib
             e = e.include?('group')
             owners = [:id => "0",:name => "Remove Owner",:label => "<span class='warning'>Remove selected</span>"]
             owners = [] if e
-            all do |o|
+            order(:last_name.asc).all do |o|
               label = "#{o.full_name} #{o.ib_keys.empty? ? ' | has no Key' : ''}"
               label = "#{o.full_name} #{o.groups.empty? ? ' | has no Group' : ''}" if e
               owners << {:id => o.id,:name => o.full_name,:label => label}
