@@ -4,7 +4,7 @@
   - with.each do |r|
     %tr
       %td{:colspan => "2"}
-        %span.mtm_label= r.name
+        %span.mtm_label_group= r.name
         &nbsp;:&nbsp;
         %input{:type => "radio",:checked => what.groups_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "1"}
         %input{:type => "radio",:checked => !what.groups_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "0"}
@@ -12,10 +12,10 @@
   - with.each do |r|
     %tr
       %td{:colspan => "2"}
-        %span.mtm_label= r.full_name
+        %span.mtm_label_owner= r.full_name
         &nbsp;:&nbsp;
-        %input{:type => "radio",:checked => !what.owners_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "1"}
-        %input{:type => "radio",:checked => what.owners_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "0"}
+        %input{:type => "radio",:checked => what.owners_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "1"}
+        %input{:type => "radio",:checked => !what.owners_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "0"}
 
 - when "persons_permissions/many_to_one"
   %p Not ready :(
