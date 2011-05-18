@@ -1,24 +1,44 @@
 - tbody_else = path.split('/')[1]
 -case path
 - when "persons_owner/persons_group"
-  - with.each do |r|
+  %tr
+    %td{:colspan => "2"}
+      %span.mtm_label_grou Member of ?
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Yes/No
+  - with.all.each do |r|
     %tr
       %td{:colspan => "2"}
         %span.mtm_label_group= r.name
         &nbsp;:&nbsp;
         %input{:type => "radio",:checked => what.groups_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "1"}
         %input{:type => "radio",:checked => !what.groups_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "0"}
+
 - when "persons_group/persons_owner"
-  - with.each do |r|
-    %tr
-      %td{:colspan => "2"}
-        %span.mtm_label_owner= r.full_name
-        &nbsp;:&nbsp;
-        %input{:type => "radio",:checked => what.owners_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "1"}
-        %input{:type => "radio",:checked => !what.owners_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "0"}
+  %tr
+    %td{:colspan => "2"}
+      %span.mtm_label_owner Is member ?
+      &nbsp;&nbsp;&nbsp;&nbsp; Yes/No
+    %td{:colspan => "2"}
+      %span.mtm_label_owner Is member ?
+      &nbsp;&nbsp;&nbsp;&nbsp; Yes/No
+  - with.order(:last_name.asc).all.each_with_index do |r,i|
+    - if (i+1).odd?
+      %tr
+        %td{:colspan => "2"}
+          %span.mtm_label_owner= r.full_name
+          &nbsp;:&nbsp;
+          %input{:type => "radio",:checked => what.owners_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "1"}
+          %input{:type => "radio",:checked => !what.owners_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "0"}
+      - else
+        %td{:colspan => "2"}
+          %span.mtm_label_owner= r.full_name
+          &nbsp;:&nbsp;
+          %input{:type => "radio",:checked => what.owners_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "1"}
+          %input{:type => "radio",:checked => !what.owners_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "0"}
 
 - when "persons_permissions/many_to_one"
   %p Not ready :(
+
 - else
   %tr
     %td

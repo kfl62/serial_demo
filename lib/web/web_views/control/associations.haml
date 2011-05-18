@@ -10,9 +10,10 @@
         %td
           &nbsp;:&nbsp;
           %input{:id => what}
+        %td{:colspan => 2}
     %tbody#xhr_partial
     %tfoot
       %tr
-        %td.buttons_bottom{:colspan => 2}
+        %td.buttons_bottom{:colspan => path == "persons_group/persons_owner" ? 4 : 2}
           %input.put{:type => "submit", :value => "Save", :disabled => true}
           %input.destroy{:type => "reset", :value => "Cancel"}
