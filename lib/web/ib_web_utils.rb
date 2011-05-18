@@ -56,7 +56,7 @@ module Ib
       get '/search/:where/:id/:env' do |w,i,e|
         path = "#{w}/#{e}"
         what = modelize(w)[i]
-        with = modelize(e).all
+        with = modelize(e)
         haml :partial, :layout => request.xhr? ? false : :'layouts/default', :locals => {:path => path,:what => what, :with => with}
       end
     end
