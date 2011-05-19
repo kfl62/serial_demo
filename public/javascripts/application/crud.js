@@ -240,6 +240,7 @@ ib.crud = {
     alert("Coming soon - " + msg + " - !");
   },
   search: function(ary,filter){
+    this.search_ary = ary
     var what_store = new dojo.data.ItemFileReadStore({
       url: "/utils/search/" + ary[0] + "/" + ary[1]
     });
@@ -303,7 +304,7 @@ on_select: function(ary,id){
           // probably dojo bug
           //with_select.set("name","[with_id][" + ary[0] + "]")
           var current_name = dojo.query('[type="hidden"]',with_select.domNode)[0]
-          dojo.attr(current_name,"name","[with_id][" + ary[i] .split('_').slice(-2).join('_') + "][" + current_id.join('_') + "]")
+          dojo.attr(current_name,"name","[with_id][" + ary[i] .split('_').join('_') + "][" + current_id.join('_') + "]")
           current_id.push('id')
           current_id = current_id.join('_')
           with_select.set("value",dijit.byId("persons_permission").item[current_id]);

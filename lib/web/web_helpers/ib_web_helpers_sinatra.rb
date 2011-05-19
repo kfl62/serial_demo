@@ -115,6 +115,7 @@ module Ib
             with_model = nil
             method = ""
             params[:with_id].each_pair do |k,v|
+              k = k.split('_').slice!(-2..-1).join('_')
               with_model = modelize(k)
               v.each_pair do |m,id|
                 method = m + "="
