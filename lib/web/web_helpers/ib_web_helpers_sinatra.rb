@@ -106,7 +106,24 @@ module Ib
             end
             retval
           end
-
+          # @todo
+          def permission_update(what,params)
+            what_id = params[:what_id].to_i
+            what_model = modelize(what)[what_id]
+            retval = []
+            data = []
+            with_model = nil
+            method = ""
+            params[:with_id].each_pair do |k,v|
+              with_model = modelize(k)
+              v.each_pair do |m,id|
+                method = m + "="
+                data = with_model[id.to_i]
+              end
+              retval << [what_model,method,data]
+            end
+            retval
+          end
         end
       end
     end

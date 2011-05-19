@@ -184,7 +184,12 @@ module Ib
             model.save
           end
         elsif type.include?("permission")
-          #model,method,data = one_to_many_update(what,with,params)
+          ary = permission_update(what,params)
+          ary.each do |a|
+            model,method,data = a
+            model.send method, data
+            model.save
+          end
         else
           model,method,data = one_to_many_update(what,with,params)
           model.send method, data

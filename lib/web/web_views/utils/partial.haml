@@ -36,8 +36,14 @@
           %input{:type => "radio",:checked => what.owners_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "1"}
           %input{:type => "radio",:checked => !what.owners_dataset.to_hash.has_key?(r.id),:name => "[with_id][#{r.id}]",:value => "0"}
 
-- when "persons_permissions/many_to_one"
-  %p Not ready :(
+- when /persons_permission/
+  -  ["persons_group","request_hw_node","request_hw_reader","response_hw_node","response_hw_device"].each do |input|
+    %tr
+      %td
+        %span= "#{input.split('_').last.capitalize}"
+      %td{:class => input}
+        &nbsp;:&nbsp;
+        %input{:id => input}
 
 - else
   %tr

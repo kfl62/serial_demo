@@ -280,28 +280,42 @@ on_select: function(ary,id){
       var deferred = dojo.xhrGet(xhrArgs);
     };
     var with_input = function(ary,id){
-      var with_store = new dojo.data.ItemFileReadStore({
-        url: "/utils/search/" + ary[1] + "/" + ary[0]
-      });
-      if (dijit.byId(ary[1]))
-        dijit.byId(ary[1]).destroy();
-      var with_select = new dijit.form.FilteringSelect({
-        id: ary[1],
-        name: "with_id",
-        value: "",
-        store: with_store,
-        searchAttr: "name",
-        placeHolder: "Select " + ary[1].split('_')[1],
-        labelAttr: "label",
-        labelType: "html"
-      },ary[1]);
+      for (i=1;i<ary.length;i++){
+        var with_store = new dojo.data.ItemFileReadStore({
+          url: "/utils/search/" + ary[i].split('_').slice(-2).join('_') + "/" + ary[0]
+        });
+        if (dijit.byId(ary[i]))
+          dijit.byId(ary[i]).destroy();
+        var with_select = new dijit.form.FilteringSelect({
+          id: ary[i],
+          name: "with_id",
+          value: "",
+          store: with_store,
+          searchAttr: "name",
+          placeHolder: "Select " + ary[i].split('_')[ary[i].split('_').length - 1],
+          labelAttr: "label",
+          labelType: "html"
+        },ary[i]);
+        if (ary.some(function(e){return e.search(/permission/) >=0 })){
+          var current_id = ary[i].split('_')
+          current_id.length > 2 ? current_id.splice(1,1) : current_id.splice(0,1)
+          // normal set function does not change the hidden inputs name attr.
+          // probably dojo bug
+          //with_select.set("name","[with_id][" + ary[0] + "]")
+          var current_name = dojo.query('[type="hidden"]',with_select.domNode)[0]
+          dojo.attr(current_name,"name","[with_id][" + ary[i] .split('_').slice(-2).join('_') + "][" + current_id.join('_') + "]")
+          current_id.push('id')
+          current_id = current_id.join('_')
+          with_select.set("value",dijit.byId("persons_permission").item[current_id]);
+        }
+      }
     };
     if (ary.every(function(e){return e.search(/owner|group/) >= 0})){
       //many_to_many
-      render_partial(ary,id,false)
+      render_partial(ary,id,true)
     }else if (ary.some(function(e){return e.search(/permission/) >=0 })){
-      //permissions
-      render_partial(ary,id,false)
+      ary = ["persons_permission","persons_group","request_hw_node","request_hw_reader","response_hw_node","response_hw_device"]
+        render_partial(ary,id,true)
     }else{
       //one_to_many
       render_partial(ary,id,true)

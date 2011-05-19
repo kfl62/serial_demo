@@ -60,11 +60,14 @@ module Ib
           end
           # @todo document this method
           def auto_search(e)
-            e = e.include?("device")
+            d = e.include?("device")
+            p = e.include?("permission")
             nodes = [:id => "0",:name => "Remove Node",:label => "<span class='warning'>Remove selected</span>"]
+            nodes = [] if p
             all do |n|
               label = "#{n.name} #{n.readers.empty? ? ' | has no Readers' : ''}"
-              label = "#{n.name} #{n.devices.empty? ? ' | has no Devices' : ''}" if e
+              label = "#{n.name} #{n.devices.empty? ? ' | has no Devices' : ''}" if d
+              label = "#{n.name}" if p
               nodes << {:id => n.id,:name => n.name,:label => label}
             end
             {:identifier => "id",:items => nodes}

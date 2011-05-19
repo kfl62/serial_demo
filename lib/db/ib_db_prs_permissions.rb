@@ -54,6 +54,22 @@ module Ib
               {:css => "hidden",:name  => "response_device_id",:label => I18n.t('persons_permission.response_device'),:value => 1}
             ]
           end
+          # @todo document this method
+          def auto_search(e)
+            permissions = []
+            all do |p|
+              label = "#{p.response_device.task.name} on #{p.response_node.name}"
+              permissions << {:id => p.id,
+                              :name => "permission",
+                              :label => label,
+                              :group_id => p.group_id,
+                              :request_node_id => p.request_node_id,
+                              :request_reader_id => p.request_reader_id ,
+                              :response_node_id => p.response_node_id,
+                              :response_device_id => p.response_device_id}
+            end
+            {:identifier => "id",:items => permissions}
+          end
         end
 
         # @todo
