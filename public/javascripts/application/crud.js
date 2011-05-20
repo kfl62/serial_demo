@@ -298,6 +298,7 @@ on_select: function(ary,id){
           labelType: "html"
         },ary[i]);
         if (ary.some(function(e){return e.search(/permission/) >=0 })){
+          ib.crud.search_ary.push(ary[i])
           var current_id = ary[i].split('_')
           current_id.length > 2 ? current_id.splice(1,1) : current_id.splice(0,1)
           // normal set function does not change the hidden inputs name attr.
