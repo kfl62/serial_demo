@@ -210,6 +210,10 @@ module Ib
                "NEWID_ACCEPTED",
                true
               ]
+        if n = Node[:sid  => string_sid(m[10,4])]
+          n.sid = string_sid(m)
+          n.save
+        else
         Node.insert(nil,
                     string_sid(m),
                     Time.now,
@@ -219,6 +223,7 @@ module Ib
                     Time.now,
                     Time.now
                    ) unless string_sid(m) == 2046
+        end
         Access.insert(msg)
         msg =  msg.compact.join(' | ')
         msg += "\n"

@@ -56,7 +56,7 @@ module Ib
         error = error.compact
         if error.empty?
           p = permission[0]
-          write(START_BYTE + p.msg_response_node_sid + ACCESS_OK + p.msg_request_reader_id + p.msg_response_device_order + "00" +  p.msg_response_device_taskId + STOP_BYTE)
+          write(START_BYTE + p.msg_response_node_sid + ACCESS_OK + p.msg_request_reader_order + p.msg_response_device_order + "00" +  p.msg_response_device_taskId + STOP_BYTE)
           Msg.msg_access_granted(msg,p)
         else
           write(START_BYTE + msg[0,4] + ACCESS_DENY + "01000000000000" + STOP_BYTE)

@@ -325,8 +325,8 @@ on_select: function(ary,id){
   }
 }
 // initialize on load{{{2
-function init_crud(){
+function init(){
   ib.crud.connect();
 }
-dojo.ready(init_crud);
+dojo.ready(init);
 

@@ -1,0 +1,12 @@
+- case opcode
+- when "02", "03"
+  %select.params{:name => "device"}
+    %option{:value => "0"} Select device
+    - devices.each do |d|
+      %option{:value => d.order}= d.name
+- when "05"
+  %input.params.sid{:name => "new_sid",:value => "0"}
+- when "07"
+  %input.params.data{:name => "new_param",:value => ""}
+- else
+  "Opcode not defined in partial"

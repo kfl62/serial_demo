@@ -1,0 +1,11 @@
+%h4= t('tasks.title')
+%form#task_form{:action => "/ctrl/tsk/execute", :method => "post"}
+  %select#task_opcode{:name => "[opcode]"}
+    - t('tasks.opcode').each do |o|
+      %option{:value => o[1]}= o[0]
+  %select#task_node.hidden{:name => "node"}
+    %option{:value => "0"}= t('tasks.node')
+    - nodes.each do |n|
+      %option{:value => n.sid}= n.name
+  %span#xhr_partial
+  %input#task_submit.hidden{:type => "submit", :value => "Send"}

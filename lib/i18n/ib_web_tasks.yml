@@ -1,0 +1,5 @@
+en:
+  tasks:
+    title: "Please configure command"
+    opcode: [["Select opcode", "00"], ["ACCESS_OK", "02"], ["ACCESS_DENY", "03"], ["NEWID_SET", "05"], ["SET_PARAM", "07"]]
+    node: "Select node"

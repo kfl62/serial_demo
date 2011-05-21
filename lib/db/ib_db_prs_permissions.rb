@@ -103,17 +103,17 @@ module Ib
         end
 
         def msg_request_node_sid
-          retval = "%04d" % request_node.id
+          retval = "%04d" % request_node.sid
           retval = retval[2,2] + retval[0,2]
           retval
         end
 
-        def msg_request_reader_id
+        def msg_request_reader_order
           "%02d" % request_reader.order
         end
 
         def msg_response_node_sid
-          retval = "%04d" % response_node.id
+          retval = "%04d" % response_node.sid
           retval = retval[2,2] + retval[0,2]
           retval
         end

@@ -36,6 +36,7 @@ var xhrMenu = function(param){
       content_node.innerHTML = data;
       dojo.attr('xhr_msg','class','hidden');
       ib.crud.connect();
+      ib.task.connect();
     },
     error: function(error){
       dojo.publish('xhrMsg',['error','error',error])
@@ -48,9 +49,10 @@ var xhrMenu = function(param){
 function init(){
   if (dojo.body().id == 'ctrl'){
     dojo.require('ib.crud');
+    dojo.require('ib.task');
   }else{
     dojo.require('ib.auth')
-  }
+  };
   dojo.publish('xhrMsg',['flash']);
   dojo.query('#menu ul > li > a:not(.edit)').onclick(function(e){e.preventDefault();xhrMenu(e.target.href);});
   dojo.query('span.paginate > a').onclick(function(e){e.preventDefault();xhrMenu(e.target.href);});
