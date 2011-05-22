@@ -10,7 +10,7 @@
         :rel => "stylesheet",
         :type => "text/css"}
   :javascript
-    djConfig = {baseUrl: "./", modulePaths: {ib: '/javascripts/application'}}
+    djConfig = {baseUrl: "/javascripts/dojo/dojo/", modulePaths: {ib: '/javascripts/application'}}
   - if Ib::Config::WebConfig.dojo_cdn
     %script{:language => "javascript",:src => "http://ajax.googleapis.com/ajax/libs/dojo/1.6/dojo/dojo.xd.js",:type => "text/javascript"}
     %link{:href=> "http://ajax.googleapis.com/ajax/libs/dojo/1.6/dijit/themes/soria/soria.css",:media => "all",:rel => "stylesheet",:type => "text/css"}
