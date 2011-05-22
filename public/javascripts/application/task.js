@@ -118,12 +118,26 @@ ib.task = {
     this.taskSubmit = null;
   },
   sendData: function(node){
+    var info_node = dojo.byId('last_log');
+    var anim = dojo.animateProperty({
+        node: info_node,
+        duration: 5000,
+        properties:{
+          opacity: {end: 1, start: 1}
+        },
+        onEnd: function(){
+          dojo.attr(info_node,'class','hidden');
+        }
+      });
     var path = '/ctrl/tsk/execute'
     xhrArgs = {
       form: node,
       url: path,
       load: function(data){
-        dojo.publish('xhrMsg',['flash']);
+        info_node.innerHTML = data;
+        dojo.attr(info_node,'class','info');
+        dojo.style(info_node,{'opacity': 1});
+        anim.play();
       },
       error: function(error){
         dojo.publish('xhrMsg',['error','error',error]);

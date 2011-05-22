@@ -25,37 +25,13 @@ module Ib
       end
       # @todo
       post "/execute" do
-        #puts params.inspect
-        case params[:opcode]
-        when /05|07/
-          sid = "%04d" % params[:node]
-          sid = sid[2,2] + sid[0,2]
-          if params[:opcode] == "05"
-            newid = "%04d" % params[:new_sid]
-            newid = newid[2,2] + newid[0,2]
-            rest = "01#{newid}00000000"
-          else
-            rest = ""
-          end
-        when /02|03/
-          if params[:opcode] == "02"
-            sid = "%04d" % params[:node]
-            sid = sid[2,2] + sid[0,2]
-            response_device = "%02X" %params[:device]
-            rest = "01#{response_device}0000000001"
-          else
-            sid = "0100"
-            rest = "01000000000000"
-          end
-        else
-          # todo
-        end
-        opcode = params[:opcode]
-        msg = ">#{sid}#{opcode}#{rest}\n"
+        @msg, @db_access_log, @db_error_log = serial_msg(params)
         Ib::Serial::Server.open(SerialConfig.dev,SerialConfig.baud) do |ibs|
-          ibs.write msg
+          ibs.write @msg
         end
+        haml '= "Last command:<br>#{@msg.chop}&#92;n<br><br> #{@db_access_log.join(" | ")}"' unless @db_access_log.empty?
       end
+
     end
   end
 end

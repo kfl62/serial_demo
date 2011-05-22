@@ -6,6 +6,7 @@
   %select#task_node.hidden{:name => "node"}
     %option{:value => "0"}= t('tasks.node')
     - nodes.each do |n|
-      %option{:value => n.sid}= n.name
+      %option{:value => n.id}= n.name
   %span#xhr_partial
   %input#task_submit.hidden{:type => "submit", :value => "Send"}
+%p#last_log.hidden

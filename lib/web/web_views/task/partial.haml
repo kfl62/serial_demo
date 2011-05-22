@@ -3,7 +3,7 @@
   %select.params{:name => "device"}
     %option{:value => "0"} Select device
     - devices.each do |d|
-      %option{:value => d.order}= d.name
+      %option{:value => d.id}= d.name
 - when "05"
   %input.params.sid{:name => "new_sid",:value => "0"}
 - when "07"

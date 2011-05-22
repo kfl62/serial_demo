@@ -125,6 +125,40 @@ module Ib
             end
             retval
           end
+          # @todo
+          def serial_msg(params)
+            opcode = params[:opcode]
+            node = modelize("hw_node")[params[:node].to_i] if params [:node]
+            node_sid = ("%04X" % node.sid).unpack("@2a2@0a2").pack("a2a2") if params[:node]
+            device = modelize("hw_device")[params[:device].to_i] if params[:device]
+            new_sid = ("%04d" % params[:new_sid]).unpack("@2a2@0a2").pack("a2a2") if params[:new_sid]
+            msg = ">#{node_sid}#{opcode}"
+            db_access_log = []
+            db_error_log = []
+            case opcode
+            when "02"
+              msg += "01" # arbitrary reader order, node expects this, obscure reason :)
+              msg += "%02X" % device.order
+              msg += "00" # reserved
+              msg += "%08X" % device.task.taskId
+              db_access_log = [nil,Time.now,"0",current_user.login_name,"web","interface",node.name,device.name,"ACCESS_OK",true]
+            when "03"
+              msg += "01" # arbitrary reader order, node expects this,obscure reason :)
+              msg += "000000000000" # complete to 20 chars
+              db_access_log = [nil,Time.now,"0",current_user.login_name,"web","interface",node.name,device.name,"ACCESS_DENY",false]
+            when "05"
+              msg += "01" # arbitrary reader order, node expects this,obscure reason :)
+              msg += new_sid
+              msg += "00000000" # complete to 20 chars
+            when "07"
+              # not ready
+              msg += "00000000000000" # placeholder for now
+            else
+              # some error handling would be nice
+            end
+            msg += "\n"
+            [msg,db_access_log,db_error_log]
+          end
         end
       end
     end
