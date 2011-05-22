@@ -121,9 +121,9 @@ ib.task = {
     var info_node = dojo.byId('last_log');
     var anim = dojo.animateProperty({
         node: info_node,
-        duration: 5000,
+        duration: 3000,
         properties:{
-          opacity: {end: 1, start: 1}
+          opacity: {end: 0, start: 1}
         },
         onEnd: function(){
           dojo.attr(info_node,'class','hidden');
@@ -137,7 +137,7 @@ ib.task = {
         info_node.innerHTML = data;
         dojo.attr(info_node,'class','info');
         dojo.style(info_node,{'opacity': 1});
-        anim.play();
+        anim.play(5000);
       },
       error: function(error){
         dojo.publish('xhrMsg',['error','error',error]);
