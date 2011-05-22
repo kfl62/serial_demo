@@ -150,6 +150,7 @@ module Ib
               msg += "01" # arbitrary reader order, node expects this,obscure reason :)
               msg += new_sid
               msg += "00000000" # complete to 20 chars
+              db_access_log = [nil,Time.now,"0",current_user.login_name,"New sid",params[:new_sid],"Old sid",node.sid,"NEWID_ACCEPTED",true]
             when "07"
               # not ready
               msg += "00000000000000" # placeholder for now

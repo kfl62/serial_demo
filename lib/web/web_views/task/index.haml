@@ -1,4 +1,5 @@
 %h4= t('tasks.title')
+%p.warning= t('tasks.warning')
 %form#task_form{:action => "/ctrl/tsk/execute", :method => "post"}
   %select#task_opcode{:name => "[opcode]"}
     - t('tasks.opcode').each do |o|
