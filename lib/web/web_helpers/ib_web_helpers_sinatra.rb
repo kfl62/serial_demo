@@ -131,7 +131,7 @@ module Ib
             node = modelize("hw_node")[params[:node].to_i] if params [:node]
             node_sid = ("%04X" % node.sid).unpack("@2a2@0a2").pack("a2a2") if params[:node]
             device = modelize("hw_device")[params[:device].to_i] if params[:device]
-            new_sid = ("%04d" % params[:new_sid]).unpack("@2a2@0a2").pack("a2a2") if params[:new_sid]
+            new_sid = ("%04X" % params[:new_sid]).unpack("@2a2@0a2").pack("a2a2") if params[:new_sid]
             msg = ">#{node_sid}#{opcode}"
             db_access_log = []
             db_error_log = []
