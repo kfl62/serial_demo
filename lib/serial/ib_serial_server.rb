@@ -68,12 +68,14 @@ module Ib
         permission = []
         group = Key[:keyId => Msg.string_keyId(msg)].owner.groups
         node = Node[:sid => Msg.string_sid(msg)].request_permissions
-        reader = Reader[:id => Msg.string_reader(msg)].permissions
+        #TODO check if reader owns node, for now is ambiguous
+        reader = Reader[:order => Msg.string_reader(msg)].permissions
         group.each{|g| permission << (g.permissions & node & reader)}
+        error_permission = permission.flatten.empty? ? "No permission!" : nil
         error_group =  group.empty? ? "Group membership error!" : nil
-        error_node = node.empty? ? "Request node has no permission defined!" : nil
-        error_reader = reader.empty? ? "Request reader has no permission defined!" : nil
-        [permission, [error_group,error_node,error_reader]]
+        error_node = node.empty? ? "Request node without permissions!" : nil
+        error_reader = reader.empty? ? "Request reader without permissions!" : nil
+        [permission, [error_permission,error_group,error_node,error_reader]]
       end
       # @todo Document this method
       def newid_request(msg)
