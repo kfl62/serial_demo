@@ -67,14 +67,13 @@ module Ib
       def check_permission(msg)
         permission = []
         group = Key[:keyId => Msg.string_keyId(msg)].owner.groups
-        node = Node[:sid => Msg.string_sid(msg)].request_permissions
-        #TODO check if reader owns node, for now is ambiguous
-        reader = Reader[:order => Msg.string_reader(msg)].permissions
-        group.each{|g| permission << (g.permissions & node & reader)}
+        node = Node[:sid => Msg.string_sid(msg)]
+        reader = node.readers_dataset.filter(:order => Msg.string_reader(msg)).first
+        group.each{|g| permission << (g.permissions & node.request_permissions & reader.permissions)}
         error_permission = permission.flatten.empty? ? "No permission!" : nil
         error_group =  group.empty? ? "Group membership error!" : nil
-        error_node = node.empty? ? "Request node without permissions!" : nil
-        error_reader = reader.empty? ? "Request reader without permissions!" : nil
+        error_node = node.request_permissions.empty? ? "Request node without permissions!" : nil
+        error_reader = reader.permissions.empty? ? "Request reader without permissions!" : nil
         [permission, [error_permission,error_group,error_node,error_reader]]
       end
       # @todo Document this method
