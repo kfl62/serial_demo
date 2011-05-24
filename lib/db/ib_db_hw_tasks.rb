@@ -31,6 +31,7 @@ module Ib
       class Task < Sequel::Model
         set_dataset :hw_tasks
         plugin :timestamps
+        plugin :validation_helpers
 
         one_to_many :devices
         class << self
