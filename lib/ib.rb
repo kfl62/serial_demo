@@ -56,16 +56,4 @@ module Ib
   autoload :Db,         'db'
   autoload :Serial,     'serial'
 
-  module Serial
-
-  end
-
-  module Db
-    autoload :Hw,       'db/hw'
-    autoload :Log,      'db/log'
-    autoload :Persons,  'db/persons'
-  end
-
-  module Web
-  end
 end
