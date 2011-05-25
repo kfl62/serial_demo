@@ -1,9 +1,8 @@
 #encoding: utf-8
-require './ib_serial'
 module Ib
   module Serial
     class Daemon
-      include Ib::Serial::Utils
+      include Utils
 
       class << self
         def run
@@ -13,14 +12,14 @@ module Ib
 
       def initialize
         self.options = {
-          :device => "/dev/ttyS0",
+          :device => '/dev/ttyS0',
           :baud_rate => 115200,
           :debug => false
         }
         start
       end
       def start
-        puts "Start watching serial communication on: #{options.dev}"
+        puts "\nConnected to: #{options[:device]}\n"
         trap("INT"){
           stop
           exit
@@ -29,18 +28,16 @@ module Ib
           stop
           exit
         }
-        @ibs = Ib::Serial::Server.new(options.device, options.baud_rate)
-        msg = @ibs.gets
+        self.ibs = Server.new(options[:device], options[:baud_rate])
+        msg = self.ibs.gets
         if msg.length == 22
-          @ibs.handle(msg)
+          self.ibs.handle(msg)
         end
       end
       def stop
-        puts "Connection to  #{options.dev} closed!"
-        @ibs.close
+        puts "\nClosed connection to: #{options[:device]} !"
+        self.ibs.close
       end
     end
   end
 end
-
-Ib::Serial::Daemon.run

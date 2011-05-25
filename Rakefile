@@ -56,11 +56,8 @@ namespace :run do
   end
   desc "Watching serial port"
   task :serial do
-    require "./lib/ib_serial.rb"
-    puts "Listening on #{Ib::Serial::SerialConfig.dev}"
-    while true
-      Ib::Serial.server
-    end
+    require "./lib/ib.rb"
+      Ib::Serial::Daemon.run
   end
 end
 

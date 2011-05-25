@@ -4,9 +4,10 @@ module Ib
   module Serial
     # @todo document this class
     class Server < SerialPort
-      include Db::Hw
-      include Db::Persons
-      include Db::Log
+      include Utils
+      include Ib::Db::Hw
+      include Ib::Db::Persons
+      include Ib::Db::Log
 
       # @todo Document this method
       def handle(msg)
