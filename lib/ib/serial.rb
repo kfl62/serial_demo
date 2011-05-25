@@ -32,5 +32,3 @@ module Ib
     autoload :Server,   'serial/server'
   end
 end
-
-

@@ -5,17 +5,17 @@ module Ib
     def options
       Ib.options
     end
-    def options=(obj)
-      Ib.options = obj
+    def options=(v)
+      Ib.options = v
     end
     def ibs
       Ib.ibs
     end
-    def ibs=(obj)
-      Ib.ibs = obj
+    def ibs=(v)
+      Ib.ibs = v
     end
-    def base_dir
-      Ib.base_dir
+    def app_root
+      Ib.app_root
     end
     def log_path
       Ib.log_path
