@@ -1,16 +1,15 @@
 #encoding: utf-8
-
 module Ib
   module Web
     # #Assets
     module Assets
       # #Sass/Compass Handler
       class Compass < Sinatra::Base
-        set :views, File.join(Ib::Config::WebConfig.sinatra_views, 'assets', 'stylesheets')
-
+        register Mixins
+        set :views, File.join(sinatra_views, 'assets', 'stylesheets')
         # load Compass configuration file
         configure do
-          compass_config = File.join(Ib::Config::WebConfig.sinatra_conf,'compass.rb')
+          compass_config = File.join(app_root,'config','compass.rb')
           ::Compass.add_project_configuration(compass_config) \
             unless ::Compass.configuration.name == compass_config
         end
@@ -24,7 +23,8 @@ module Ib
 
       # #Coffeescript Handler
       class Coffee < Sinatra::Base
-        set :views, File.join(Ib::Config::WebConfig.sinatra_views, 'assets','coffeescripts')
+        register Mixins
+        set :views, File.join(sinatra_views, 'assets','coffeescripts')
 
         # @todo Document this method
         get '/javascripts/:name.js' do

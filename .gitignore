@@ -8,3 +8,4 @@ public/docs/*
 /config/simple_conf.yaml
 Gemfile.lock
 public/javascripts/dojo/*
+log/*

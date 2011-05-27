@@ -6,6 +6,7 @@
 --charset utf-8
 --protected
 --private
+--no-private
 --no-stats
 --plugin yard-sinatra
 --name-tag 'action: What\'s happening'

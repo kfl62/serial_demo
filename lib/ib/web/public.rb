@@ -5,12 +5,12 @@ module Ib
     # #IButton public pages
     # @todo document this class
     class Public < Sinatra::Base
+      register Mixins
       use Assets::Compass
       use Assets::Coffee
 
-      set :views, File.join(Ib::Config::WebConfig.sinatra_views, 'public')
+      set :views, File.join(sinatra_views, 'public')
 
-      # @private GET '/'{{{2
       # Just returns the index.html.
       #
       # In our case the index.hml is the README.md rendered using

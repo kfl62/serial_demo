@@ -30,5 +30,6 @@ module Ib
 
     autoload :Daemon,   'serial/daemon'
     autoload :Server,   'serial/server'
+    autoload :Msg,      'serial/msg'
   end
 end

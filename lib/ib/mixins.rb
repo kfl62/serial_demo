@@ -1,28 +1,40 @@
 #encoding: utf-8
 
 module Ib
-  module Utils
-    def options
-      Ib.options
+  module Mixins
+    # @todo
+    def opt
+      Ib.opt
     end
-    def options=(v)
-      Ib.options = v
+    # @todo
+    def opt=(v)
+      Ib.opt = v
     end
+    # @todo
     def ibs
       Ib.ibs
     end
+    # @todo
     def ibs=(v)
       Ib.ibs = v
     end
+    # @todo
     def app_root
       Ib.app_root
     end
+    # @todo
+    def sinatra_views
+      Ib.sinatra_views
+    end
+    # @todo
     def log_path
       Ib.log_path
     end
+    # @todo
     def pid_dir
       Ib.pid_dir
     end
+    # @todo
     def logger
       Ib.logger
     end

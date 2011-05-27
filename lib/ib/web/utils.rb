@@ -7,7 +7,7 @@ module Ib
       include Db::Hw
       include Db::Persons
 
-      set :views, File.join(Ib::Config::WebConfig.sinatra_views, 'utils')
+      set :views, File.join(Ib.sinatra_views, 'utils')
 
       # @todo Document this method
       get '/msg/:what/:kind' do |w,k|

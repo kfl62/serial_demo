@@ -1,8 +1,7 @@
 #! /usr/bin/env ruby
 #encoding: utf-8
-
-require './config/ib_config'
-require './lib/ib_db'
+require 'web/helpers/haml'
+require 'web/helpers/sinatra'
 
 module Ib
   # #Ib::Web module
@@ -12,24 +11,26 @@ module Ib
   #   ...
   # @todo document this model
   module Web
-    include Config
-    require 'ib_web_assets'
-    require 'ib_web_public'
-    require 'ib_web_utils'
-    require 'ib_web_control'
-    require 'ib_web_control_tsk'
+    # initialize options
+    config_file = File.join(Ib.app_root,'config','simple_conf.yaml')
+    if File.exists?(config_file)
+      opts = YAML.load_file(config_file)["Web"]
+      opts.each_pair do |k,v|
+        Ib.opt.send k + "=",v
+      end
+    Ib.opt.device =  YAML.load_file(config_file)["Serial"]["device"]
+    Ib.opt.baud_rate =  YAML.load_file(config_file)["Serial"]["baud_rate"]
+    end
 
-    require 'ib_web_helpers_haml'
-    require 'ib_web_helpers_sinatra'
-    Haml::Helpers.class_eval('include Helpers::Haml::Helpers')
-    Sinatra::Base.class_eval('include Helpers::Sinatra::Helpers')
-    Sinatra::Base.set(:root, WebConfig.sinatra_root)
-    Sinatra::Base.set(:haml, :format => :html5, :attr_wrapper => '"')
-
+    Haml::Helpers.class_eval('include Helpers::Haml')
+    Sinatra::Base.class_eval('include Helpers::Sinatra')
+    Sinatra::Base.set(
+      :root => Ib.app_root,
+      :haml => {:format => :html5, :attr_wrapper => '"'}
+    )
     # @todo document this method
     def self.server
       Rack::Builder.new do
-
         use Rack::Session::Cookie, :secret => 'zsdgryst34kkufklfSwsqwess'
         use Rack::Flash
         use Rack::Rewrite do
@@ -54,11 +55,12 @@ module Ib
         end
       end
     end
+    autoload :Control,      'web/control'
+    autoload :ControlTsk,   'web/control_tsk'
+    autoload :Public,       'web/public'
+    autoload :Utils,        'web/utils'
+    autoload :Assets,       'web/assets'
   end
 end
 
-# run as standalone rb file
-#if __FILE__ == $0
-  #run Ib::Web.server
-#end
 

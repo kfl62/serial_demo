@@ -4,7 +4,7 @@ module Ib
   module Serial
     # @todo document this class
     class Server < SerialPort
-      include Utils
+      include Mixins
       include Ib::Db::Hw
       include Ib::Db::Persons
       include Ib::Db::Log

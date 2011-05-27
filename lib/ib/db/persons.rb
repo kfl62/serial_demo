@@ -7,7 +7,7 @@ module Ib
       autoload :Admin,      'db/persons/admin'
       autoload :Group,      'db/persons/group'
       autoload :Owner,      'db/persons/owner'
-      autoload :Permission, '/db/persons/permission'
+      autoload :Permission, 'db/persons/permission'
     end
   end
 end

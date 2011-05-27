@@ -5,13 +5,13 @@ module Ib
     # #IButton Control Center
     # @todo Document this class
     class Control < Sinatra::Base
+      register Mixins
       include Db::Hw
       include Db::Persons
       use Assets::Compass
       use Assets::Coffee
 
-      set :views, File.join(Ib::Config::WebConfig.sinatra_views, 'control')
-      # @private GET '/'{{{2
+      set :views, File.join(sinatra_views, 'control')
       # Just returns the index.html.
       #
       # __Note:__<br />- don't forget we are in {Control} class
@@ -22,7 +22,6 @@ module Ib
         ds = Ib::Db::Log::Access.order(:id.desc).limit(15)
         haml :index, :layout => request.xhr? ? false : :layout, :locals => {:ds  => ds}
       end
-      # @private GET '/:model/:page/list'{{{2
       # Route for listing tables content in record/row manner in
       # browsers in browsers with _js enabled || disabled_.<br />
       # Instead of REST-ful `GET /model` which returns a list of
@@ -37,7 +36,6 @@ module Ib
         ds = obj.name =~ sort_desc ? obj.order(:id.desc).paginate(p.to_i,25) : obj.paginate(p.to_i,25)
         haml :list, :layout => request.xhr? ? false : :layout, :locals => {:ds  => ds, :path => m}
       end
-      # @private GET '/:model/new'{{{2
       # Route for creating content for a new record in browsers with
       # _js enabled || disabled_.<br />Similar with REST-ful `POST /model/new` witch
       # returns a form for creating a new record.
@@ -48,7 +46,6 @@ module Ib
         r = obj
         haml :post, :layout => request.xhr? ? false : :layout, :locals => {:r  => r, :path => m}
       end
-      # @private POST '/:model/new'{{{2
       # Route for creating (inserting) the new record in browsers with
       # _js enabled || disabled_.<br />Similar with REST-ful `POST /model/new` witch
       # returns the form again if the input is invalid, otherwise redirects
@@ -62,7 +59,6 @@ module Ib
         r = obj.create(fields)
         flash[:msg] = {:msg => {:txt => t('crud.msg.post', :model => r.model.name, :id => r.id.to_s), :class => "info"}}.to_json
       end
-      # @private GET '/:model/:id'{{{2
       # Route for viewing content of one record in browsers
       # with _js enabled || disabled_.<br />Similar with REST-ful
       # `GET /model/id` witch returns a record.
@@ -74,7 +70,6 @@ module Ib
         r = obj[id.to_i]
         haml :get, :layout => request.xhr? ? false : :layout, :locals => {:r  => r, :path => m}
       end
-      # @private GET '/:model/:id/edit'{{{2
       # Route for editing content of one record in browsers
       # with _js enabled || disabled_.<br />Similar with REST-ful
       # `GET /model/id/edit` witch returns a form for editing a record
@@ -86,7 +81,6 @@ module Ib
         r = obj[id.to_i]
         haml :put, :layout => request.xhr? ? false : :layout, :locals => {:r  => r, :path => m}
       end
-      # @private POST '/:model/:id/edit'{{{2
       # Route for saving edited content of one record in browsers with
       #  _js disabled_.<br />Similar with REST-ful `POST /model/id/edit` witch
       # updates the selected record
@@ -101,7 +95,6 @@ module Ib
         r.update(params[:form])
         haml :get, :layout => request.xhr? ? false : :layout, :locals => {:r  => r, :path => m}
       end
-      # @private PUT '/:model/:id'{{{2
       # Route for saving edited content of one record in browsers with
       # _js enabled_.<br />Instead of REST-ful `POST /model/id/edit` witch
       # updates the selected record, we use Sinatra's `put` verb, for same
@@ -117,7 +110,6 @@ module Ib
         r.update(params[:form])
         flash[:msg] = {:msg => {:txt => t('crud.msg.put', :model => r.model.name, :id => r.id.to_s), :class => "info"}}.to_json
       end
-      # @private GET '/:model/:id/delete'{{{2
       # Route for delete content of one record in browsers with
       # _js disabled_.<br />Similar with REST-ful `GET /model/id/delete` witch
       # returns a form for deleting the record (may be simply a confirmation).
@@ -134,7 +126,6 @@ module Ib
         r = obj[id.to_i]
         haml :delete, :layout => request.xhr? ? false : :layout, :locals => {:r  => r, :path => m}
       end
-      # @private POST '/:model/:id/delete'{{{2
       # Route for delete content of one record in browsers with
       # _js disabled_.<br />Similar with REST-ful `POST /model/id/delete` witch
       # deletes the selected record.
@@ -148,7 +139,6 @@ module Ib
         r = obj[id.to_i]
         r.destroy
       end
-      # @private DELETE '/:model/:id'{{{2
       # Route for delete content of one record in browsers with
       # _js enabled_.<br />Instead of REST-ful `POST /model/id/delete` witch
       # deletes the selected record, we use Sinatra's `delete` verb, for same
@@ -164,14 +154,12 @@ module Ib
         r.destroy
         flash[:msg] = {:msg => {:txt => t('crud.msg.delete', :model => r.model.name, :id => r.id.to_s), :class => "info"}}.to_json
       end
-      # @private GET '/:what/:whit'{{{2
       # Define associations route
       # @todo Document this route
       get '/associations/:what/:with' do |what,with|
         path = "#{what}/#{with}"
         haml :associations, :layout => request.xhr? ? false : :layout, :locals => {:path => path,:what => what}
       end
-      # @private PUT '/:what/:whit'{{{2
       # Save associations route
       # @todo Document this route
       put '/associations/:what/:with' do |what,with|
@@ -197,7 +185,6 @@ module Ib
         end
         flash[:msg] = {:msg => {:txt => t('assoc.msg', :model => modelize(what).model.name), :class => "info"}}.to_json
       end
-      # @private POST '/:what/:whit'{{{2
       # Save associations route
       # @todo Document this route
       post '/associations/:what/:with/edit' do |what,with|
