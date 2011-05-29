@@ -25,13 +25,10 @@ module Ib
       # @todo
       post "/execute" do
         @msg, @db_access_log, @db_error_log = serial_msg(params)
-        if Ib.ibs
+        Ib::Serial::Server.open(Ib.opt.device,Ib.opt.baud_rate) do |ibs|
           ibs.write @msg
-        else
-          Ib::Serial::Server.open(Ib.opt.device,Ib.opt.baud_rate) do |ibs|
-            ibs.write @msg
-          end
         end
+        Ib::Db::Log::Access.insert @db_access_log unless @db_access_log.empty?
         haml '= "Last command:<br>#{@msg.chop}&#92;n<br><br> #{@db_access_log.join(" | ")}"' unless @db_access_log.empty?
       end
 
