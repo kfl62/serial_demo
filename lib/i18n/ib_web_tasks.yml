@@ -3,4 +3,4 @@ en:
     title: "Please configure command"
     opcode: [["Select opcode", "00"], ["ACCESS_OK", "02"], ["ACCESS_DENY", "03"], ["NEWID_SET", "05"], ["SET_PARAM", "07"]]
     node: "Select node"
-    warning: "Just for testing!<br> If You intend to change the <b>sid</b>, to avoid strange behavior caused by database, <b>must run serial server</b> to accomplish the suited changes in database!"
+    warning: "Just for testing!<br> If You intend to change the <b>sid</b>, to avoid strange behavior caused by database, <b>must run serial server</b> to accomplish the suited changes in database!<br/> NEWID_SET and SET_PARAMS options are disposed at the moment :("

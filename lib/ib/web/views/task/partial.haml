@@ -5,8 +5,8 @@
     - devices.each do |d|
       %option{:value => d.id}= d.name
 - when "05"
-  %input.params.sid{:name => "new_sid",:value => "0"}
+  %input.params.sid{:name => "new_sid",:value => "0", :disabled => true}
 - when "07"
-  %input.params.data{:name => "new_param",:value => ""}
+  %input.params.data{:name => "new_param",:value => "", :disabled => true}
 - else
   "Opcode not defined in partial"
