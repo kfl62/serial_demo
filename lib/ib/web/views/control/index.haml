@@ -34,6 +34,11 @@
                 - else
                   %span= f[:value]
           - i += 1
+        - while i < 15
+          %tr
+            %td{:colspan => ds.first.table_data.length + 1}
+              %span &nbsp;
+          - i += 1
       %tfoot
         %tr
           %td{:colspan => "9"}= t('monitor.log.info')
