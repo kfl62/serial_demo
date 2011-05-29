@@ -1,6 +1,10 @@
 #encoding: utf-8
 
 module Ib
+  # #Ib::Mixins module
+  # ##Description:
+  # ##Scope:
+  # @todo document this module
   module Mixins
     # @todo
     def opt

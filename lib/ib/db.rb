@@ -3,13 +3,16 @@
 require "sequel"
 
 module Ib
+  # #Ib::Db module
+  # ##Description:
+  # ##Scope:
   # @todo document this module
   module Db
 
     #case DbConfig.database
     #when 'sqlite'
       require 'sqlite3'
-      #DB = Sequel.connect("sqlite://#{DbConfig.sqlite_path}/#{DbConfig.sqlite_file}") unless defined?(DB)
+      # DB = Sequel.connect("sqlite://#{DbConfig.sqlite_path}/#{DbConfig.sqlite_file}") unless defined?(DB)
       DB = Sequel.connect("sqlite://db/ibutton.sqlite3") unless defined?(DB)
    #when 'mysql'
       #require 'mysql'

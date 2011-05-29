@@ -1,8 +1,12 @@
 #encoding: utf-8
 module Ib
   module Serial
+    # #Ib::Db::Serial::Telegram module
+    # ##Description
+    # ##Scope
     # The 22 character length ASCII string
     # START_BYTE ">", STOP_BYTE "\n"
+    # @todo document this module
     module Telegram
       # ACTION_REQUEST
       #
@@ -15,6 +19,7 @@ module Ib
       #        10,12        keyId                 123456789ABC
       #        22,1         STOP_BYTE             \n
       #      # Note: START_BYTE, STOP_BYTE are removed before this method
+      # @param [String] msg
       # @return [Array]
       def tg_opcode_01(msg)
         request_node_sid = get_set_sid(msg[0,4])
@@ -166,6 +171,8 @@ module Ib
         [opcode, request_node_sid]
       end
       # Depending on the context, delete or add the START_BYTE and STOP_BYTE
+      # @param [String] msg
+      # @return [String]
       def get_set_msg(msg)
         msg.class == String ? msg.slice(/[^>+].*[^\n+]/) : [">",msg.join,"\n"].join
       end

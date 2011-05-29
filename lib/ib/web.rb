@@ -21,7 +21,6 @@ module Ib
     Ib.opt.device =  YAML.load_file(config_file)["Serial"]["device"]
     Ib.opt.baud_rate =  YAML.load_file(config_file)["Serial"]["baud_rate"]
     end
-
     Haml::Helpers.class_eval('include Helpers::Haml')
     Sinatra::Base.class_eval('include Helpers::Sinatra')
     Sinatra::Base.set(

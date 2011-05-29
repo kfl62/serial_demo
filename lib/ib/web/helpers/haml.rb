@@ -2,7 +2,12 @@
 
 module Ib
   module Web
+    # Just for convenience, namespace
     module Helpers
+      # #Ib::Web::Helpers::Haml module
+      # ##Description
+      # ##Scope
+      # @todo document this module
       module Haml
         # stolen from http://gist.github.com/119874 and made a tiny bit more robust by me
         # this implementation uses haml by default. if you want to use any other template mechanism

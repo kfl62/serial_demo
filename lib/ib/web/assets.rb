@@ -1,7 +1,10 @@
 #encoding: utf-8
 module Ib
   module Web
-    # #Assets
+    # #Ib::Web::Assets module
+    # ##Description
+    # ##Scope
+    # @todo document this module
     module Assets
       # #Sass/Compass Handler
       class Compass < Sinatra::Base

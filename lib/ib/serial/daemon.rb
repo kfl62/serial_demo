@@ -1,9 +1,9 @@
 #encoding: utf-8
 module Ib
   module Serial
+    # @todo
     class Daemon
       include Mixins
-      # Just a convenience method for Ib::Serial::Daemon.new
       class << self
         # Initialize and run(stop) server on serial port
         def run

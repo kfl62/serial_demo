@@ -11,7 +11,7 @@ end
 require 'mixins'
 # @todo documentation
 module Ib
-
+  # @todo
   VERSION = "0.1.0"
 
   @@opt = OpenStruct.new

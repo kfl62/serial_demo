@@ -3,7 +3,9 @@
 module Ib
   module Web
     module Helpers
-      # #Sinatra helpers
+      # #Ib::Web::Heplers::Sinatra module
+      # ##Descrition
+      # ##Scope
       # Helper methods used in ... classes
       module Sinatra
         # @return [String] return `Hash` key,value pairs as a `String`
