@@ -43,7 +43,7 @@ module Ib
       @@logger.level = opt.debug ? Logger::DEBUG : Logger::INFO
       @@logger.instance_eval do
         def format_message(severity, datetime, progname, msg)
-          "[%s %s] - %s\n" % [ severity, datetime.strftime("%Y-%m-%d %H:%M:%S"), msg ]
+          "[%s %s] - %s\n" % [ severity.ljust(5), datetime.strftime("%Y-%m-%d %H:%M:%S"), msg ]
         end
       end
       @@logger

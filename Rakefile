@@ -40,12 +40,12 @@ namespace :console do
   desc "Irb with DB environment loaded"
   task :db do
     puts "Starting Irb with DB environment loaded"
-    exec "irb -r ./lib/ib_db.rb"
+    exec "irb -r./lib/ib"
   end
   desc "Irb with Serial environment loaded"
   task :serial do
     puts "Starting Irb with Serial environment loaded"
-    exec "irb -r ./lib/ib_serial.rb"
+    exec "irb -r ./lib/ib"
   end
 end
 namespace :run do

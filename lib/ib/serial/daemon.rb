@@ -44,26 +44,26 @@ module Ib
           puts "\n\nDebug message:\n#{e.message}\n#{e.backtrace.join("\n")}" if opt.debug
           exit 1
         else
-          logger.info "Connected to: #{opt.device}"
+          logger.info("Connected to: #{opt.device}")
         end
         while true do
           begin
             msg = ibs.gets
             raise SerialError, "Incorrect data length: #{msg.length}" if msg.length != 22
           rescue SerialError => e
-            logger.error e.message
+            logger.error(e.message)
           end
-          logger.debug "Msg ASCII: #{@msg.chop}\\n"
-          ibs.handle(msg)
+          logger.debug("Msg ASCII: #{msg.chop}\\n")
+          ibs.srv_handle_incoming(msg)
         end
       end
       # @todo
       def stop
-        logger.info "Disconnected from: #{opt.device}"
+        logger.info("Disconnected from: #{opt.device}")
         ibs.close
       end
       # @todo
-      def load_from_file
+      def load_options_from_file
         config_file = File.join(app_root,'config','simple_conf.yaml')
         if File.exists?(config_file)
           opts = YAML.load_file(config_file)["Serial"]
@@ -71,6 +71,7 @@ module Ib
             opt.send k + "=",v
           end
         end
+        opt
       end
       # @todo
       def parse_opt
@@ -94,13 +95,13 @@ module Ib
                    "Integer from 50 to 256000.You may set in config file!",
                    "(default: #{opt.baud_rate})"){|v| opt.baud_rate = v}
             opts.separator ""; opts.separator "Other opt:"
-            opts.on_tail("-h", "--help", "Display this usage information."){puts "#{opt}\n";exit}
+            opts.on_tail("-h", "--help", "Display this usage information."){puts "#{opts}\n";exit}
             opts.on_tail("-v", "--version", "Display version"){puts "Ibutton #{VERSION}";exit}
           }
           begin opts.parse! ARGV
           rescue  OptionParser::InvalidOption => e
             puts e
-            puts opt
+            puts opts
             exit 1
           end
           opt
@@ -115,7 +116,7 @@ module Ib
             Process.kill(15, pid)
             FileUtils.rm f
             puts "Daemon stopped!" if opt.kill
-            logger.info "Serial daemon stopped"
+            logger.info("Serial daemon stopped")
           rescue => e
             puts "Failed to kill! Pid=#{pid}: #{e}"
           end
@@ -139,7 +140,7 @@ module Ib
             exit 1
           end
           store_pid(Process.pid)
-          logger.info "Serial daemon started"
+          logger.info("Serial daemon started")
           puts "Daemon started!"
           STDIN.reopen '/dev/null'
           STDOUT.reopen '/dev/null', "a"

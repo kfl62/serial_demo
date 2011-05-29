@@ -5,19 +5,23 @@ module Ib
   module Serial
     # @todo
     class SerialError < StandardError; end
+    # @todo
+    class SerialHwError < SerialError; end
+    # @todo
+    class SerialPermissionError < SerialError; end
 
     START_BYTE = ">"
     STOP_BYTE  = "\n"
 
     # @private opcodes
-    ACCESS_REQUEST  = "01"
-    ACCESS_OK       = "02"
-    ACCESS_DENY     = "03"
+    ACTION_REQUEST  = "01"
+    ACTION_OK       = "02"
+    ACTION_DENY     = "03"
     NEWID_REQUEST   = "04"
     NEWID_SET       = "05"
     NEWID_ACCEPTED  = "06"
     SET_PARAM       = "07"
-    RESET_ID        = "08"
+    INSIDE_BUTTON   = "08"
     SET_DEFAULT     = "09"
     COM_ALIVE       = "0A"
     UPG_REQUEST     = "10"
@@ -30,6 +34,6 @@ module Ib
 
     autoload :Daemon,   'serial/daemon'
     autoload :Server,   'serial/server'
-    autoload :Msg,      'serial/msg'
+    autoload :Telegram, 'serial/telegram'
   end
 end

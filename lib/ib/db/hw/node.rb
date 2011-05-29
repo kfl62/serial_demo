@@ -95,6 +95,14 @@ module Ib
         def max_con_devices
           devices_nr.to_s + '/' + devices.length.to_s
         end
+        # @todo
+        def by_reader_order(order)
+          readers_dataset.filter(:order => order).first
+        end
+        # @todo
+        def by_device_order(order)
+          devices_dataset.filter(:order => order).first
+        end
         # @return [Array of Hashes] one Hash for each column
         # @example Each hash contains:
         #   {
