@@ -18,8 +18,8 @@ module Ib
       opts.each_pair do |k,v|
         Ib.opt.send k + "=",v
       end
-    Ib.opt.device =  YAML.load_file(config_file)["Serial"]["device"]
-    Ib.opt.baud_rate =  YAML.load_file(config_file)["Serial"]["baud_rate"]
+    Ib.opt.device =  YAML.load_file(config_file)["Serial"]["device"] || "/dev/ttyS0"
+    Ib.opt.baud_rate =  YAML.load_file(config_file)["Serial"]["baud_rate"] || 115200
     end
     Haml::Helpers.class_eval('include Helpers::Haml')
     Sinatra::Base.class_eval('include Helpers::Sinatra')
