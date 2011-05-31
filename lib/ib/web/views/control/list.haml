@@ -51,7 +51,20 @@
                 - unless ds.last_page?
                   %a.bo{:href => "/ctrl/#{path}/#{ds.page_count}/list"} &raquo;
               &nbsp;&nbsp;|&nbsp;&nbsp;
-            %a.new{:href => "/ctrl/#{path}/new", :title => "Create new!"}
+            - unless ds.model.name.include?("Log")
+              %a.new{:href => "/ctrl/#{path}/new", :title => "Create new!"}
             %span &nbsp;&nbsp;|&nbsp;&nbsp;Search... soon :)
 - else
-  %h4 Empty table
+  %table.list
+    %thead
+      %tr
+        %td
+          %h4  Empty table
+    %tfoot
+      %tr
+        %td.last_row
+          %span
+            %br
+            %span.paginate You may consider to add a new record :)
+            - unless ds.model.name.include?("Log")
+              %a.new{:href => "/ctrl/#{path}/new", :title => "Create new!"}

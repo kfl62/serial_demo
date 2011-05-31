@@ -47,18 +47,18 @@ module Ib
           # @todo document this method
           def new_record_defaults
             [
-              {:css => "hidden",:name  => "group_id",:label => I18n.t('persons_permission.group'),:value => 1},
-              {:css => "hidden",:name  => "request_node_id",:label => I18n.t('persons_permission.request_node'),:value => 1},
-              {:css => "hidden",:name  => "request_reader_id",:label => I18n.t('persons_permission.request_reader'),:value => 1},
-              {:css => "hidden",:name  => "response_node_id",:label => I18n.t('persons_permission.response_node'),:value => 1},
-              {:css => "hidden",:name  => "response_device_id",:label => I18n.t('persons_permission.response_device'),:value => 1}
+              {:css => "hidden",:name  => "group_id",:label => I18n.t('persons_permission.group'),:value => "nil"},
+              {:css => "hidden",:name  => "request_node_id",:label => I18n.t('persons_permission.request_node'),:value => "nil"},
+              {:css => "hidden",:name  => "request_reader_id",:label => I18n.t('persons_permission.request_reader'),:value => "nil"},
+              {:css => "hidden",:name  => "response_node_id",:label => I18n.t('persons_permission.response_node'),:value => "nil"},
+              {:css => "hidden",:name  => "response_device_id",:label => I18n.t('persons_permission.response_device'),:value => "nil"}
             ]
           end
           # @todo document this method
           def auto_search(e)
             permissions = []
             all do |p|
-              label = "#{p.response_device.task.name} on #{p.response_node.name}"
+              label = "#{p.response_device.task.name rescue 'Unknown'} on #{p.response_node.name rescue 'Unknown'}"
               permissions << {:id => p.id,
                               :name => "permission",
                               :label => label,
@@ -92,11 +92,11 @@ module Ib
         def table_data
           [
             {:css => "integer",:name => "id",:label => I18n.t('mdl.id'),:value => id},
-            {:css => "normal",:name  => "group_id",:label => I18n.t('persons_permission.group'),:value => group.name},
-            {:css => "normal",:name  => "request_node_id",:label => I18n.t('persons_permission.request_node'),:value => request_node.name},
-            {:css => "normal",:name  => "request_reader_id",:label => I18n.t('persons_permission.request_reader'),:value => request_reader.name},
-            {:css => "normal",:name  => "response_node_id",:label => I18n.t('persons_permission.response_node'),:value => response_node.name},
-            {:css => "normal",:name  => "response_device_id",:label => I18n.t('persons_permission.response_device'),:value => response_device.name},
+            {:css => "normal",:name  => "group_id",:label => I18n.t('persons_permission.group'),:value => (group.name rescue 'Undefined')},
+            {:css => "normal",:name  => "request_node_id",:label => I18n.t('persons_permission.request_node'),:value => (request_node.name rescue 'Undefined')},
+            {:css => "normal",:name  => "request_reader_id",:label => I18n.t('persons_permission.request_reader'),:value => (request_reader.name rescue 'Undefined')},
+            {:css => "normal",:name  => "response_node_id",:label => I18n.t('persons_permission.response_node'),:value => (response_node.name rescue 'Undefined')},
+            {:css => "normal",:name  => "response_device_id",:label => I18n.t('persons_permission.response_device'),:value => (response_device.name rescue 'Undefined')},
             {:css => "datetime",:name  => "created_at",:label => I18n.t('mdl.created_at'),:value => created_at},
             {:css => "datetime",:name  => "updated_at",:label => I18n.t('mdl.updated_at'),:value => updated_at}
           ]
