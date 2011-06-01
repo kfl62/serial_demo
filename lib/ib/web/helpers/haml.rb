@@ -74,6 +74,15 @@ module Ib
           with = (what == 'permission') ? "all related" : ary[1].split('_')[1]
           t("associate.title", :what => what.capitalize, :with => with.capitalize)
         end
+        # @todo
+        def uptime(ctime)
+          diff = Time.now - ctime
+          sec  = diff.modulo(60)
+          min  = diff.divmod(60)[0].modulo(60)
+          hour = diff.divmod(60)[0].divmod(60)[0].modulo(60)
+          day  = diff.divmod(60)[0].divmod(60)[0].divmod(60)[0].modulo(24)
+          "%d days-%02d:%02d:%02d" % [day,hour,min,sec]
+        end
       end
     end
   end
