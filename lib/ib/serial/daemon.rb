@@ -47,14 +47,15 @@ module Ib
           logger.info("Connected to: #{opt.device}")
         end
         while true do
-          logger.debug("Msg ASCII: #{msg.chop}\\n")
           begin
             msg = ibs.gets
             raise SerialError, "Incorrect data length: #{msg.length}" if msg.length != 22
           rescue SerialError => e
+            logger.debug("Msg ASCII: #{msg.chop}\\n")
             logger.error(e.message)
             logger.error("Message dropped!")
           else
+            logger.debug("Msg ASCII: #{msg.chop}\\n")
             ibs.srv_handle_incoming(msg)
           end
         end
