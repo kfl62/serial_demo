@@ -15,8 +15,12 @@ module Ib
         opt.device = '/dev/ttyS0'
         opt.baud_rate = 115200
         opt.debug = false
+        opt.mail = false
         load_options_from_file
-        parse_opt
+        parse_opt_serial
+        if opt.mail
+          parse_opt_mail
+        end
         if opt.kill
           kill_pid
         end
@@ -77,27 +81,29 @@ module Ib
         opt
       end
       # @todo
-      def parse_opt
+      def parse_opt_serial
         if ARGV.any?
           require 'optparse'
           opts = OptionParser.new { |opts|
             opts.summary_width = 25
             opts.banner = "Ibutton server (#{VERSION})\n\n"\
-                         "Usage: ibutton [-d] [-k] [--debug] [-p port] [-b baud]\n"\
+                         "Usage: ibutton [-d] [-k] [--debug] [--no-mail]\n"\
+                         "               [-p port] [-b baud]\n"\
                          "       ibutton --help\n"\
                          "       ibutton --version"
-            opts.separator ""; opts.separator "Control opt:"
+            opts.separator ""; opts.separator "Control options:"
             opts.on("-d", "--daemon", "Run daemonized in the background"){|v| opt.daemonize = v}
             opts.on("-k", "--kill", "Kill daemon on port #{opt.device}."){|v| opt.kill = v}
             opts.on("--debug","Enable debug level logging"){|v| opt.debug = true}
-            opts.separator ""; opts.separator "Serial port opt:"
+            opts.on("--mail","Enable mailer"){|v| opt.mail = true}
+            opts.separator ""; opts.separator "Serial port options:"
             opts.on("-p", "--port Port", String,
                    "File name of the device.You may set in config file!",
                    "(default: #{opt.device})"){|v| opt.device = v}
             opts.on("-b", "--baud Baudrate", Integer,
                    "Integer from 50 to 256000.You may set in config file!",
                    "(default: #{opt.baud_rate})"){|v| opt.baud_rate = v}
-            opts.separator ""; opts.separator "Other opt:"
+            opts.separator ""; opts.separator "Other options:"
             opts.on_tail("-h", "--help", "Display this usage information."){puts "#{opts}\n";exit}
             opts.on_tail("-v", "--version", "Display version"){puts "Ibutton #{VERSION}";exit}
           }
@@ -111,15 +117,29 @@ module Ib
         end
       end
       # @todo
+      def parse_opt_mail
+        require 'pony'
+        config_file = File.join(app_root,'config','simple_conf.yaml')
+        if File.exists?(config_file)
+          opts = YAML.load_file(config_file)["Mail"]
+        end
+        Pony.options = opts
+      end
+      # @todo
       def kill_pid
         f = File.join(pid_dir,"ibutton.pid")
-        if File.file?(f)
+        s = File.join(pid_dir,"ibutton.status")
+        if File.exists?(f)
           begin
             pid = IO.read(f).chomp.to_i
             Process.kill(15, pid)
-            FileUtils.rm f
+            FileUtils.rm_f [f,s]
             puts "Daemon stopped!" if opt.kill
             logger.info("Serial daemon stopped")
+            opt.mail = YAML.load_file(s)[:last][:mail] if File.exits?(s)
+            Pony.mail(:to => Pony.options[:to],
+                      :subject => "Server status",
+                      :body => "Serial daemon stopped") if opt.mail
           rescue => e
             puts "Failed to kill! Pid=#{pid}: #{e}"
           end
@@ -131,10 +151,13 @@ module Ib
       # @todo
       def store_pid(pid)
         FileUtils.mkdir_p(pid_dir)
-        File.open(File.join(pid_dir,"ibutton.pid"), 'w'){|f| f << pid}
+        File.open(File.join(pid_dir,"ibutton.pid"), 'w'){|f| f.write(pid)}
+        last = {:last => {:debug => opt.debug, :mail => opt.mail}}
+        File.open(File.join(pid_dir,"ibutton.status"), 'w'){|f| f.write(last.to_yaml)}
       end
       # @todo
       def daemonize
+        $0 = 'ibutton'
         fork do
           Process.setsid
           exit if fork
@@ -145,6 +168,9 @@ module Ib
           store_pid(Process.pid)
           logger.info("Serial daemon started")
           puts "Daemon started!"
+          Pony.mail(:to => Pony.options[:to],
+                    :subject => "Server status",
+                    :body => "Serial daemon started") if opt.mail
           STDIN.reopen '/dev/null'
           STDOUT.reopen '/dev/null', "a"
           STDERR.reopen STDOUT

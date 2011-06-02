@@ -38,6 +38,18 @@ module Ib
           if srv_check_hw(tg_opcode_0A(msg))
             logger.debug("Alive message hw_check passed...")
             logger.debug("Alive message from #{@request_node.name} :data: #{msg[6,14]}")
+            if msg[6,2] == '01'
+              logger.warn("Alive message with last error: TASKREADKEYBLOCKED")
+              Pony.mail(:to => Pony.options[:to],
+                        :subject => "WARN: Alive with 01",
+                        :body => "Alive message with last error: TASKREADKEYBLOCKED") if opt.mail
+            end
+            if msg[6,2] == '02'
+              logger.warn("Alive message with last error: TASKREADKEYCONTOROVERFLOW")
+              Pony.mail(:to => Pony.options[:to],
+                        :subject => "WARN: Alive with 02",
+                        :body => "Alive message with last error: TASKREADKEYCONTOROVERFLOW") if opt.mail
+            end
             Status[:node_id => @request_node.id].save
           end
         else
@@ -116,6 +128,9 @@ module Ib
             raise SerialHwError, "Key with keyId=#{hw[3]} not registered in DB" if @key.nil?
           rescue SerialHwError => e
             logger.warn("Action request ignored! Reason: #{e.message}")
+            Pony.mail(:to => Pony.options[:to],
+                      :subject => "WARN: Action request",
+                      :body => "Action request ignored! Reason: #{e.message}") if opt.mail
             if @key.nil? && srv_auto_insert.include?(Key)
               db_add_key_owner(hw[3])
             end
@@ -132,6 +147,9 @@ module Ib
             raise SerialHwError, "Key with keyId=#{hw[3]} not registered in DB" if @key.nil?
          rescue SerialHwError => e
             logger.warn("NewId request ignored! Reason: #{e.message}")
+            Pony.mail(:to => Pony.options[:to],
+                      :subject => "WARN: NewID request",
+                      :body => "NewID request ignored! Reason: #{e.message}") if opt.mail
             false
           else
             true
@@ -154,6 +172,9 @@ module Ib
             raise SerialHwError, "Node with sid=#{hw[1]}! is not tracked in Status table!" if @alive_status.nil?
           rescue SerialHwError => e
             logger.warn("Alive message ignored! Reason: #{e.message}")
+            Pony.mail(:to => Pony.options[:to],
+                      :subject => "WARN: Alive message",
+                      :body => "Alive message ignored! Reason: #{e.message}") if opt.mail
             if @alive_status.nil? && srv_auto_insert.include?(Status)
               db_add_status_node(@request_node) unless @request_node.nil?
             end
@@ -184,6 +205,9 @@ module Ib
         rescue SerialPermissionError => e
           return e.message
           logger.warn e
+          Pony.mail(:to => Pony.options[:to],
+                    :subject => "WARN: Permissions",
+                    :body => "Permission denied! Reason: #{e.message}") if opt.mail
         else
           @permission = permission.flatten.first
         end
@@ -197,85 +221,20 @@ module Ib
         new_owner.save
         logger.warn("New key with keyId=#{keyId} was inserted in Key table")
         logger.warn("New owner (Owner New) was created! Rename and associate with group!")
+        Pony.mail(:to => Pony.options[:to],
+                  :subject => "WARN: New Key / Owner",
+                  :body => "New key with keyId=#{keyId} was inserted in Key table\n" +
+                           "New owner (Owner New) was created! Rename and associate with group!") if opt.mail
       end
+      # @todo
       def db_add_status_node(node)
         logger.warn("Node with sid=#{node.sid} will be inserted in Status table!")
         Status.insert([nil,Time.now,node.id,node.name,Time.now])
         logger.info("Node sid=#{node.sid} is tracked for alive status...")
+        Pony.mail(:to => Pony.options[:to],
+                  :subject => "WARN: Node in Status",
+                  :body => "Node with sid=#{node.sid} was inserted in Status table!") if opt.mail
       end
-      # # @todo Document this method
-      # def handle(msg)
-      #   msg = msg_prepare(msg)
-      #   #missing = check_missing_hw_in_db(msg)
-      #   #if missing.compact.empty?
-      #     case get_set_opcode(msg)
-      #     when ACTION_REQUEST
-      #       acTION_request(msg)
-      #     when COM_ALIVE
-      #       Msg.msg_com_alive(msg)
-      #     when NEWID_REQUEST
-      #       newid_request(msg)
-      #     when NEWID_ACCEPTED
-      #       Msg.msg_newid_accepted(msg)
-      #     else
-      #       Msg.msg_unknown_opcode(msg)
-      #     end
-      #   #else
-      #     #Msg.msg_missing_hw_in_db(missing,msg)
-      #   #end
-      # end
-      # # @todo Document this method
-      # def check_missing_hw_in_db(msg)
-      #   opcode = Msg.string_opcode(msg)
-      #   missing_node = Node[:sid => Msg.string_sid(msg)].nil? ? Msg.string_sid(msg) : nil
-      #   missing_reader = Reader[:id => Msg.string_reader(msg)].nil? ? Msg.string_reader(msg) : nil
-      #   case opcode
-      #   when ACTION_REQUEST
-      #     missing = [missing_node, missing_reader]
-      #   when NEWID_REQUEST, NEWID_ACCEPTED
-      #     missing = [nil, nil]
-      #   else
-      #     missing = [missing_node, nil]
-      #   end
-      #   missing
-      # end
-      # # @todo Document this method
-      # def acTION_request(msg)
-      #   msg_acTION_request(msg)
-      #   access_response(msg)
-      # end
-      # # @todo Document this method
-      # def access_response(msg)
-      #   permission, error = check_permission(msg)
-      #   permission = permission.flatten
-      #   error = error.compact
-      #   if error.empty?
-      #     p = permission[0]
-      #     write(START_BYTE + p.msg_response_node_sid + ACTION_OK + p.msg_request_reader_order + p.msg_response_device_order + "00" +  p.msg_response_device_taskId + STOP_BYTE)
-      #     Msg.msg_access_granted(msg,p)
-      #   else
-      #     write(START_BYTE + msg[0,4] + ACTION_DENY + "01000000000000" + STOP_BYTE)
-      #     Msg.msg_access_denied(msg,error)
-      #   end
-      # end
-      # # @todo Document this method
-      # def check_permission(msg)
-      #   permission = []
-      #   group = Key[:keyId => Msg.string_keyId(msg)].owner.groups
-      #   node = Node[:sid => Msg.string_sid(msg)]
-      #   reader = node.readers_dataset.filter(:order => Msg.string_reader(msg)).first
-      #   group.each{|g| permission << (g.permissions & node.request_permissions & reader.permissions)}
-      #   error_permission = permission.flatten.empty? ? "No permission!" : nil
-      #   error_group =  group.empty? ? "Group membership error!" : nil
-      #   error_node = node.request_permissions.empty? ? "Request node without permissions!" : nil
-      #   error_reader = reader.permissions.empty? ? "Request reader without permissions!" : nil
-      #   [permission, [error_permission,error_group,error_node,error_reader]]
-      # end
-      # # @todo Document this method
-      # def newid_request(msg)
-      #   write(START_BYTE + Msg.string_sid(2046) + NEWID_SET + msg[6,2] + Msg.string_sid(new_sid) + "00000000" + STOP_BYTE)
-      #   Msg.msg_newid_request(msg)
-      # end
     end # Server
   end # Serial
 end # Ib

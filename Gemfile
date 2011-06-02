@@ -11,4 +11,5 @@ gem "sequel"
 gem "sqlite3"
 gem "serialport"
 gem "rdiscount"
+gem "pony"
 gem "wirble", :group => :development
