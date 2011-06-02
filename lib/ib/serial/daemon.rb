@@ -17,7 +17,7 @@ module Ib
         opt.debug = false
         opt.mail = false
         load_options_from_file
-        parse_opt_serial
+        parse_opt_cli
         if opt.mail
           parse_opt_mail
         end
@@ -81,7 +81,7 @@ module Ib
         opt
       end
       # @todo
-      def parse_opt_serial
+      def parse_opt_cli
         if ARGV.any?
           require 'optparse'
           opts = OptionParser.new { |opts|
@@ -133,13 +133,17 @@ module Ib
           begin
             pid = IO.read(f).chomp.to_i
             Process.kill(15, pid)
-            FileUtils.rm_f [f,s]
             puts "Daemon stopped!" if opt.kill
             logger.info("Serial daemon stopped")
-            opt.mail = YAML.load_file(s)[:last][:mail] if File.exits?(s)
-            Pony.mail(:to => Pony.options[:to],
+            opt.mail = YAML.load_file(s)[:last][:mail] if File.exists?(s)
+            if opt.mail
+              require 'pony'
+              parse_opt_mail
+              Pony.mail(:to => Pony.options[:to],
                       :subject => "Server status",
-                      :body => "Serial daemon stopped") if opt.mail
+                      :body => "Serial daemon stopped")
+            end
+            FileUtils.rm_f [f,s]
           rescue => e
             puts "Failed to kill! Pid=#{pid}: #{e}"
           end
