@@ -161,14 +161,16 @@ module Ib
       #         1,1         START_BYTE              >
       #         2,4         request_node_sid        0100 (MSB first 'bigendian')
       #         6,2         opcode                  0A
-      #         8,14        unknown data            00000000000000
+      #         8,2         last_error              01|02 TASKREADKEY's status
+      #        10,12        unknown data            000000000000
       #        22,1         STOP_BYTE               \n
       #      # Note: START_BYTE, STOP_BYTE are removed before this method
       # @return [Array]
       def tg_opcode_0A(msg)
         request_node_sid = get_set_sid(msg[0,4])
         opcode = get_set_opcode(msg[4,2])
-        [opcode, request_node_sid]
+        last_error = msg[6,2]
+        [opcode, request_node_sid,last_error]
       end
       # Depending on the context, delete or add the START_BYTE and STOP_BYTE
       # @param [String] msg
