@@ -87,7 +87,7 @@ module Ib
           opts = OptionParser.new { |opts|
             opts.summary_width = 25
             opts.banner = "Ibutton server (#{VERSION})\n\n"\
-                         "Usage: ibutton [-d] [-k] [--debug] [--no-mail]\n"\
+                         "Usage: ibutton [-d] [-k] [--debug] [--mail]\n"\
                          "               [-p port] [-b baud]\n"\
                          "       ibutton --help\n"\
                          "       ibutton --version"
