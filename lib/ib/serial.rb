@@ -57,5 +57,6 @@ module Ib
     autoload :Daemon,   'serial/daemon'
     autoload :Server,   'serial/server'
     autoload :Telegram, 'serial/telegram'
+    autoload :Upgrade,  'serial/upgrade'
   end
 end
