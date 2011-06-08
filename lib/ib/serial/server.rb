@@ -4,12 +4,17 @@ module Ib
   module Serial
     # @todo document this class
     class Server < SerialPort
-      include Mixins, Telegram, Db::Hw, Db::Persons, Db::Log
+      include Mixins, Telegram, Upgrade, Db::Hw, Db::Persons, Db::Log
 
-      attr_accessor :request_node, :request_reader, :key, :owner, :groups, :permission
+      attr_accessor :request_node, :request_reader, :key, :owner, :groups, :permission, :upgrade_node, :upgrade_hash
       # DB Models in which can be automatically insert new records
       def srv_auto_insert
         [Key,Status]
+      end
+      # Handle upgrade command from outside (webif or rake)
+      def srv_upgrade(hex_file, ver = nil)
+        @upgrade_hash, version, size = file_parse(hex_file)
+        srv_handle_outgoing(UPG_REQUEST, [version, size])
       end
       # Handle incoming commands/messages
       #
@@ -52,6 +57,8 @@ module Ib
             end
             Status[:node_id => @request_node.id].save
           end
+        when UPG_ACCEPTED
+          #
         else
           logger.error("Unknown/Unhandled opcode! (#{get_set_opcode(msg)})")
         end
@@ -86,6 +93,11 @@ module Ib
           serial_msg, db_msg, log_msg = tg_opcode_05(msg,new_sid)
           ibs.write get_set_msg(serial_msg)
           logger.info(log_msg.join(','))
+        when UPG_REQUEST
+          serial_msg, db_msg, log_msg = tg_opcode_10(msg)
+          #ACCESS.insert(db_msg)
+          #ibs.write get_set_msg(serial_msg)
+          logger.info (log_msg.join(','))
         else
           #
         end

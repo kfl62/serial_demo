@@ -172,6 +172,121 @@ module Ib
         last_error = msg[6,2]
         [opcode, request_node_sid,last_error]
       end
+      # UPG_REQUEST
+      #
+      #     "> xxxx xx xxxx xxxx xxxx xx \n"
+      #     Start/Length      Name                Value/Example
+      #         1,1         START_BYTE            >
+      #         2,4         broadcast_sid         FF07 (2047 MSB first 'bigendian')
+      #         6,2         opcode                10
+      #         8,4         upgrade_mode          0100 (0001 force 'bigendian')
+      #                                           0000 (0000 normal'bigendian')
+      #        12,4         fw_version            0100 (1.0 'bigendian')
+      #        16,4         fw_size               6C60 (24648 'bigendian')
+      #        20,2         reserved              B7 ??? why this value ???
+      #        22,1         STOP_BYTE             \n
+      #      # Note: START_BYTE, STOP_BYTE are added after this method
+      # @param [String] msg
+      # @return [Array]
+      def tg_opcode_10(msg)
+        ibs.upgrade_node = '07FF'
+        [
+          ['FF07',UPG_REQUEST,'0100',msg[0],msg[1],'B7'],
+          ['FF07',UPG_REQUEST,'0100',msg[0],msg[1],'B7'],
+          ['FF07',UPG_REQUEST,'0100',msg[0],msg[1],'B7']
+        ]
+      end
+      # UPG_ACCEPTED
+      #
+      #     "> xxxx xx xxxxxxxxxxxxxx \n"
+      #     Start/Length      Name                Value/Example
+      #         1,1         START_BYTE            >
+      #         2,4         accept_node_sid       0100 (MSB first 'bigendian')
+      #         6,2         opcode                11
+      #         8,14        reserved              00000000000000
+      #        22,1         STOP_BYTE             \n
+      #      # Note: START_BYTE, STOP_BYTE are removed before this method
+      # @param [String] msg
+      # @return [Array]
+      def tg_opcode_11(msg)
+        #
+      end
+      # UPG_DATA
+      #
+      #     "> xxxx xx xx xxxxxxxxxxxx \n"
+      #     Start/Length      Name                Value/Example
+      #         1,1         START_BYTE            >
+      #         2,4         broadcast_sid         FF07 (2047 MSB first 'bigendian')
+      #         6,2         opcode                12
+      #         8,2         data_index_in_block   00-FF (from Upgrade#data_blocks_build)
+      #         8,12        data                  xxxxxxxxxxxx (from Upgrade#data_blocks_build)
+      #        22,1         STOP_BYTE             \n
+      #      # Note: START_BYTE, STOP_BYTE are removed before this method
+      # @param [String] msg
+      # @return [Array]
+      def tg_opcode_12(msg)
+        #
+      end
+      # UPG_BLOCK_SYNC
+      #
+      #     "> xxxx xx xxxx xxxx xxxx xx \n"
+      #     Start/Length      Name                Value/Example
+      #         1,1         START_BYTE            >
+      #         2,4         broadcast_sid         FF07 (2047 MSB first 'bigendian')
+      #         6,2         opcode                13
+      #         8,4         crc                   0FED (ED0F MSB first 'bigendian')
+      #        12,4         block_index           0100 (0001 MSB first 'bigendian')
+      #        16,4         block_size            0001 (0100 256 MSB first 'bigendian')
+      #        20,2         reserved              B5 ??? why this value ???
+      #        22,1         STOP_BYTE             \n
+      #      # Note: START_BYTE, STOP_BYTE are removed before this method
+      # @param [String] msg
+      # @return [Array]
+      def tg_opcode_13(msg)
+        #
+      end
+      # UPG_DATA_RESP
+      #
+      #     "> xxxxxxxxxxxxxxxxxxxx \n"
+      #     Start/Length      Name                Value/Example
+      #         1,1         START_BYTE            >
+      #        22,1         STOP_BYTE             \n
+      #      # Note: START_BYTE, STOP_BYTE are removed before this method
+      # @param [String] msg
+      # @return [Array]
+      def tg_opcode_14(msg)
+        #
+      end
+      # UPG_FINISH
+      #
+      #     "> xxxx xx xxxxxxxxxxxxxx \n"
+      #     Start/Length      Name                Value/Example
+      #         1,1         START_BYTE            >
+      #         2,4         broadcast_sid         FF07 (2047 MSB first 'bigendian')
+      #         6,2         opcode                15
+      #         8,14        reserved              00000000000000 ??? garbage ???
+      #        22,1         STOP_BYTE             \n
+      #      # Note: START_BYTE, STOP_BYTE are removed before this method
+      # @param [String] msg
+      # @return [Array]
+      def tg_opcode_15(msg)
+        #
+      end
+      # UPG_FINISH_RESP
+      #
+      #     "> xxxxxxxxxxxxxxxxxxxx \n"
+      #     Start/Length      Name                Value/Example
+      #         1,1         START_BYTE            >
+      #         2,4         updated_sid           0100 (0001 MSB first 'bigendian')
+      #         6,2         opcode                16
+      #         8,14        reserved              00000000000000 ??? garbage ???
+      #        22,1         STOP_BYTE             \n
+      #      # Note: START_BYTE, STOP_BYTE are removed before this method
+      # @param [String] msg
+      # @return [Array]
+      def tg_opcode_16(msg)
+        #
+      end
       # Depending on the context, delete or add the START_BYTE and STOP_BYTE
       # @param [String] msg
       # @return [String]
@@ -206,6 +321,11 @@ module Ib
       # @todo Document this method
       def get_set_key(msg)
         msg.length == 20 ? msg[8,12] : msg
+      end
+      #
+      # @todo
+      def get_set_endian(msg)
+        msg.unpack("@2a2@0a2").pack("a2a2")
       end
     end
   end

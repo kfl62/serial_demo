@@ -44,8 +44,10 @@ module Ib
         0x6E17, 0x7E36, 0x4E55, 0x5E74, 0x2E93, 0x3EB2, 0x0ED1, 0x1EF0
       ]
       # @todo
+      BOOT_LOADER = 512...4096
+      # @todo
       def crc16(buf, crc=0xFFFF)
-        buf.each_byte{|x| crc = ((crc & 0x00FF) << 8) ^ CCITT_16[((crc >> 8) ^ x) & 0x00FF]}
+        buf.scan(/../).each{|x| crc = ((crc & 0x00FF) << 8) ^ CCITT_16[((crc >> 8) ^ x.hex) & 0x00FF]}
         crc
       end
       # @todo
@@ -55,10 +57,16 @@ module Ib
           file_data = File.new(file,'r')
         rescue Errno::ENOENT => e
           Ib.logger.error("Upgrade failed: #{e.message}")
+          return false
         else
-          data_blocks = data_blocks_build(file_data)
+          version = file.split('_').last.split('.').first
+          version = get_set_endian(version)
+          data_blocks, size = data_blocks_build(file_data)
+          size = get_set_endian("%04X" % size)
+          return [data_blocks, version, size]
+        ensure
+          file_data.close if file_data
         end
-        #data_blocks
       end
       # @todo
       def data_blocks_build(stream,hash = {})
@@ -72,32 +80,35 @@ module Ib
         rescue SerialUpgradeError => e
           if record_type == "04"
             ext_address = line[9,4].hex << 16
-            Ib.logger.error("Upgrade recordType:04 ext_address updated: #{ext_address.to_s(16)}")
+            logger.warn("Upgrade recordType:04 ext_address updated: #{ext_address.to_s(16)}")
           else
-            Ib.logger.error("Upgrade failed: Unknown recordType")
+            logger.error("Upgrade failed: Unknown recordType")
             done = true
+            return false
           end
         else
           address = (line[3,4].hex + ext_address) / 2
           line.unpack("@9a16@25a16").each do |word|
-            if (address > 4096 && word =~ /\AFFFFFF00/)
-              Ib.logger.info("Hexfile parsed (Relevant part lines 1-#{index/2 + 1})") unless done
-              done = true
-            else
+            unless BOOT_LOADER.include?(address)
               block,packet = index.divmod(256)
               block   = "%02X" % block
               packet  = "%02X" % packet
-              data = word.unpack("@4a2@2a2@0a2@12a2@10a2@8a2").pack("a2a2a2a2a2a2")
+              data = word.unpack("a2@2a2@4a2@8a2@10a2@12a2").pack("a2a2a2a2a2a2")
               if packet == "00"
-                hash[block.to_sym] = [data]
+                hash[block] = [data]
               else
-                hash[block.to_sym] << data
+                hash[block] << data
               end
-              index += 1
+              if (address > BOOT_LOADER.end && word =~ /\AFFFFFF00/)
+                index += 1
+                logger.info("Hexfile parsed (Code size: #{index * 6})")
+                done = true
+              end
+              index += 1 unless done
             end
           end
         end until done
-        hash
+        return [hash, index * 6]
       end
     end # Upgrade
   end # Serial
