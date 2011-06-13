@@ -56,8 +56,7 @@ namespace :run do
   end
   desc "Watching serial port"
   task :serial do
-    require "./lib/ib.rb"
-      Ib::Serial::Daemon.run
+    puts "Deprecated! You may try `./bin/ibutton -h` to start the serial server."
   end
 end
 
