@@ -5,6 +5,7 @@ ib.task = {
   selectOpcodeValue: "00",
   selectNode: null,
   selectNodeValue: "0",
+  selectFile: null,
   selectParam: null,
   taskPartial: null,
   taskSubmit: null,
@@ -26,7 +27,8 @@ ib.task = {
     };
   },
   opcodeOnChange: function(){
-    if (this.selectNode == null){
+    if (this.selectNode == null & this.selectOpcodeValue != '10'){
+      if (this.selectFile != null){this.fileDestroy()}
       this.selectNode = dojo.byId('task_node');
       dojo.removeClass(this.selectNode,'hidden')
       this.connections.push(
@@ -38,6 +40,18 @@ ib.task = {
     }else{
       if (this.selectOpcodeValue == '00'){
         this.nodeDestroy()
+      }else if (this.selectOpcodeValue == '10'){
+        if (this.selectFile == null){
+          if (this.selectNode != null){this.nodeDestroy()}
+          this.selectFile = dojo.byId('task_file')
+          dojo.removeClass(this.selectFile,'hidden')
+          this.connections.push(
+            dojo.connect(this.selectFile,"onchange",function(e){
+              ib.task.selectFileValue = e.target.value;
+              ib.task.fileOnChange();
+            })
+          )
+        }
       }else{
         this.nodeReset(true)
       }
@@ -61,6 +75,24 @@ ib.task = {
        this.nodeReset(false)
     }
   },
+  fileOnChange: function(){
+    if (this.selectParam == null){
+      path = '/ctrl/tsk/partial?opcode=' + this.selectOpcodeValue + "&file=" + this.selectFileValue;
+      xhrArgs = {
+        url: path,
+        load: function(data){
+          ib.task.taskPartial.innerHTML = data;
+          ib.task.connectParam();
+        },
+        error: function(error){
+          dojo.publish('xhrMsg',['error','error',error]);
+        }
+      };
+      var deferred = dojo.xhrGet(xhrArgs);
+    }else{
+       this.fileReset(false)
+    }
+  },
   nodeDestroy: function(){
     if (this.selectParam != null){this.paramDestroy()}
     dojo.disconnect(this.connections[1])
@@ -69,6 +101,15 @@ ib.task = {
     this.selectNode.selectedIndex = 0
     this.selectNode = null
     this.selectNodeValue = "0"
+  },
+  fileDestroy: function(){
+    if (this.selectParam != null){this.paramDestroy()}
+    dojo.disconnect(this.connections[1])
+    this.connections.length = 1
+    dojo.addClass(this.selectFile,'hidden')
+    this.selectFile.selectedIndex = 0
+    this.selectFile = null
+    this.selectFileValue = "0"
   },
   nodeReset: function(opcode){
     if (this.selectParam != null){this.paramDestroy()}
@@ -80,6 +121,16 @@ ib.task = {
       this.nodeOnChange();
     }
   },
+  fileReset: function(opcode){
+    if (this.selectParam != null){this.paramDestroy()}
+    if (opcode || this.selectFileValue == "0"){
+      this.selectFile.selectedIndex = 0
+      dojo.removeClass(this.selectFile,'hidden')
+      this.selectFileValue = "0"
+    }else{
+      this.fileOnChange();
+    }
+  },
   connectParam: function(){
     if (this.selectParam == null){
       this.selectParam = dojo.query('.params',dojo.byId('task_form'))[0]
@@ -88,6 +139,9 @@ ib.task = {
           ib.task.paramOnChange()
         })
       )
+      if (this.selectOpcodeValue == '10'){
+        dojo.removeClass(this.taskSubmit,'hidden')
+      }
     }else{
       alert('Some error')
     }

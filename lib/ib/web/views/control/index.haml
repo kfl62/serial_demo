@@ -1,6 +1,5 @@
 - i = 0
 - nodes = Ib::Db::Log::Status.order(:node_id.asc).all
-- pid_file = File.join(Ib.pid_dir,'ibutton.pid')
 %h4.ce<
   = t('monitor.title')
   %span.reload{:title => "Start Auto-Reload", :data => {:duration => 5000, :referrer => "/ctrl/"}}
@@ -9,9 +8,10 @@
   %p.server<
     #{t('monitor.server.server')}&nbsp;&raquo;&nbsp;
     %span.text= "#{t('monitor.server.status')}:&nbsp;"
-    %span.server_status= File.exists?(pid_file) ? 'ALIVE' : 'DEAD'
+    %span.server_status= ibs_sock.nil? ? 'DEAD' : 'ALIVE'
     %span.text= "&raquo;&nbsp;#{t('monitor.server.uptime')}:&nbsp;"
-    %span.server_uptime= uptime(File.ctime(pid_file)) if File.exists?(pid_file)
+    %span.server_uptime= ibs_sock ? uptime(ibs_sock.opt.start) : '00:00:00'
+    %span.text= "&nbsp;&nbspVersion: #{Ib::VERSION}"
   %p.nodes_title= "#{t('monitor.server.connected_nodes')}:"
   %p.nodes
     %span=  "#{t('monitor.server.node')}:<br /> #{t('monitor.server.status')}:<br /> #{t('monitor.server.alive')}:"

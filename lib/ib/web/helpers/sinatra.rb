@@ -127,15 +127,20 @@ module Ib
           retval
         end
         # @todo
+        def ibs_sock
+          File.exists?(File.join(Ib.pid_dir,'ibutton_serial.sock')) ? \
+            DRbObject.new_with_uri("drbunix://#{Ib.pid_dir}/ibutton_serial.sock") : nil
+        end
+        # @todo
         def serial_msg(params)
           opcode = params[:opcode]
           node = modelize("hw_node")[params[:node].to_i] if params [:node]
-          node_sid = ("%04X" % node.sid).unpack("@2a2@0a2").pack("a2a2") if params[:node]
+          node_sid = ("%04X" % node.sid).unpack("@2a2@0a2").pack("a2a2") if node
           device = modelize("hw_device")[params[:device].to_i] if params[:device]
           new_sid = ("%04X" % params[:new_sid]).unpack("@2a2@0a2").pack("a2a2") if params[:new_sid]
           msg = ">#{node_sid}#{opcode}"
-          db_access_log = []
-          db_error_log = []
+          db_access_log  = []
+          log_serial_log = []
           case opcode
           when "02"
             msg += "01" # arbitrary reader order, node expects this, obscure reason :)
@@ -143,10 +148,12 @@ module Ib
             msg += "00" # reserved
             msg += "%08X" % device.task.taskId
             db_access_log = [nil,Time.now,"0",current_user.login_name,"web","interface",node.name,device.name,"ACCESS_OK",true]
+            log_serial_log = "Admin: \"#{current_user.login_name}\" sent ACCESS_OK to node \"#{node.name}\"!"
           when "03"
             msg += "01" # arbitrary reader order, node expects this,obscure reason :)
             msg += "000000000000" # complete to 20 chars
             db_access_log = [nil,Time.now,"0",current_user.login_name,"web","interface",node.name,device.name,"ACCESS_DENY",false]
+            log_serial_log = "Admin: \"#{current_user.login_name}\" sent ACCESS_DENY to node \"#{node.name}\"!"
           when "05"
             msg += "01" # arbitrary reader order, node expects this,obscure reason :)
             msg += new_sid
@@ -155,11 +162,13 @@ module Ib
           when "07"
             # not ready
             msg += "00000000000000" # placeholder for now
+          when "10"
+            msg = [params[:file], params[:new_version]]
           else
             # some error handling would be nice
           end
-          msg += "\n"
-          [msg,db_access_log,db_error_log]
+          msg += "\n" if msg.is_a? String
+          [msg,db_access_log,log_serial_log]
         end
       end
     end

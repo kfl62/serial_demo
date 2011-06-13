@@ -1,13 +1,22 @@
 %h4= t('tasks.title')
-%p.warning= t('tasks.warning')
-%form#task_form{:action => "/ctrl/tsk/execute", :method => "post"}
-  %select#task_opcode{:name => "[opcode]"}
-    - t('tasks.opcode').each do |o|
-      %option{:value => o[1]}= o[0]
-  %select#task_node.hidden{:name => "node"}
-    %option{:value => "0"}= t('tasks.node')
-    - nodes.each do |n|
-      %option{:value => n.id}= n.name
-  %span#xhr_partial
-  %input#task_submit.hidden{:type => "submit", :value => "Send"}
-%p#last_log.hidden
+- if ibs_sock
+  %p.warning= t('tasks.warning')
+  %form#task_form{:action => "/ctrl/tsk/execute", :method => "post"}
+    %select#task_opcode{:name => "[opcode]"}
+      - t('tasks.opcode').each do |o|
+        %option{:value => o[1]}= o[0]
+    %select#task_node.hidden{:name => "node"}
+      %option{:value => "0"}= t('tasks.node')
+      - nodes.each do |n|
+        %option{:value => n.id}= n.name
+    %select#task_file.hidden{:name => "file"}
+      %option{:value => "0"} Select file
+      - hex_files.each do |f|
+        %option{:value => f[0]}= f[1]
+    %span#xhr_partial
+    %input#task_submit.hidden{:type => "submit", :value => "Send"}
+  %p#last_log.hidden
+- else
+  %br
+  %br
+  %h4 You must start serial server first (./bin/ibutton -d)

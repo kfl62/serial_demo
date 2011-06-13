@@ -83,6 +83,12 @@ module Ib
           day  = diff.divmod(60)[0].divmod(60)[0].divmod(60)[0].modulo(24)
           "%d days-%02d:%02d:%02d" % [day,hour,min,sec]
         end
+        # @todo
+        def hex_files
+          retval = Dir.glob(File.join(settings.app_root,'vendor','firmware','*.hex'))
+          retval = retval.sort{|x,y| (y[/_(.+)\./,1] || '0000') <=> (x[/_(.+)\./,1] || '0000')}
+          retval.map{|f| [File.basename(f), File.basename(f,'.hex')]}
+        end
       end
     end
   end
