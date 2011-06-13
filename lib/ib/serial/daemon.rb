@@ -12,10 +12,11 @@ module Ib
       end
       # @todo
       def initialize
-        opt.device = '/dev/ttyS0'
+        opt.device    = '/dev/ttyS0'
         opt.baud_rate = 115200
-        opt.debug = false
-        opt.mail = false
+        opt.debug     = false
+        opt.mail      = false
+        opt.start     = Time.now
         load_options_from_file
         parse_opt_cli
         if opt.mail
@@ -43,6 +44,15 @@ module Ib
         }
         begin
           self.ibs = Server.new(opt.device, opt.baud_rate)
+          DRb.start_service "drbunix://#{pid_dir}/ibutton_serial.sock", self.ibs
+          fork do
+            Process.setsid
+            exit if fork
+            STDIN.reopen '/dev/null'
+            STDOUT.reopen '/dev/null', "a"
+            STDERR.reopen STDOUT
+            DRb.thread.join
+          end
         rescue Errno::ENOENT, Errno::EACCES => e
           puts "Port (#{opt.device}) not found or wrong permissions! Exiting..."
           puts "\n\nDebug message:\n#{e.message}\n#{e.backtrace.join("\n")}" if opt.debug
@@ -67,6 +77,8 @@ module Ib
       # @todo
       def stop
         logger.info("Disconnected from: #{opt.device}")
+        DRb.stop_service
+        FileUtils.rm_f File.join(pid_dir,"ibutton_serial.sock")
         ibs.close
       end
       # @todo

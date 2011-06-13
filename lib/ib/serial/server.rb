@@ -6,15 +6,42 @@ module Ib
     class Server < SerialPort
       include Mixins, Telegram, Upgrade, Db::Hw, Db::Persons, Db::Log
 
-      attr_accessor :request_node, :request_reader, :key, :owner, :groups, :permission, :upgrade_node, :upgrade_hash
+      attr_accessor :request_node, :request_reader, :key, :owner, :groups, :permission, :upgrade_hash
       # DB Models in which can be automatically insert new records
       def srv_auto_insert
         [Key,Status]
       end
       # Handle upgrade command from outside (webif or rake)
-      def srv_upgrade(hex_file, ver = nil)
-        @upgrade_hash, version, size = file_parse(hex_file)
-        srv_handle_outgoing(UPG_REQUEST, [version, size])
+      def srv_upgrade(hex_file, version = nil, forced = true)
+        v_msg = version.nil? ? "\tNo version supplied. Guessing from filename!" : "\tVersion: #{version}"
+        logger.info("Upgrade command received:")
+        logger.info("\tFirmware to read from: #{hex_file}")
+        logger.info(v_msg)
+        @upgrade_hash               = file_parse(hex_file)
+        @upgrade_hash["start"]      = Time.now
+        @upgrade_hash["version"]    = version if version
+        @upgrade_hash["forced"]     = forced
+        @upgrade_hash["nodes"]      = Array.new
+        @upgrade_hash["nodes_dead"] = Array.new
+        @upgrade_hash["b_sid"]      = 2047
+        @upgrade_hash["sync_error"] = Hash.new
+        @upgrade_hash["sync_retry"] = 3
+        srv_handle_outgoing(UPG_REQUEST,@upgrade_hash)
+        Thread.new do
+          sleep(0.5)
+          if @upgrade_hash["nodes"].empty?
+            logger.info("Upgrade aborted! Reason:")
+            logger.info("\tWe have not received an acceptance from any node!")
+            logger.info("Clearing upgrade_hash...")
+            @upgrade_hash.clear
+          else
+            logger.info("Received acceptance for sid: #{@upgrade_hash["nodes"].join(', ')}")
+            logger.info("Starting upgrade...")
+            @upgrade_hash["c_sid"] = @upgrade_hash["b_sid"]
+            data_blocks_send
+          end
+          if @upgrade_hash.empty? then terminate end
+        end
       end
       # Handle incoming commands/messages
       #
@@ -58,9 +85,19 @@ module Ib
             Status[:node_id => @request_node.id].save
           end
         when UPG_ACCEPTED
-          #
+          @upgrade_hash["nodes"] << get_set_sid(msg[0,4])
+          logger.info(tg_opcode_11(msg))
+        when UPG_DATA_RESP
+          sid , sync_status, error = tg_opcode_14(msg)
+          logger.info("Synchronization status:#{sync_status} received from node:#{sid}")
+          @upgrade_hash["sync_noresp"].delete(sid)
+          @upgrade_hash["sync_error"].merge!(sid => error) unless sync_status == '01'
+        when UPG_FINISH_RESP
+          sid, log_msg  = tg_opcode_16(msg)
+          logger.info(log_msg)
+          @upgrade_hash["nodes"].delete(sid)
         else
-          logger.error("Unknown/Unhandled opcode! (#{get_set_opcode(msg)})")
+          logger.error("Unknown/Unhandled opcode! (#{get_set_opcode(msg)}) Node:#{get_set_sid(msg[0,4])}")
         end
       end
       # Handle outgoing commands/messages
@@ -95,9 +132,24 @@ module Ib
           logger.info(log_msg.join(','))
         when UPG_REQUEST
           serial_msg, db_msg, log_msg = tg_opcode_10(msg)
+          ibs.write get_set_msg(serial_msg)
           #ACCESS.insert(db_msg)
-          #ibs.write get_set_msg(serial_msg)
-          logger.info (log_msg.join(','))
+          logger.info ("Upgrade request msg: >" + log_msg.join + "\\n")
+        when UPG_DATA
+          serial_msg, db_msg, log_msg = tg_opcode_12(msg)
+          ibs.write get_set_msg(serial_msg)
+          #ACCESS.insert(db_msg)
+          logger.debug ("Sent data msg: >" + log_msg.join + "\\n to node/broadcast:#{@upgrade_hash["c_sid"]}")
+        when UPG_BLOCK_SYNC
+          serial_msg, db_msg, log_msg = tg_opcode_13(msg)
+          ibs.write get_set_msg(serial_msg)
+          #ACCESS.insert(db_msg)
+          logger.info ("Synchronization msg: >" + log_msg.join + "\\n")
+        when UPG_FINISH
+          serial_msg, db_msg, log_msg = tg_opcode_15(msg)
+          ibs.write get_set_msg(serial_msg)
+          #ACCESS.insert(db_msg)
+          logger.info ("Upgrade finished msg: >" + log_msg.join + "\\n")
         else
           #
         end

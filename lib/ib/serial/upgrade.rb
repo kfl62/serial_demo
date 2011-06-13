@@ -59,18 +59,19 @@ module Ib
           Ib.logger.error("Upgrade failed: #{e.message}")
           return false
         else
-          version = file.split('_').last.split('.').first
-          version = get_set_endian(version)
-          data_blocks, size = data_blocks_build(file_data)
-          size = get_set_endian("%04X" % size)
-          return [data_blocks, version, size]
+          version = file[/_(.+)\./,1]
+          upgrade_hash = data_blocks_build(file_data)
+          upgrade_hash["version"] = version.length == 4 ? version : '0000'
+          return upgrade_hash
         ensure
           file_data.close if file_data
         end
       end
       # @todo
-      def data_blocks_build(stream,hash = {})
-        address, ext_address, index = 0, 0, 0
+      def data_blocks_build(stream,upgrade_hash = {})
+        upgrade_hash["hex_data"] = Hash.new
+        upgrade_hash["size"] = 0
+        address, ext_address = 0, 0
         done = false
         begin
           line = stream.gets
@@ -90,25 +91,127 @@ module Ib
           address = (line[3,4].hex + ext_address) / 2
           line.unpack("@9a16@25a16").each do |word|
             unless BOOT_LOADER.include?(address)
-              block,packet = index.divmod(256)
+              block,packet = upgrade_hash["size"].divmod(1536)
               block   = "%02X" % block
               packet  = "%02X" % packet
               data = word.unpack("a2@2a2@4a2@8a2@10a2@12a2").pack("a2a2a2a2a2a2")
               if packet == "00"
-                hash[block] = [data]
+                upgrade_hash["hex_data"][block] = [data]
               else
-                hash[block] << data
+                upgrade_hash["hex_data"][block] << data
               end
               if (address > BOOT_LOADER.end && word =~ /\AFFFFFF00/)
-                index += 1
-                logger.info("Hexfile parsed (Code size: #{index * 6})")
+                upgrade_hash["size"] += 6
                 done = true
+                logger.info("Hexfile parsed (Code size: #{upgrade_hash["size"]})")
               end
-              index += 1 unless done
+              upgrade_hash["size"] += 6 unless done
             end
           end
         end until done
-        return [hash, index * 6]
+        return upgrade_hash
+      end
+      # @todo
+      def data_blocks_send
+        @upgrade_hash["hex_data"].each_pair do |block, data_ary|
+          logger.info("Sending block: #{block} to node/broadcast: #{@upgrade_hash["c_sid"]}")
+          str_for_crc = ""
+          data_ary.each_with_index do |line,index|
+            data = ["%02X" % index, line]
+            srv_handle_outgoing(UPG_DATA, data)
+            sleep(0.01)
+            str_for_crc << line
+            if index == data_ary.length - 1
+              @upgrade_hash["c_crc"] = crc16(str_for_crc)
+              logger.info("Block:#{block} was sent. Sending synchronization msg, crc:#{"%04X" % @upgrade_hash["c_crc"]}")
+              data = [@upgrade_hash["c_crc"], block, index + 1]
+              @upgrade_hash["sync_noresp"] = @upgrade_hash["nodes"] - @upgrade_hash["nodes_dead"]
+              srv_handle_outgoing(UPG_BLOCK_SYNC,data)
+              sleep(0.5)
+              unless @upgrade_hash["sync_error"].empty?
+                logger.warn("Synchronization problem...")
+                @upgrade_hash["sync_error"].each_pair do |sid,error|
+                  data_blocks_resend(sid,block,error)
+                end
+                logger.info("Data requested by nodes in their UPG_DATA_RESP was sent.")
+                logger.info("Clearing sync_error and sending synchronization msg. for implied!")
+                @upgrade_hash["sync_error"].each_key do |sid|
+                  @upgrade_hash["c_sid"] = sid
+                  srv_handle_outgoing(UPG_BLOCK_SYNC,[@upgrade_hash["c_crc"],block,index +1])
+                end
+                @upgrade_hash["c_sid"] = @upgrade_hash["b_sid"]
+                @upgrade_hash["sync_error"].clear
+                sleep(0.5)
+              else
+                if @upgrade_hash["sync_noresp"].empty?
+                  logger.info("Synchronization successful...")
+                else
+                  unless @upgrade_hash["sync_retry"] > 0
+                    logger.warn("No UPG_DATA_RESP from node/nodes #{@upgrade_hash["sync_noresp"].join(', ')} !")
+                    @upgrade_hash["sync_noresp"].each do |sid|
+                      @upgrade_hash["c_sid"] = sid
+                      srv_handle_outgoing(UPG_BLOCK_SYNC,[@upgrade_hash["c_crc"],block,index +1])
+                    end
+                    @upgrade_hash["sync_retry"] -= 1
+                    sleep(0.5)
+                  else
+                    @upgrade_hash["nodes_dead"] = @upgrade_hash["sync_noresp"]
+                    @upgrade_hash["sync_noresp"].clear
+                    @upgrade_hash["sync_retry"] = 3
+                    logger.warn("Synchronization msg sent 3 times to nod/nodes #{@upgrade_hash["nodes_dead"].join(', ')}")
+                    logger.warn("Presuming they were disconnected during upgrade!")
+                  end
+                  @upgrade_hash["c_sid"] = @upgrade_hash["b_sid"]
+                end
+              end
+            end
+          end # line
+        end # block
+        logger.info("Upgrade was completed in #{Time.now - @upgrade_hash["start"]} seconds.")
+        logger.info("Sending UPG_FINISH opcode to node/broadcast: #{@upgrade_hash["c_sid"]}.")
+        if @upgrade_hash["nodes_dead"].empty?
+          srv_handle_outgoing(UPG_FINISH,@upgrade_hash["c_sid"])
+        else
+          logger.warn "Nodes #{@upgrade_hash["nodes_dead"].join(', ')} were disconnected during upgrade!"
+          logger.warn "Sending upgrade finished only to alive nodes..."
+          (@upgrade_hash["nodes"] - @upgrade_hash["nodes_dead"]).each do |sid|
+            @upgrade_hash["c_sid"] = sid
+            srv_handle_outgoing(UPG_FINISH,@upgrade_hash["c_sid"])
+          end
+        end
+        sleep(0.5)
+        if (@upgrade_hash["nodes"] - @upgrade_hash["nodes_dead"]).empty?
+          logger.info("Received upgrade completed responses from all implied nodes...")
+          logger.info("Clearing upgrade_hash...")
+          @upgrade_hash.clear
+        else
+          logger.warn("No UPG_FINISH_RESP from node/nodes sid:#{(@upgrade_hash["nodes"] - @upgrade_hash["nodes_dead"]).join(',')} !")
+          logger.info("Waiting for 60 seconds and clearing upgrade_hash")
+          sleep(60)
+          @upgrade_hash.clear
+        end
+      end #data_blocks_send
+      # @todo
+      def data_blocks_resend(sid,block,error)
+        @upgrade_hash["c_sid"] = sid
+        case error
+        when nil
+          logger.warn("Synchronization status:03 from node:#{sid}")
+          logger.info("Sending again block: #{block} to node/broadcast: #{sid}")
+          @upgrade_hash["hex_data"][block].each_with_index do |line,index|
+            data = ["%02X" % index, line]
+            srv_handle_outgoing(UPG_DATA, data)
+            sleep(0.01)
+          end
+        else
+          logger.warn("Synchronization status:02 from node#{sid}")
+          logger.info("Sending again lines with index: #{error.join(',')} to node/broadcast: #{sid}")
+          error.each do |e|
+            line = @upgrade_hash["hex_data"][block][e.hex]
+            srv_handle_outgoing(UPG_DATA, [e,line])
+            sleep(0.01)
+          end
+        end
       end
     end # Upgrade
   end # Serial

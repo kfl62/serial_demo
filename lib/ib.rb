@@ -2,6 +2,7 @@
 require 'bundler/setup'
 require 'ostruct'
 require 'logger'
+require 'drb'
 require 'i18n'
 #require 'compass'
 Dir['config','lib/*'].each do |dir|

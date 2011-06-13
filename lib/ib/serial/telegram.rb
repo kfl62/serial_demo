@@ -189,11 +189,15 @@ module Ib
       # @param [String] msg
       # @return [Array]
       def tg_opcode_10(msg)
-        ibs.upgrade_node = '07FF'
+        broadcast_sid = get_set_sid(@upgrade_hash["b_sid"])
+        upgrade_mode  = @upgrade_hash["forced"] ? get_set_endian('0001') : '0000'
+        fw_version    = get_set_endian(@upgrade_hash["version"])
+        fw_size       = get_set_endian("%04X" % @upgrade_hash["size"])
+        reserved      = 'B7'
         [
-          ['FF07',UPG_REQUEST,'0100',msg[0],msg[1],'B7'],
-          ['FF07',UPG_REQUEST,'0100',msg[0],msg[1],'B7'],
-          ['FF07',UPG_REQUEST,'0100',msg[0],msg[1],'B7']
+          [broadcast_sid, UPG_REQUEST, upgrade_mode, fw_version, fw_size, reserved],
+          [broadcast_sid, UPG_REQUEST, upgrade_mode, fw_version, fw_size, reserved],
+          [broadcast_sid, UPG_REQUEST, upgrade_mode, fw_version, fw_size, reserved]
         ]
       end
       # UPG_ACCEPTED
@@ -209,7 +213,7 @@ module Ib
       # @param [String] msg
       # @return [Array]
       def tg_opcode_11(msg)
-        #
+        "Upgrade request accepted node sid:#{get_set_sid(msg[0,4])}"
       end
       # UPG_DATA
       #
@@ -225,7 +229,14 @@ module Ib
       # @param [String] msg
       # @return [Array]
       def tg_opcode_12(msg)
-        #
+        broadcast_sid       = get_set_sid(@upgrade_hash["c_sid"])
+        data_index_in_block = msg[0]
+        data                = msg[1]
+        [
+          [broadcast_sid,UPG_DATA,data_index_in_block,data],
+          [broadcast_sid,UPG_DATA,data_index_in_block,data],
+          [broadcast_sid,UPG_DATA,data_index_in_block,data]
+        ]
       end
       # UPG_BLOCK_SYNC
       #
@@ -239,23 +250,48 @@ module Ib
       #        16,4         block_size            0001 (0100 256 MSB first 'bigendian')
       #        20,2         reserved              B5 ??? why this value ???
       #        22,1         STOP_BYTE             \n
-      #      # Note: START_BYTE, STOP_BYTE are removed before this method
+      #      # Note: START_BYTE, STOP_BYTE are added after this method
       # @param [String] msg
       # @return [Array]
       def tg_opcode_13(msg)
-        #
+        broadcast_sid = get_set_sid(@upgrade_hash["c_sid"])
+        crc           = get_set_endian("%04X" % msg[0])
+        block_index   = msg[1] + "00"
+        block_size    = get_set_endian("%04X" % msg[2])
+        reserved      = "B5"
+        [
+          [broadcast_sid,UPG_BLOCK_SYNC,crc,block_index,block_size,reserved],
+          [broadcast_sid,UPG_BLOCK_SYNC,crc,block_index,block_size,reserved],
+          [broadcast_sid,UPG_BLOCK_SYNC,crc,block_index,block_size,reserved]
+        ]
       end
       # UPG_DATA_RESP
       #
-      #     "> xxxxxxxxxxxxxxxxxxxx \n"
+      #     "> xxxx xx xx xxxxxxxxxxxx \n"
       #     Start/Length      Name                Value/Example
       #         1,1         START_BYTE            >
+      #         2,4         updated_sid           0100 (0001 MSB first 'bigendian')
+      #         6,2         opcode                14
+      #         8,2         sync_status           01 OK, 02 failures <= 6, 03 resend block
+      #        10,12        failed_pckg           6 * XX index of package in block
       #        22,1         STOP_BYTE             \n
       #      # Note: START_BYTE, STOP_BYTE are removed before this method
       # @param [String] msg
       # @return [Array]
       def tg_opcode_14(msg)
-        #
+        updated_sid = get_set_sid(msg[0,4])
+        sync_status = msg[6,2]
+        failed_pckg = get_set_failed(msg[8,12])
+        case sync_status
+        when "01"
+          [updated_sid, sync_status, nil]
+        when "02"
+          [updated_sid, sync_status, failed_pckg]
+        when "03"
+          [updated_sid, sync_status, nil]
+        else
+          # No chance to get here :)
+        end
       end
       # UPG_FINISH
       #
@@ -270,7 +306,13 @@ module Ib
       # @param [String] msg
       # @return [Array]
       def tg_opcode_15(msg)
-        #
+        broadcast_sid = get_set_sid(@upgrade_hash['c_sid'])
+        reserved = '00000000000000'
+        [
+          [broadcast_sid,UPG_FINISH,reserved],
+          [broadcast_sid,UPG_FINISH,reserved],
+          [broadcast_sid,UPG_FINISH,reserved]
+        ]
       end
       # UPG_FINISH_RESP
       #
@@ -285,7 +327,11 @@ module Ib
       # @param [String] msg
       # @return [Array]
       def tg_opcode_16(msg)
-        #
+        updated_sid = get_set_sid(msg[0,4])
+        [
+          updated_sid,
+          "Upgrade completed response from node sid:#{updated_sid}"
+        ]
       end
       # Depending on the context, delete or add the START_BYTE and STOP_BYTE
       # @param [String] msg
@@ -296,13 +342,10 @@ module Ib
       # According to params type, returns sid formatted as String or as Integer
       def get_set_sid(msg)
         if msg.class == Fixnum
-          retval = "%04X" % msg
-          retval= retval[2,2] + retval[0,2]
+          ("%04X" % msg).unpack("@2a2@0a2").pack("a2a2")
         else
-         retval= msg[2,2] + msg[0,2]
-         retval = retval.to_i(16)
+          msg.unpack("@2a2@0a2").pack("a2a2").hex
         end
-        retval
       end
       # @todo Document this method
       def get_set_opcode(msg)
@@ -326,6 +369,22 @@ module Ib
       # @todo
       def get_set_endian(msg)
         msg.unpack("@2a2@0a2").pack("a2a2")
+      end
+      # @todo
+      def get_set_failed(msg, retval = [])
+        ary = msg.scan(/../)
+        for i in 0..ary.length - 1
+          if ary[i] == '00'
+            if i == 0
+              retval << ary[i]
+            else
+              break
+            end
+          else
+            retval << ary[i]
+          end
+        end
+        retval
       end
     end
   end
