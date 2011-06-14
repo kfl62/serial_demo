@@ -163,7 +163,7 @@ module Ib
             # not ready
             msg += "00000000000000" # placeholder for now
           when "10"
-            msg = [params[:file], params[:new_version]]
+            msg = [params[:file], params[:new_version].split('::')].flatten
           else
             # some error handling would be nice
           end

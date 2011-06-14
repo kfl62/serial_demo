@@ -38,8 +38,8 @@ module Ib
           ibs_sock.logger.info("Web msg::#{@msg.chop}\\n::#{@log_serial_log}")
           haml '= "Last command:<br>#{@msg.chop}&#92;n<br><br> #{@db_access_log.join(" | ")}"' unless @db_access_log.empty?
         when Array
-          ibs_sock.srv_upgrade(@msg[0],@msg[1].empty? ? nil : @msg[1])
-          haml '= "Upgrade command sent to nodes:<br>&nbsp;&nbsp;&nbsp;&nbsp;Firmware: #{@msg[0]}<br>&nbsp;&nbsp;&nbsp;&nbsp;Version: #{@msg[1]}"'
+          ibs_sock.srv_upgrade(@msg[0],@msg[1],@msg[2])
+          haml '= "Upgrade command sent to nodes:<br>&nbsp;&nbsp;&nbsp;&nbsp;Firmware: #{@msg[0]}<br>&nbsp;&nbsp;&nbsp;&nbsp;Version: #{@msg[1]}<br>&nbsp;&nbsp;&nbsp;&nbsp;Node: #{@msg[2]}"'
         end
       end
     end

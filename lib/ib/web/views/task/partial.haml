@@ -9,6 +9,7 @@
 - when "07"
   %input.params.data{:name => "new_param",:value => "", :disabled => true}
 - when "10"
-  %input.params.file{:name => "new_version",:value => version}
+  ver./sid
+  %input.params.file{:name => "new_version",:value => "#{version}::2047"}
 - else
   "Opcode not defined in partial"
