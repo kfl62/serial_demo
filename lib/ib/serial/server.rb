@@ -12,19 +12,24 @@ module Ib
         [Key,Status]
       end
       # Handle upgrade command from outside (webif or rake)
-      def srv_upgrade(hex_file, version = nil, forced = true)
-        v_msg = version.nil? ? "\tNo version supplied. Guessing from filename!" : "\tVersion: #{version}"
-        logger.info("Upgrade command received:")
-        logger.info("\tFirmware to read from: #{hex_file}")
+      def srv_upgrade(hex_file, version = nil, sid = 2047, forced = true)
+        v_msg = version.nil? ? ("* No version supplied. Guessing from filename!".ljust(59) + "*") : ("* Version: #{version}".ljust(59) + "*")
+        s_msg = sid.to_i == 2047  ? ("* Node: Broadcast(2047)".ljust(59) + "*") : ("* Node sid: #{sid}".ljust(59) + "*")
+        logger.info("*"*60)
+        logger.info("* Upgrade command received:".ljust(59) + "*")
+        logger.info("* Firmware to read from: #{hex_file}".ljust(59) + "*")
         logger.info(v_msg)
+        logger.info(s_msg)
+        logger.info("*"*60)
         @upgrade_hash               = file_parse(hex_file)
         @upgrade_hash["start"]      = Time.now
         @upgrade_hash["version"]    = version if version
         @upgrade_hash["forced"]     = forced
         @upgrade_hash["nodes"]      = Array.new
         @upgrade_hash["nodes_dead"] = Array.new
-        @upgrade_hash["b_sid"]      = 2047
+        @upgrade_hash["b_sid"]      = sid.to_i
         @upgrade_hash["sync_error"] = Hash.new
+        @upgrade_hash["sync_noresp"]= Array.new
         @upgrade_hash["sync_retry"] = 3
         srv_handle_outgoing(UPG_REQUEST,@upgrade_hash)
         Thread.new do
@@ -39,6 +44,7 @@ module Ib
             logger.info("Starting upgrade...")
             @upgrade_hash["c_sid"] = @upgrade_hash["b_sid"]
             data_blocks_send
+            data_blocks_finish
           end
           if @upgrade_hash.empty? then terminate end
         end
@@ -139,7 +145,7 @@ module Ib
           serial_msg, db_msg, log_msg = tg_opcode_12(msg)
           ibs.write get_set_msg(serial_msg)
           #ACCESS.insert(db_msg)
-          logger.debug ("Sent data msg: >" + log_msg.join + "\\n to node/broadcast:#{@upgrade_hash["c_sid"]}")
+          logger.debug ("Sent data msg: >" + log_msg.join + "\\n to node(s):#{@upgrade_hash["c_sid"]}")
         when UPG_BLOCK_SYNC
           serial_msg, db_msg, log_msg = tg_opcode_13(msg)
           ibs.write get_set_msg(serial_msg)

@@ -103,101 +103,99 @@ module Ib
               if (address > BOOT_LOADER.end && word =~ /\AFFFFFF00/)
                 upgrade_hash["size"] += 6
                 done = true
-                logger.info("Hexfile parsed (Code size: #{upgrade_hash["size"]})")
               end
               upgrade_hash["size"] += 6 unless done
             end
           end
         end until done
+        logger.info("Hexfile parsed (Code size: #{upgrade_hash["size"]})")
         return upgrade_hash
       end
       # @todo
       def data_blocks_send
         @upgrade_hash["hex_data"].each_pair do |block, data_ary|
-          logger.info("Sending block: #{block} to node/broadcast: #{@upgrade_hash["c_sid"]}")
-          str_for_crc = ""
-          data_ary.each_with_index do |line,index|
-            data = ["%02X" % index, line]
-            srv_handle_outgoing(UPG_DATA, data)
-            sleep(0.01)
-            str_for_crc << line
-            if index == data_ary.length - 1
-              @upgrade_hash["c_crc"] = crc16(str_for_crc)
-              logger.info("Block:#{block} was sent. Sending synchronization msg, crc:#{"%04X" % @upgrade_hash["c_crc"]}")
-              data = [@upgrade_hash["c_crc"], block, index + 1]
-              @upgrade_hash["sync_noresp"] = @upgrade_hash["nodes"] - @upgrade_hash["nodes_dead"]
-              srv_handle_outgoing(UPG_BLOCK_SYNC,data)
-              sleep(0.5)
-              unless @upgrade_hash["sync_error"].empty?
-                logger.warn("Synchronization problem...")
-                @upgrade_hash["sync_error"].each_pair do |sid,error|
-                  data_blocks_resend(sid,block,error)
-                end
-                logger.info("Data requested by nodes in their UPG_DATA_RESP was sent.")
-                logger.info("Clearing sync_error and sending synchronization msg. for implied!")
-                @upgrade_hash["sync_error"].each_key do |sid|
-                  @upgrade_hash["c_sid"] = sid
-                  srv_handle_outgoing(UPG_BLOCK_SYNC,[@upgrade_hash["c_crc"],block,index +1])
-                end
-                @upgrade_hash["c_sid"] = @upgrade_hash["b_sid"]
-                @upgrade_hash["sync_error"].clear
-                sleep(0.5)
-              else
-                if @upgrade_hash["sync_noresp"].empty?
-                  logger.info("Synchronization successful...")
-                else
-                  unless @upgrade_hash["sync_retry"] > 0
-                    logger.warn("No UPG_DATA_RESP from node/nodes #{@upgrade_hash["sync_noresp"].join(', ')} !")
-                    @upgrade_hash["sync_noresp"].each do |sid|
-                      @upgrade_hash["c_sid"] = sid
-                      srv_handle_outgoing(UPG_BLOCK_SYNC,[@upgrade_hash["c_crc"],block,index +1])
-                    end
-                    @upgrade_hash["sync_retry"] -= 1
-                    sleep(0.5)
-                  else
-                    @upgrade_hash["nodes_dead"] = @upgrade_hash["sync_noresp"]
-                    @upgrade_hash["sync_noresp"].clear
-                    @upgrade_hash["sync_retry"] = 3
-                    logger.warn("Synchronization msg sent 3 times to nod/nodes #{@upgrade_hash["nodes_dead"].join(', ')}")
-                    logger.warn("Presuming they were disconnected during upgrade!")
-                  end
-                  @upgrade_hash["c_sid"] = @upgrade_hash["b_sid"]
-                end
-              end
-            end
-          end # line
-        end # block
-        logger.info("Upgrade was completed in #{Time.now - @upgrade_hash["start"]} seconds.")
-        logger.info("Sending UPG_FINISH opcode to node/broadcast: #{@upgrade_hash["c_sid"]}.")
-        if @upgrade_hash["nodes_dead"].empty?
-          srv_handle_outgoing(UPG_FINISH,@upgrade_hash["c_sid"])
+          block_send(block,data_ary)
+          block_sync(block,data_ary)
+          block_sync_check(block,data_ary)
+        end
+      end
+      # @todo
+      def block_send(block,data_ary)
+        msg_helper = @upgrade_hash["c_sid"] == 2047 ? "broadcast" : "node"
+        logger.info("Sending block: #{block} to #{msg_helper}: #{@upgrade_hash["c_sid"]}")
+        data_ary.each_with_index do |line,index|
+          data = ["%02X" % index, line]
+          srv_handle_outgoing(UPG_DATA, data)
+          sleep(0.01)
+        end
+      end
+      # @todo
+      def block_sync(block,data_ary)
+        @upgrade_hash["c_crc"] = crc16(data_ary.join)
+        logger.info("Block:#{block} was sent. Sending synchronization msg, crc:#{"%04X" % @upgrade_hash["c_crc"]}")
+        data = [@upgrade_hash["c_crc"], block, data_ary.length]
+        @upgrade_hash["sync_noresp"] = @upgrade_hash["nodes"] - @upgrade_hash["nodes_dead"]
+        srv_handle_outgoing(UPG_BLOCK_SYNC,data)
+        sleep(0.5)
+      end
+      # @todo
+      def block_sync_check(block,data_ary)
+        if @upgrade_hash["sync_noresp"].empty?
+          if @upgrade_hash["sync_error"].empty?
+            logger.info("Synchronization: Successful...")
+          else
+            block_sync_error(block,data_ary)
+          end
         else
-          logger.warn "Nodes #{@upgrade_hash["nodes_dead"].join(', ')} were disconnected during upgrade!"
-          logger.warn "Sending upgrade finished only to alive nodes..."
-          (@upgrade_hash["nodes"] - @upgrade_hash["nodes_dead"]).each do |sid|
-            @upgrade_hash["c_sid"] = sid
-            srv_handle_outgoing(UPG_FINISH,@upgrade_hash["c_sid"])
+          block_sync_missing(block,data_ary)
+          block_sync_check(block,data_ary)
+        end
+      end
+      # @todo
+      def block_sync_error(block,data_ary)
+        logger.warn("Synchronization: Problem...")
+        @upgrade_hash["sync_error"].each_pair do |sid,error|
+          data_blocks_resend(sid,block,error)
+        end
+        logger.info("Data requested by node(s) in their UPG_DATA_RESP was sent.")
+        logger.info("Clearing sync_error and sending synchronization msg. for implied!")
+        @upgrade_hash["sync_error"].each_key do |sid|
+          @upgrade_hash["c_sid"] = sid
+          srv_handle_outgoing(UPG_BLOCK_SYNC,[@upgrade_hash["c_crc"],block,data_ary.length])
+        end
+        @upgrade_hash["c_sid"] = @upgrade_hash["b_sid"]
+        @upgrade_hash["sync_error"].clear
+        sleep(0.5)
+        block_sync_check(block,data_ary)
+      end
+      # @todo
+      def block_sync_missing(block,data_ary)
+        while !@upgrade_hash["sync_noresp"].empty?
+          if @upgrade_hash["sync_retry"] > 0
+            logger.warn("No UPG_DATA_RESP from node(s) #{@upgrade_hash["sync_noresp"].join(', ')} !")
+            @upgrade_hash["sync_noresp"].each do |sid|
+              @upgrade_hash["c_sid"] = sid
+              srv_handle_outgoing(UPG_BLOCK_SYNC,[@upgrade_hash["c_crc"],block,data_ary.length])
+            end
+            @upgrade_hash["sync_retry"] -= 1
+            sleep(0.5)
+          else
+            @upgrade_hash["nodes_dead"] = @upgrade_hash["nodes_dead"] | @upgrade_hash["sync_noresp"]
+            @upgrade_hash["sync_noresp"].clear
+            @upgrade_hash["sync_retry"] = 3
+            logger.warn("Synchronization msg sent 3 times to node(s) #{@upgrade_hash["nodes_dead"].join(', ')}")
+            logger.warn("Presuming they were disconnected during upgrade!")
           end
         end
-        sleep(0.5)
-        if (@upgrade_hash["nodes"] - @upgrade_hash["nodes_dead"]).empty?
-          logger.info("Received upgrade completed responses from all implied nodes...")
-          logger.info("Clearing upgrade_hash...")
-          @upgrade_hash.clear
-        else
-          logger.warn("No UPG_FINISH_RESP from node/nodes sid:#{(@upgrade_hash["nodes"] - @upgrade_hash["nodes_dead"]).join(',')} !")
-          logger.info("Waiting for 60 seconds and clearing upgrade_hash")
-          sleep(60)
-          @upgrade_hash.clear
-        end
-      end #data_blocks_send
+        @upgrade_hash["c_sid"] = @upgrade_hash["b_sid"]
+      end
       # @todo
       def data_blocks_resend(sid,block,error)
         @upgrade_hash["c_sid"] = sid
         case error
         when nil
           logger.warn("Synchronization status:03 from node:#{sid}")
-          logger.info("Sending again block: #{block} to node/broadcast: #{sid}")
+          logger.info("Sending again block: #{block} to node: #{sid}")
           @upgrade_hash["hex_data"][block].each_with_index do |line,index|
             data = ["%02X" % index, line]
             srv_handle_outgoing(UPG_DATA, data)
@@ -205,12 +203,38 @@ module Ib
           end
         else
           logger.warn("Synchronization status:02 from node#{sid}")
-          logger.info("Sending again lines with index: #{error.join(',')} to node/broadcast: #{sid}")
+          logger.info("Sending again line(s) with index: #{error.join(',')} to node: #{sid}")
           error.each do |e|
             line = @upgrade_hash["hex_data"][block][e.hex]
             srv_handle_outgoing(UPG_DATA, [e,line])
             sleep(0.01)
           end
+        end
+      end
+      # @todo
+      def data_blocks_finish
+        logger.info("Upgrade was completed in #{Time.now - @upgrade_hash["start"]} seconds.")
+        logger.info("Sending UPG_FINISH opcode to node/broadcast: #{@upgrade_hash["c_sid"]}.")
+        if @upgrade_hash["nodes_dead"].empty?
+          srv_handle_outgoing(UPG_FINISH,@upgrade_hash["c_sid"])
+        else
+          logger.warn "Node(s) #{@upgrade_hash["nodes_dead"].join(', ')} were disconnected during upgrade!"
+          logger.warn "Sending upgrade finished only to alive node(s)..."
+          (@upgrade_hash["nodes"] - @upgrade_hash["nodes_dead"]).each do |sid|
+            @upgrade_hash["c_sid"] = sid
+            srv_handle_outgoing(UPG_FINISH,@upgrade_hash["c_sid"])
+          end
+        end
+        sleep(0.5)
+        if (@upgrade_hash["nodes"] - @upgrade_hash["nodes_dead"]).empty?
+          logger.info("Received upgrade completed responses from all implied node(s)...")
+          logger.info("Clearing upgrade_hash...")
+          @upgrade_hash.clear
+        else
+          logger.warn("No UPG_FINISH_RESP from node(s) sid:#{(@upgrade_hash["nodes"] - @upgrade_hash["nodes_dead"]).join(',')} !")
+          logger.info("Waiting for 60 seconds and clearing upgrade_hash")
+          sleep(60)
+          @upgrade_hash.clear
         end
       end
     end # Upgrade
