@@ -112,10 +112,8 @@
 
 # Check for missing binaries (stale symlinks should not happen)
 # Note: Special treatment of stop for LSB conformance
-test -x bundle || { echo "Starting ibutton as root requires RVM system wide install and bundler gem";
+
 IBUTTON_BIN=/home/kfl62/work/ibutton/bin/ibutton
-  if [ "$1" = "stop" ]; then exit 0;
-  else exit 5; fi; }
 test -x $IBUTTON_BIN || { echo "$IBUTTON_BIN not installed";
   if [ "$1" = "stop" ]; then exit 0;
   else exit 5; fi; }
