@@ -4,7 +4,6 @@ require 'ostruct'
 require 'logger'
 require 'drb'
 require 'i18n'
-#require 'compass'
 Dir['config','lib/*'].each do |dir|
   dir = File.join(File.expand_path('..',File.dirname(__FILE__)),dir)
   $LOAD_PATH.unshift(dir) unless $LOAD_PATH.include?(dir)
