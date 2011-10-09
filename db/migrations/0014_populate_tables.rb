@@ -18,7 +18,7 @@ class PopulateTables < Sequel::Migration
     DB[:hw_keys].insert(nil,1,"123456789ABC",Time.now(),Time.now())
     DB[:hw_keys].insert(nil,2,"2900001424C1",Time.now(),Time.now())
     DB[:prs_admins].insert(nil,1,"test","test@example.org","mFh7AiLhrk","8f810609c5215b6315d42e7fabecce877442d722",Time.now(),Time.now())
-    DB[:prs_admins].insert(nil,2,"csattila","Albert.Attila@evoline.ro",nil,nil,Time.now(),Time.now())
+    DB[:prs_admins].insert(nil,2,"csattila","s_a_attila@yajoo.com",nil,nil,Time.now(),Time.now())
     DB[:prs_groups].insert(nil,"Employees",Time.now(),Time.now())
     DB[:prs_groups_owners].insert(1,1)
     DB[:prs_groups_owners].insert(1,2)
