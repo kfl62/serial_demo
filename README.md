@@ -1,4 +1,2 @@
 # The only public page
-## Specially for you :)
-Third line
-
+Playing around, a server wich handles serial port communication, authorizes stuff persisted in a SQlite db and a web interface Sinatra
